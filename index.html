@@ -56,8 +56,22 @@
   border-radius: 8px;
 } */
 
+.background-container {
+  position: fixed; /* or absolute, depending on your layout */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Important: Negative z-index to place it behind other content */
+  background-image: url('desert.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
         body {
-            background-image: url('desert.jpg');
+            /* background-image: url('desert.jpg'); */
+            background-color: #00000069;
             background-size: cover;
             background-repeat: no-repeat;
             /* filter: blur(2px) brightness(0.5); */
@@ -980,7 +994,9 @@
 
 <body>
     <!-- <div id="skybox"></div> -->
-
+    <div class="background-container">
+        <!-- <img src="desert.jpg" alt="Desert Landscape"> -->
+      </div>
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -1032,7 +1048,7 @@
         <!-- Middle Panel -->
         <div class="middle-panel">
             <div id="timerBG"
-                style="border-radius: 30px; height: 100%; background-image: linear-gradient(#0fbd8c00 37%, #0fbd8c60); width: 80%; display: flex; flex-direction: column; justify-content: center; align-items: center; justify-content: space-between; ">
+                style="border-radius: 30px; height: 100%; background-image: linear-gradient(#0fbd8c00 37%, #0fbd8c60); width: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; justify-content: space-between; ">
                 <div class="title" onclick="openPopup('timerPopup')" style="margin-bottom: 10px;">
                     <p style="margin-bottom: 0px; font-size: 30px; width: 95%; height: 70px; text-align: center; align-items: center; align-self: center; align-content: center;"
                         id="timerTitle">Chinese Language</p>
