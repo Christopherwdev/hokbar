@@ -1288,7 +1288,7 @@
     <script>
 
 
-        
+
         let isTouch = false;
 
         if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
@@ -1297,7 +1297,7 @@
             isTouch = false;
         }
         console.log(isTouch);
-        
+
         topic = document.getElementById('topic');
         topic.textContent = isTouch;
 
@@ -1922,74 +1922,78 @@ fas fa-star
         function initDragElement(tab) {
             addholo(tab);
 
-            if (isTouch) {
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-                const header = tab.querySelector('.tab-header');
 
-                header.ontouchstart = function (e) {
-                    e.stopPropagation();
-                    e.preventDefault(); // Prevent default touch behavior
-                    tab.style.zIndex = ++currentZIndex; // Bring to top
-                    // applyBlurBasedOnZIndex(); // Assuming this is your blur function
-                    const touch = e.touches[0]; // Get the first touch
-                    pos3 = touch.clientX;
-                    pos4 = touch.clientY;
-                    header.ontouchend = closeDragElement; // Use ontouchend to close
-                    header.ontouchmove = elementDrag;     // Use ontouchmove for dragging
-                };
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = tab.querySelector('.tab-header');
 
-                function elementDrag(e) {
-                    e.preventDefault();
-                    const touch = e.touches[0]; // Get the first touch
-                    pos1 = pos3 - touch.clientX;
-                    pos2 = pos4 - touch.clientY;
-                    pos3 = touch.clientX;
-                    pos4 = touch.clientY;
-                    tab.style.top = (tab.offsetTop - pos2) + "px";
-                    tab.style.left = (tab.offsetLeft - pos1) + "px";
-                    tab.style.borderRadius = '10px';
-                    addholo(tab);
-                }
-            } else {
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-                const header = tab.querySelector('.tab-header');
+            header.ontouchstart = function (e) {
+                e.stopPropagation();
+                e.preventDefault(); // Prevent default touch behavior
+                tab.style.zIndex = ++currentZIndex; // Bring to top
+                // applyBlurBasedOnZIndex(); // Assuming this is your blur function
+                const touch = e.touches[0]; // Get the first touch
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                header.ontouchend = closeDragElement; // Use ontouchend to close
+                header.ontouchmove = elementDragTouch;     // Use ontouchmove for dragging
+            };
 
-                header.onmousedown = function (e) {
-                    e.preventDefault();
-                    tab.style.zIndex = ++currentZIndex; // Bring to top
-                    // applyBlurBasedOnZIndex();
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    tab.onmouseup = closeDragElement;
-                    // tab.onmouseout = closeDragElement;
+            function elementDragTouch(e) {
+                e.preventDefault();
+                const touch = e.touches[0]; // Get the first touch
+                pos1 = pos3 - touch.clientX;
+                pos2 = pos4 - touch.clientY;
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                tab.style.top = (tab.offsetTop - pos2) + "px";
+                tab.style.left = (tab.offsetLeft - pos1) + "px";
+                tab.style.borderRadius = '10px';
+                addholo(tab);
+            }
 
 
-                    // document.onmouseout = closeDragElement;
-                    document.onmousemove = elementDrag;
+            header.onmousedown = function (e) {
+                e.preventDefault();
+                tab.style.zIndex = ++currentZIndex; // Bring to top
+                // applyBlurBasedOnZIndex();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                tab.onmouseup = closeDragElement;
+                // tab.onmouseout = closeDragElement;
 
-                };
 
-                function elementDrag(e) {
-                    e.preventDefault();
-                    pos1 = pos3 - e.clientX;
-                    pos2 = pos4 - e.clientY;
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    tab.style.top = (tab.offsetTop - pos2) + "px";
-                    tab.style.left = (tab.offsetLeft - pos1) + "px";
-                    tab.style.borderRadius = '10px';
+                // document.onmouseout = closeDragElement;
+                document.onmousemove = elementDragMouse;
 
-                    addholo(tab);
+            };
 
-                }
+            function elementDragMouse(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                tab.style.top = (tab.offsetTop - pos2) + "px";
+                tab.style.left = (tab.offsetLeft - pos1) + "px";
+                tab.style.borderRadius = '10px';
+
+                addholo(tab);
+
             }
 
 
 
 
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
+
+            function closeDragElement(mode) {
+
+                if (mode == 'touch') {
+                    header.ontouchend = closeDragElement;
+                    header.ontouchmove = elementDrag;
+                } else {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
 
                 const icon = tab.querySelector('.tab-header #lockbutton i')
 
@@ -2079,53 +2083,51 @@ fas fa-star
         // Initialize resizing for a specific element
         function initResizeElement(tab) {
 
-            if (isTouch) {
-                const resizers = tab.querySelectorAll('.resizer-right, .resizer-bottom, .resizer-both');
-                let startX, startY, startWidth, startHeight;
-
-                resizers.forEach(resizer => {
-                    resizer.ontouchstart = function (e) {
-                        e.stopPropagation();
-                        e.preventDefault(); // Prevent default touch behavior
-                        tab.style.zIndex = ++currentZIndex;
-                        // applyBlurBasedOnZIndex(); // Your blur function
-                        const touch = e.touches[0]; // Get the first touch
-                        startX = touch.clientX;
-                        startY = touch.clientY;
-                        startWidth = parseInt(window.getComputedStyle(tab).width, 10);
-                        startHeight = parseInt(window.getComputedStyle(tab).height, 10);
-                        resizer.ontouchend = stopResize;
-                        resizer.ontouchmove = resizeElement;
-                    };
-
-                    function resizeElement(e) {
-                        e.preventDefault(); // Prevent default touch behavior
-                        const touch = e.touches[0]; // Get the first touch
-                        const deltaX = touch.clientX - startX;
-                        const deltaY = touch.clientY - startY;
-
-                        if (resizer.classList.contains('resizer-right')) {
-                            tab.style.width = (startWidth + deltaX) + "px";
-                        } else if (resizer.classList.contains('resizer-bottom')) {
-                            tab.style.height = (startHeight + deltaY) + "px";
-                        } else if (resizer.classList.contains('resizer-both')) {
-                            tab.style.width = (startWidth + deltaX) + "px";
-                            tab.style.height = (startHeight + deltaY) + "px";
-                        }
-                        tab.style.borderRadius = '10px';
-                        addholo(tab);
-                    }
-
-                    function stopResize() {
-                        resizer.ontouchend = null;
-                        resizer.ontouchmove = null;
-                    }
-                });
-            }
-        else {
 
             const resizers = tab.querySelectorAll('.resizer-right, .resizer-bottom, .resizer-both');
             let startX, startY, startWidth, startHeight;
+
+            resizers.forEach(resizer => {
+                resizer.ontouchstart = function (e) {
+                    e.stopPropagation();
+                    e.preventDefault(); // Prevent default touch behavior
+                    tab.style.zIndex = ++currentZIndex;
+                    // applyBlurBasedOnZIndex(); // Your blur function
+                    const touch = e.touches[0]; // Get the first touch
+                    startX = touch.clientX;
+                    startY = touch.clientY;
+                    startWidth = parseInt(window.getComputedStyle(tab).width, 10);
+                    startHeight = parseInt(window.getComputedStyle(tab).height, 10);
+                    resizer.ontouchend = stopResizeTouch;
+                    resizer.ontouchmove = resizeElementTouch;
+                };
+
+                function resizeElementTouch(e) {
+                    e.preventDefault(); // Prevent default touch behavior
+                    const touch = e.touches[0]; // Get the first touch
+                    const deltaX = touch.clientX - startX;
+                    const deltaY = touch.clientY - startY;
+
+                    if (resizer.classList.contains('resizer-right')) {
+                        tab.style.width = (startWidth + deltaX) + "px";
+                    } else if (resizer.classList.contains('resizer-bottom')) {
+                        tab.style.height = (startHeight + deltaY) + "px";
+                    } else if (resizer.classList.contains('resizer-both')) {
+                        tab.style.width = (startWidth + deltaX) + "px";
+                        tab.style.height = (startHeight + deltaY) + "px";
+                    }
+                    tab.style.borderRadius = '10px';
+                    addholo(tab);
+                }
+
+                function stopResizeTouch() {
+                    resizer.ontouchend = null;
+                    resizer.ontouchmove = null;
+                }
+            });
+
+
+
 
             resizers.forEach(resizer => {
                 resizer.onmousedown = function (e) {
@@ -2136,11 +2138,11 @@ fas fa-star
                     startY = e.clientY;
                     startWidth = parseInt(window.getComputedStyle(tab).width, 10);
                     startHeight = parseInt(window.getComputedStyle(tab).height, 10);
-                    document.onmouseup = stopResize;
-                    document.onmousemove = resizeElement;
+                    document.onmouseup = stopResizeMouse;
+                    document.onmousemove = resizeElementMouse;
                 };
 
-                function resizeElement(e) {
+                function resizeElementMouse(e) {
                     if (resizer.classList.contains('resizer-right')) {
                         tab.style.width = (startWidth + e.clientX - startX) + "px";
                     } else if (resizer.classList.contains('resizer-bottom')) {
@@ -2155,13 +2157,13 @@ fas fa-star
 
                 }
 
-                function stopResize() {
+                function stopResizeMouse() {
                     document.onmouseup = null;
                     document.onmousemove = null;
                 }
             });
         }
-        }
+
 
         // Close a tab
         function closeTab(tabId) {
