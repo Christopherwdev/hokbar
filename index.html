@@ -201,6 +201,8 @@
             /* transform: rotateZ(-1.5deg); */
         }
 
+     
+
         .left-panel .holo {
             transform: rotateY(25deg);
 
@@ -396,13 +398,14 @@
             /* background-color: var(--box-color); */
 
             background-color: #00000031;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             background-blend-mode: overlay;
 
             border-radius: var(--border-radius);
             /* padding: var(--padding); */
             height: 100%;
             position: relative;
+            /* box-shadow: #00000033 0px 15px 40px 0px; */
         }
 
         .box .pane {
@@ -777,7 +780,7 @@
             border-radius: 10px;
             opacity: 1;
             align-self: center;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
 
         .bottom-pane:hover>#notch {
@@ -1305,17 +1308,7 @@
 
 
 
-        let isTouch = false;
 
-        if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
-            isTouch = true;
-        } else {
-            isTouch = false;
-        }
-        console.log(isTouch);
-
-        topic = document.getElementById('topic');
-        topic.textContent = isTouch;
 
 
         const googleColors = [
