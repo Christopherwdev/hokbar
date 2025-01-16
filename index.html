@@ -1752,26 +1752,39 @@ fas fa-star
 
             // Tab header
             const tabHeader = document.createElement('div');
-            tabHeader.classList.add('tab-header');
-            tabHeader.innerHTML = `
+    tabHeader.classList.add('tab-header');
+    tabHeader.innerHTML = `
         <p>${url}</p>
-        <button id='pinbutton' onclick="pinTab('${uniqueId}')" style="margin-left: 5px; width: 20px; flex-grow: 0; color: white">
-            <i class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i>
-            </button>
-            <button id='lockbutton' onclick="togglelock('${uniqueId}')" style="margin-left: 5px; width: 20px; flex-grow: 0; color: white">
-            <i class="fas fa-lock" style="font-size: 10px; color: white"></i>
-            </button>
-        <button id='snapbutton' onclick="snappingTab('${uniqueId}')" style="margin-left: 5px; width: 20px; flex-grow: 0; color: white">
-            <i class="fas fa-columns" style="font-size: 10px; color: #ffffff80"></i>
-            </button>
-            <button id='maximizebutton' onclick="maximizeTab('${uniqueId}')" style="margin-left: 5px; width: 20px; flex-grow: 0; color: white">
-            <i class="fas fa-external-link" style="font-size: 10px; color: #ffffff80"></i>
-            </button>
-        <button id='closebutton' onclick="closeTab('${uniqueId}')" style="margin-left: 5px; width: 20px; flex-grow: 0; color: white">
-            <i class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i>
-            </button>
+        <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
+        <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
+        <button id='snapbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-columns" style="font-size: 10px; color: #ffffff80"></i></button>
+        <button id='maximizebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-external-link" style="font-size: 10px; color: #ffffff80"></i></button>
+        <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
     `;
-            tabContainer.appendChild(tabHeader);
+    tabContainer.appendChild(tabHeader);
+
+
+    // Add event listeners AFTER the elements are created
+    const buttons = tabHeader.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function(ev) {
+            const buttonId = this.id;
+            if (buttonId === 'pinbutton') pinTab(uniqueId);
+            else if (buttonId === 'lockbutton') togglelock(uniqueId);
+            else if (buttonId === 'snapbutton') snappingTab(uniqueId);
+            else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
+            else if (buttonId === 'closebutton') closeTab(uniqueId);
+        });
+        button.addEventListener('touchend', function(ev) {  // Add touchend listener
+            ev.preventDefault(); // Prevent default touch behavior
+            const buttonId = this.id;
+            if (buttonId === 'pinbutton') pinTab(uniqueId);
+            else if (buttonId === 'lockbutton') togglelock(uniqueId);
+            else if (buttonId === 'snapbutton') snappingTab(uniqueId);
+            else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
+            else if (buttonId === 'closebutton') closeTab(uniqueId);
+        });
+    });
 
 
 
