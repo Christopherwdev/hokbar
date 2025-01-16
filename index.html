@@ -1904,54 +1904,33 @@ fas fa-star
         }
         // Initialize dragging for a specific element
         function initDragElement(tab) {
+    addholo(tab);
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const header = tab.querySelector('.tab-header');
 
+    header.ontouchstart = function(e) {
+        e.preventDefault(); // Prevent default touch behavior
+        tab.style.zIndex = ++currentZIndex; // Bring to top
+        // applyBlurBasedOnZIndex(); // Assuming this is your blur function
+        const touch = e.touches[0]; // Get the first touch
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        header.ontouchend = closeDragElement; // Use ontouchend to close
+        header.ontouchmove = elementDrag;     // Use ontouchmove for dragging
+    };
 
-
-            addholo(tab);
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-            const header = tab.querySelector('.tab-header');
-
-            header.onmousedown = function (e) {
-                e.preventDefault();
-                tab.style.zIndex = ++currentZIndex; // Bring to top
-                // applyBlurBasedOnZIndex();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                tab.onmouseup = closeDragElement;
-                // tab.onmouseout = closeDragElement;
-
-
-                // document.onmouseout = closeDragElement;
-                document.onmousemove = elementDrag;
-                // document.addEventListener('keydown', function (event) {
-                //     if (event.key === 'ArrowLeft') {
-
-                //         applySnapping(tab, 'left');
-                //         closeDragElement();
-                //         console.log('left');
-                //     } else if (event.key === 'ArrowRight') {
-
-                //         applySnapping(tab, 'right');
-                //         closeDragElement();
-
-                //     }
-                // });
-            };
-
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                tab.style.top = (tab.offsetTop - pos2) + "px";
-                tab.style.left = (tab.offsetLeft - pos1) + "px";
-                tab.style.borderRadius = '10px';
-
-                addholo(tab);
-
-            }
+    function elementDrag(e) {
+        e.preventDefault();
+        const touch = e.touches[0]; // Get the first touch
+        pos1 = pos3 - touch.clientX;
+        pos2 = pos4 - touch.clientY;
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        tab.style.top = (tab.offsetTop - pos2) + "px";
+        tab.style.left = (tab.offsetLeft - pos1) + "px";
+        tab.style.borderRadius = '10px';
+        addholo(tab);
+    }
 
             function closeDragElement() {
                 onmouseup = null;
