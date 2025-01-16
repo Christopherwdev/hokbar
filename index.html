@@ -1299,8 +1299,8 @@
         const isTouch = isMobileTablet();
         console.log(isTouch);
         
-        topic = getElementById('topic');
-        topic.value = isTouch;
+        topic = document.getElementById('topic');
+        topic.textContent = isTouch;
 
 
         const googleColors = [
