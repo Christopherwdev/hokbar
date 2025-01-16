@@ -85,18 +85,20 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
+            position: absolute;
         }
 
 
         #skybox {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      filter: blur(10px); /* Apply blur to the skybox */
-    }
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            filter: blur(10px);
+            /* Apply blur to the skybox */
+        }
 
         ::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.2);
@@ -459,10 +461,14 @@
 
             color: var(--text-color);
             padding: 10px;
-            
+            outline: none;
 
         }
-     
+        textarea::placeholder {
+            color: #ffffff81;
+        }
+
+
 
         .utilities {
 
@@ -704,7 +710,7 @@
             background-blend-mode: overlay;
             transition: height 0.3s ease, opacity 0.3s ease;
             ;
-            height: 30px;
+            height: 50px;
             overflow: hidden;
             z-index: 10000000;
             justify-content: center;
@@ -716,14 +722,20 @@
             /* opacity: 0.01; */
             border-top: 0px solid #ffffff7c;
             /* filter: blur(10px); */
-            perspective: 1000px;
+
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            align-self: center;
+            display: flexbox;
 
 
         }
 
         .bottom-pane:hover {
             border-top: 1px solid #ffffff7c;
-            height: 100px;
+            height: 130px;
             opacity: 1;
             filter: blur(0px);
         }
@@ -738,6 +750,31 @@
         .bottom-pane:hover>* {
             /* Targets direct children on hover */
             opacity: 1;
+        }
+        
+        .bottom-pane #notch {
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.675);
+            height: 5px;
+            width: 150px;
+            border-radius: 10px;
+            opacity: 1;
+            align-self: center;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-pane:hover > #notch {
+            /* width: 100%; */
+            height: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            color: rgba(255, 255, 255, 0);
+            /* height: 0px; */
+
+            border-radius: 10px;
+            opacity: 0;
         }
 
         .bottom-pane-content {
@@ -754,7 +791,7 @@
         }
 
         .chat-footer {
-            height: 100px;
+            height: auto;
             display: flex;
             width: 50%;
             display: flex;
@@ -765,6 +802,11 @@
             align-content: center;
             text-align: center;
             align-self: center;
+            transition: width 1s ease;
+        }
+
+        .bottom-pane:hover > .chat-footer {
+            width: 100%;
         }
 
         .chat-footer button {
@@ -775,20 +817,23 @@
             border-radius: 100px;
             cursor: pointer;
             font-size: 14px;
-            height: 50px;
-            width: 50px;
+            height: 60px;
+            width: 60px;
+            border: 1px solid #ffffff2d;
+            transition: border 0.5;
         }
 
         .chat-footer button:hover {
-            border: 2px solid white;
+            border: 2px solid rgba(255, 255, 255, 0.844);
         }
 
 
         .chat-footer input {
             flex: 1;
-            height: 50px;
-            padding: 10px;
-            padding-left: 15px;
+
+            height: 60px;
+            /* padding: 10px; */
+            padding-left: 20px;
             border: 1px solid #ffffff2d;
             /* Thicker border */
             border-radius: 100px;
@@ -976,7 +1021,7 @@
                         <button onclick="saveToStorage('noteArea')">Save</button>
                         <button onclick="clearTextarea('noteArea')">Clear</button>
                     </div>
-                    <textarea id="noteArea" style="height: 160px;"></textarea><br>
+                    <textarea id="noteArea" style="height: 160px;" placeholder="Jot down any events or reminders here..."></textarea><br>
                 </div>
             </div>
 
@@ -1016,7 +1061,8 @@
                     </div>
                     <div class="sub-container"
                         style="display: flex;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
-                        <a class="button" onclick="createNewTab('https://www.physicsandmathstutor.com/past-papers/')" target="_blank">
+                        <a class="button" onclick="createNewTab('https://www.physicsandmathstutor.com/past-papers/')"
+                            target="_blank">
                             <div class="utilities">
 
                                 <div class="circle">
@@ -1213,6 +1259,7 @@
 
     </div>
     <div class="bottom-pane" id="bottom-pane">
+        <div class="sub-container" id="notch"></div>
         <div class="bottom-pane-content">
             <div class="chat-footer">
                 <input type="text" id="user-input" placeholder="Physics Unit 5 June 2022 QP"
@@ -1307,6 +1354,51 @@
             const value = localStorage.getItem(id);
             if (value) {
                 document.getElementById(id).value = value;
+            } else {
+                // ["noteArea", "timers", "utilities", "ammo"];
+                if (id == 'timers') {
+                    document.getElementById(id).value = `Chinese Language
+1
+30
+#f7a028
+
+English Language
+0
+30
+#0FBD8C
+
+Mathematics
+1
+0
+#FF2491
+
+`;
+                } else if (id == 'ammo') {
+                    document.getElementById(id).value = `Dynamic Papers
+https://dynamicpapers.com/edexcel-recent-papers/ias-ial/chemistry/
+fas fa-file-word
+#FF2491
+
+Physics and Maths Tutor
+https://physicsandmathstutor.com
+fas fa-book
+#0FBD8C
+
+Camera
+Camera
+fas fa-star
+#f7a028
+
+Games
+https://www.crazygames.com/embed/getaway-shootout
+fas fa-heart
+#FF2491
+
+Calculator
+https://www.desmos.com/calculator
+fas fa-star
+#f7a028`;
+                }
             }
         }
 
@@ -1331,6 +1423,8 @@
 
             const areas = ["noteArea", "timers", "utilities", "ammo"];
             areas.forEach(loadFromStorage);
+
+
             updateTime(); // Ensure time is updated on load
             loadammo();
 
@@ -2610,8 +2704,9 @@
 
 
 
-<script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js" crossorigin="anonymous"></script>
-<script type="importmap">
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"
+        crossorigin="anonymous"></script>
+    <script type="importmap">
   {
     "imports": {
       "three": "https://unpkg.com/three@0.154.0/build/three.module.js",
@@ -2620,117 +2715,117 @@
   }
 </script>
 
-<script type="module">
-  import * as THREE from "three";
+    <script type="module">
+        import * as THREE from "three";
 
-  const img_base = "https://threejs.org/examples/textures/kandao3.jpg";
-  const img_depth = "https://threejs.org/examples/textures/kandao3_depthmap.jpg";
+        const img_base = "https://threejs.org/examples/textures/kandao3.jpg";
+        const img_depth = "https://threejs.org/examples/textures/kandao3_depthmap.jpg";
 
-  let camera, scene, renderer, skybox;
-  let targetRotationX = 0; // Target rotation for X (vertical tilt)
-  let targetRotationY = 0; // Target rotation for Y (horizontal rotation)
-  let currentRotationX = 0; // Current rotation for X
-  let currentRotationY = 0; // Current rotation for Y
+        let camera, scene, renderer, skybox;
+        let targetRotationX = 0; // Target rotation for X (vertical tilt)
+        let targetRotationY = 0; // Target rotation for Y (horizontal rotation)
+        let currentRotationX = 0; // Current rotation for X
+        let currentRotationY = 0; // Current rotation for Y
 
-  function init() {
-    const container = document.getElementById("skybox");
+        function init() {
+            const container = document.getElementById("skybox");
 
-    // Scene setup
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x101010);
+            // Scene setup
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x101010);
 
-    // Lighting
-    const light = new THREE.AmbientLight(0xffffff, 3.3);
-    scene.add(light);
+            // Lighting
+            const light = new THREE.AmbientLight(0xffffff, 3.3);
+            scene.add(light);
 
-    // Camera
-    camera = new THREE.PerspectiveCamera(
-      70,
-      window.innerWidth / window.innerHeight,
-      1,
-      50
-    );
-    scene.add(camera);
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                70,
+                window.innerWidth / window.innerHeight,
+                1,
+                50
+            );
+            scene.add(camera);
 
-    // Panoramic Sphere
-    const panoSphereGeo = new THREE.SphereGeometry(30, 500, 500);
-    const panoSphereMat = new THREE.MeshStandardMaterial({
-      side: THREE.BackSide,
-      displacementScale: -28.0
-    });
-    skybox = new THREE.Mesh(panoSphereGeo, panoSphereMat);
+            // Panoramic Sphere
+            const panoSphereGeo = new THREE.SphereGeometry(30, 500, 500);
+            const panoSphereMat = new THREE.MeshStandardMaterial({
+                side: THREE.BackSide,
+                displacementScale: -28.0
+            });
+            skybox = new THREE.Mesh(panoSphereGeo, panoSphereMat);
 
-    // Load texture and depth map
-    const manager = new THREE.LoadingManager();
-    const loader = new THREE.TextureLoader(manager);
+            // Load texture and depth map
+            const manager = new THREE.LoadingManager();
+            const loader = new THREE.TextureLoader(manager);
 
-    loader.load(img_base, function (texture) {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.minFilter = THREE.NearestFilter;
-      texture.generateMipmaps = false;
-      skybox.material.map = texture;
-    });
+            loader.load(img_base, function (texture) {
+                texture.colorSpace = THREE.SRGBColorSpace;
+                texture.minFilter = THREE.NearestFilter;
+                texture.generateMipmaps = false;
+                skybox.material.map = texture;
+            });
 
-    loader.load(img_depth, function (depth) {
-      depth.minFilter = THREE.NearestFilter;
-      depth.generateMipmaps = false;
-      skybox.material.displacementMap = depth;
-    });
+            loader.load(img_depth, function (depth) {
+                depth.minFilter = THREE.NearestFilter;
+                depth.generateMipmaps = false;
+                skybox.material.displacementMap = depth;
+            });
 
-    // Add the skybox to the scene when textures are loaded
-    manager.onLoad = function () {
-      scene.add(skybox);
-    };
+            // Add the skybox to the scene when textures are loaded
+            manager.onLoad = function () {
+                scene.add(skybox);
+            };
 
-    // Renderer setup
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.useLegacyLights = false;
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.useLegacyLights = false;
 
-    container.appendChild(renderer.domElement);
+            container.appendChild(renderer.domElement);
 
-    // Event listeners
-    window.addEventListener("resize", onWindowResize);
-    window.addEventListener("mousemove", onMouseMove);
-  }
+            // Event listeners
+            window.addEventListener("resize", onWindowResize);
+            window.addEventListener("mousemove", onMouseMove);
+        }
 
-  // Smooth mouse movement handler
-  function onMouseMove(event) {
-    const mouseX = (event.clientX / window.innerWidth) * 2 - 1; // Normalize X to range [-1, 1]
-    const mouseY = (event.clientY / window.innerHeight) * 2 - 1; // Normalize Y to range [-1, 1]
+        // Smooth mouse movement handler
+        function onMouseMove(event) {
+            const mouseX = (event.clientX / window.innerWidth) * 2 - 1; // Normalize X to range [-1, 1]
+            const mouseY = (event.clientY / window.innerHeight) * 2 - 1; // Normalize Y to range [-1, 1]
 
-    // Set target rotation with reduced movement (subtle motion)
-    targetRotationY = mouseX * Math.PI * 0.2; // Horizontal rotation
-    targetRotationX = mouseY * Math.PI * 0.2; // Vertical tilt
-  }
+            // Set target rotation with reduced movement (subtle motion)
+            targetRotationY = mouseX * Math.PI * 0.2; // Horizontal rotation
+            targetRotationX = mouseY * Math.PI * 0.2; // Vertical tilt
+        }
 
-  // Update camera and renderer on window resize
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
+        // Update camera and renderer on window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
 
-  // Animation loop with easing
-  function animate() {
-    requestAnimationFrame(animate);
+        // Animation loop with easing
+        function animate() {
+            requestAnimationFrame(animate);
 
-    // Smoothly interpolate (ease) towards the target rotation
-    currentRotationX += (targetRotationX - currentRotationX) * 0.005; // Ease X
-    currentRotationY += (targetRotationY - currentRotationY) * 0.005; // Ease Y
+            // Smoothly interpolate (ease) towards the target rotation
+            currentRotationX += (targetRotationX - currentRotationX) * 0.005; // Ease X
+            currentRotationY += (targetRotationY - currentRotationY) * 0.005; // Ease Y
 
-    // Apply the eased rotations to the skybox
-    skybox.rotation.x = currentRotationX;
-    skybox.rotation.y = currentRotationY;
+            // Apply the eased rotations to the skybox
+            skybox.rotation.x = currentRotationX;
+            skybox.rotation.y = currentRotationY;
 
-    renderer.render(scene, camera);
-  }
+            renderer.render(scene, camera);
+        }
 
-  // Initialize and start animation
-  init();
-  animate();
-</script>
+        // Initialize and start animation
+        init();
+        animate();
+    </script>
 </body>
 
 </html>
