@@ -1016,7 +1016,7 @@
                     </div>
                     <div class="sub-container"
                         style="display: flex;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
-                        <a class="button" href="https://www.physicsandmathstutor.com/past-papers/" target="_blank">
+                        <a class="button" onclick="createNewTab('https://www.physicsandmathstutor.com/past-papers/')" target="_blank">
                             <div class="utilities">
 
                                 <div class="circle">
@@ -1798,13 +1798,13 @@
             let tabCenterY = rect.top + rect.height / 2;
 
 
-            let distanceX = (tabCenterX - centerX) / 20; // Scale factor adjusts sensitivity
+            let distanceX = (tabCenterX - centerX) / 30; // Scale factor adjusts sensitivity
             let distanceY = (tabCenterY - centerY) / 50; // Scale factor adjusts sensitivity
 
 
 
 
-            tab.style.transform = `rotateY(${minMagnitude(65 * -distanceX / Math.abs(distanceX), -distanceX)}deg) rotateZ(${0}deg) rotateX(${minMagnitude(45 * distanceY / Math.abs(distanceY), distanceY)}deg)`;
+            tab.style.transform = `rotateY(${minMagnitude(45 * -distanceX / Math.abs(distanceX), -distanceX)}deg) rotateZ(${0}deg) rotateX(${minMagnitude(45 * distanceY / Math.abs(distanceY), distanceY)}deg)`;
             // tab.style.transform = `rotateY(${-distanceX}deg) rotateZ(${0}deg) rotateX(${distanceY}deg)`;
 
         }
