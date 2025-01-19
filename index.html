@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>HOKBAR UI</title>
-    
+
     <style>
         /* Universal standardization */
         :root {
@@ -73,7 +73,7 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
-            filter: blur(0px) brightness(0.8);
+            filter: blur(0px) brightness(0.4);
         }
 
         body {
@@ -503,7 +503,7 @@
 
 
         .utilities {
-
+            cursor: pointer;
             border-radius: calc(var(--border-radius)/2);
             height: 80px;
             width: 80px;
@@ -513,7 +513,7 @@
             align-content: center;
             text-align: center;
             justify-items: center;
-            font-size: 10px;
+            font-size: 13px;
             flex-shrink: 0;
 
 
@@ -566,7 +566,7 @@
             height: 40px;
             width: 40px;
             background-color: #0fbd8c;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
 
         }
 
@@ -584,6 +584,7 @@
         }
 
         .files {
+            cursor: pointer;
             width: 100%;
             height: 58px;
             display: flex;
@@ -1199,6 +1200,33 @@
             border-radius: var(--border-radius);
             padding: 10px;
         }
+
+        #tab-interviewprocontent::-webkit-scrollbar {
+            display: none;
+        }
+
+        #tab-interviewprotext {
+            width: calc(100%-5px);
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            overflow: auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            box-sizing: border-box;
+            border-radius: 10px;
+            font-size: 24px;
+            outline: none;
+            text-align: left;
+            overflow-y: auto;
+            line-height: 1.5;
+            margin-top: 0px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 100px;
+            /* overflow: scroll; */
+        }
     </style>
 </head>
 
@@ -1289,40 +1317,39 @@
                     </div>
                     <div class="sub-container"
                         style="display: flex;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
-                        <a class="button" onclick="createNewTab('https://www.physicsandmathstutor.com/past-papers/')"
-                            target="_blank">
-                            <div class="utilities">
+                        <a class="button" target="_blank">
+                            <div class="utilities" onclick="advancedSearch('Notes')">
 
                                 <div class="circle">
-                                    <i class="fas fa-file-text"></i>
+                                    <i class="fas fa-pencil-square"></i>
                                 </div>
-                                Past Paper
+                                Notes
                             </div>
                         </a>
 
                         <div class="utilities">
-                            <div class="circle">
-                                <i class="fas fa-star"></i>
+                            <div class="circle" onclick="advancedSearch('Calculator')">
+                                <i class="fas fa-calculator"></i>
                             </div>
-                            UMS Checker
+                            Calculator
                         </div>
-                        <div class="utilities">
+                        <div class="utilities" onclick="createNewTab('Camera')">
                             <div class="circle">
-                                <i class="fas fa-commenting"></i>
+                                <i class="fas fa-video-camera"></i>
                             </div>
-                            Poe.com
+                            Camera
                         </div>
-                        <div class="utilities">
+                        <div class="utilities" onclick="advancedSearch('PMT')">
                             <div class="circle">
-                                <i class="fas fa-microphone"></i>
+                                <i class="fas fa-file"></i>
                             </div>
-                            Past Paper
+                            PMT
                         </div>
-                        <div class="utilities">
+                        <div class="utilities" onclick="advancedSearch('dynamic papers')">
                             <div class="circle">
-                                <i class="fas fa-microphone"></i>
+                                <i class="fas fa-file"></i>
                             </div>
-                            Past Paper
+                            Dynamic Papers
                         </div>
                     </div>
                     <!-- <textarea id="utilities"></textarea> -->
@@ -1496,11 +1523,12 @@
             <!-- <button onclick="advancedSearch(this.textContent)">Interview Pro</button> -->
             <button onclick="advancedSearch(this.textContent)">PMT</button>
             <button onclick="advancedSearch(this.textContent)">Dynamic Papers</button>
-            <button onclick="advancedSearch('https://www.crazygames.com/embed/getaway-shootout')">Getaway Shootout</button>
+            <button onclick="advancedSearch('https://www.crazygames.com/embed/getaway-shootout')">Getaway
+                Shootout</button>
             <button onclick="advancedSearch('https://turbowarp.org/551905179/embed')">Pixel Valley</button>
             <button onclick="advancedSearch('https://turbowarp.org/472699119/embed')">Smash Royale</button>
-          
- 
+
+
         </div>
         <div class="bottom-pane-content">
             <div class="chat-footer">
@@ -1567,6 +1595,82 @@
         <div class="resizer-both"></div>
     </div>
 
+
+
+    <!-- <div class="tab" id="tab-interviewpro"
+        style="display: block; width: 500px; height: 400px; overflow: hidden; transform: none;">
+        <div class="tab-header">
+            <p>InterviewPro</p>
+            <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
+            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
+
+            <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
+        </div>
+        <div class="sub-container" style="height: calc(100% - 30px); display: flexbox; flex-direction: column;">
+
+            <div id="tab-interviewprocontent" style="flex-grow: 1; overflow-y: auto;">
+                <video srcObject='stream' autoplay="true" id="tab-interviewprovideo"
+                    style="width: 100%; height: auto; max-width: 200px;"></video>
+                <div id="tab-interviewprotext">
+                    </div>
+            </div><div class="toolbar" id="toolbar" style="margin-bottom: 20px; margin-top: 10px; justify-content: center;">
+                <button onclick="deleteFile()" class="other-button"
+                    style="border: 2px solid #0FBD8C; font-weight: bold; background-color: #0FBD8C76;">Start</button>
+                <button onclick="deleteFile()" class="other-button"
+                    style="border: 2px solid #FF2941; font-weight: bold; background-color: #ff294276;">Clear</button>
+                <button onclick="setHeading('h1')" class="other-button">H1</button>
+                <button onclick="setHeading('h2')" class="other-button">H2</button>
+                <button onclick="setHeading('h3')" class="other-button">H3</button>
+                <button onclick="setHeading('')" class="other-button">Normal</button>
+
+            </div>
+        </div>
+        <div class="resizer-right"></div>
+        <div class="resizer-bottom"></div>
+        <div class="resizer-both"></div>
+    </div> -->
+
+
+    <div class="tab" id="tab-interviewpro"
+        style="display: none; width: 500px; height: 400px; overflow: hidden; transform: none;">
+        <div class="tab-header">
+            <p>InterviewPro</p>
+            <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
+            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
+
+            <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
+        </div>
+        <div class="sub-container" style="height: calc(100% - 30px); display: flexbox; flex-direction: column;">
+
+            <div id="tab-interviewprocontent" style="flex-grow: 1; overflow-y: auto;">
+                <video srcObject='stream' autoplay="true" id="tab-interviewprovideo"
+                    style="width: 100%; height: auto; max-width: 200px;"></video>
+                <div id="tab-interviewprotext">
+                </div>
+            </div>
+            <div class="toolbar" id="toolbar" style="margin-bottom: 20px; margin-top: 10px; justify-content: center;">
+                <button onclick="deleteFile()" class="other-button"
+                    style="border: 2px solid #0FBD8C; font-weight: bold; background-color: #0FBD8C76;">Start</button>
+                <button onclick="deleteFile()" class="other-button"
+                    style="border: 2px solid #FF2941; font-weight: bold; background-color: #ff294276;">Clear</button>
+                <button onclick="setHeading('h1')" class="other-button">H1</button>
+                <button onclick="setHeading('h2')" class="other-button">H2</button>
+                <button onclick="setHeading('h3')" class="other-button">H3</button>
+                <button onclick="setHeading('')" class="other-button">Normal</button>
+
+            </div>
+        </div>
+        <div class="resizer-right"></div>
+        <div class="resizer-bottom"></div>
+        <div class="resizer-both"></div>
+    </div>
+
     <!-- <div class="sub-container" style="height: 20px; width: 100%;flex-shrink: 0;"></div> -->
 
 
@@ -1575,34 +1679,73 @@
 
 
     <script> //initialize tab-notes
-        const buttons = document.querySelectorAll('#tab-notes .tab-header button'); // More efficient selector
+        initializetabbuttons(document.querySelectorAll('#tab-notes .tab-header button'), 'tab-notes');
+        // initializetabbuttons(document.querySelectorAll('#tab-interviewpro .tab-header button'), 'tab-interviewpro') // More efficient selector
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.preventDefault(); // Good practice to prevent default behavior
-                const action = this.id; // Use the ID as an action identifier
 
-                switch (action) {
-                    case 'pinbutton':
-                        pinTab('tab-notes');
-                        break;
-                    case 'lockbutton':
-                        togglelock('tab-notes');
-                        break;
-                    case 'closebutton':
-                        closeTab('tab-notes');
-                        break;
-                    // Add cases for other buttons (snapbutton, maximizebutton) as needed
-                    default:
-                        console.warn(`Unhandled button action: ${action}`);
-                }
+        function initializetabbuttons(buttons, tabname) {
+            buttons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault(); // Good practice to prevent default behavior
+                    const action = this.id; // Use the ID as an action identifier
+
+                    switch (action) {
+                        case 'pinbutton':
+                            pinTab(tabname);
+                            break;
+                        case 'lockbutton':
+                            togglelock(tabname);
+                            break;
+                        case 'closebutton':
+                            closeTab(tabname);
+                            break;
+                        // Add cases for other buttons (snapbutton, maximizebutton) as needed
+                        default:
+                            console.warn(`Unhandled button action: ${action}`);
+                    }
+                });
             });
-        });
-    </script>
+        }
+        function initializevideo(video) {
+            video.id = 'video';
+
+            // Set the autoplay attribute.  Note that autoplay is often unreliable due to browser restrictions.
+            video.autoplay = true;
+
+            video.style.transform = 'scaleX(-1)';
 
 
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        video.srcObject = stream;
+                        console.log('camera');
+                    })
+                    .catch(function (err) {
+                        console.error("An error occurred: " + err);
+                        // Handle the error appropriately, e.g., display an error message to the user.
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = "Camera access denied. Please check your browser settings.";
+                        document.body.appendChild(errorMessage);
+                    });
+            } else {
+                console.error("getUserMedia is not supported by your browser.");
+                // Handle the case where getUserMedia is not supported.
+                const errorMessage = document.createElement('p');
+                errorMessage.textContent = "Your browser does not support webcam access.";
+                document.body.appendChild(errorMessage);
 
-    <script>
+            }
+
+            video.style.width = '100%';
+            video.style.minWidth = '100%';
+
+            // video.style.height = 'calc(100% - 50px)';
+
+            video.style.border = '0px';
+        }
+        // initializevideo(document.getElementById('tab-interviewprovideo'))
+
 
         function getDisplayName(fileName) {
             const parts = fileName.split('_');
@@ -2059,6 +2202,8 @@ fas fa-star
 
             initDragElement(document.getElementById('tab-notes'));
             initResizeElement(document.getElementById('tab-notes'));
+            initDragElement(document.getElementById('tab-interviewpro'));
+            initResizeElement(document.getElementById('tab-interviewpro'));
             document.getElementById('tab-notes').style.transform = '';
             timertotal = counter;
             // alert(`Done. Total timers: ${timertotal}`);
@@ -2390,43 +2535,8 @@ fas fa-star
 
                 if (url == 'Camera') {
                     let video = document.createElement('video');
-
-                    video.id = 'video';
-
-                    // Set the autoplay attribute.  Note that autoplay is often unreliable due to browser restrictions.
-                    video.autoplay = true;
-
-                    video.style.transform = 'scaleX(-1)';
-
-
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        navigator.mediaDevices.getUserMedia({ video: true })
-                            .then(function (stream) {
-                                video.srcObject = stream;
-                                console.log('camera');
-                            })
-                            .catch(function (err) {
-                                console.error("An error occurred: " + err);
-                                // Handle the error appropriately, e.g., display an error message to the user.
-                                const errorMessage = document.createElement('p');
-                                errorMessage.textContent = "Camera access denied. Please check your browser settings.";
-                                document.body.appendChild(errorMessage);
-                            });
-                    } else {
-                        console.error("getUserMedia is not supported by your browser.");
-                        // Handle the case where getUserMedia is not supported.
-                        const errorMessage = document.createElement('p');
-                        errorMessage.textContent = "Your browser does not support webcam access.";
-                        document.body.appendChild(errorMessage);
-
-                    }
                     tabContainer.style.overflowY = 'hidden';
-                    video.style.width = '100%';
-                    video.style.minWidth = '100%';
-
-                    // video.style.height = 'calc(100% - 50px)';
-
-                    video.style.border = '0px';
+                    initializevideo(video);
                     tabContainer.appendChild(video);
                 }
 
@@ -2520,8 +2630,8 @@ fas fa-star
             let tabCenterY = rect.top + rect.height / 2;
 
 
-            let distanceX = (tabCenterX - centerX) / 30; // Scale factor adjusts sensitivity
-            let distanceY = (tabCenterY - centerY) / 50; // Scale factor adjusts sensitivity
+            let distanceX = (tabCenterX - centerX) / 20 * 500 / rect.height; // Scale factor adjusts sensitivity
+            let distanceY = (tabCenterY - centerY) / 20 * 500 / rect.height; // Scale factor adjusts sensitivity
 
 
             if (type == 'normal') {
@@ -2769,6 +2879,8 @@ fas fa-star
                         tab.style.height = (startHeight + e.clientY - startY) + "px";
                     }
                     tab.style.borderRadius = '10px';
+
+
                     addholo(tab, 'normal');
 
 
@@ -3431,18 +3543,6 @@ fas fa-star
 
     </script>
 
-
-
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"
-        crossorigin="anonymous"></script>
-    <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.154.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.154.0/examples/jsm/"
-    }
-  }
-</script>
 
 
 </body>
