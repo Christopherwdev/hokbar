@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>HOKBAR UI</title>
+    
     <style>
         /* Universal standardization */
         :root {
@@ -56,22 +57,29 @@
   border-radius: 8px;
 } */
 
-.background-container {
-  position: fixed; /* or absolute, depending on your layout */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Important: Negative z-index to place it behind other content */
-  background-image: url('desert.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
+        .background-container {
+            position: fixed;
+            /* or absolute, depending on your layout */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Important: Negative z-index to place it behind other content */
+            background-image: url('desert.jpg');
+            background-color: #000000;
+            /* background-image: url('https://bingw.jasonzeng.dev/?index=random'); */
+            /* background: url(https://www.elementaryos-fr.org/wp-content/uploads/2013/09/wallpaper-1923233.jpg) 50% 50% / cover no-repeat; */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            filter: blur(0px) brightness(0.8);
+        }
 
         body {
             /* background-image: url('desert.jpg'); */
-            background-color: #00000069;
+            /* background-color: #00000069; */
+
             background-size: cover;
             background-repeat: no-repeat;
             /* filter: blur(2px) brightness(0.5); */
@@ -138,7 +146,7 @@
             /* background-color: #4a4a4a83;
             backdrop-filter: blur(20px); */
             /* background-blend-mode: overlay; */
-            opacity: 1;
+            /* opacity: 0.8; */
             width: 1200px;
             height: 650px;
             /* background-color: var(--background-color); */
@@ -185,13 +193,13 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: radial-gradient(circle, orange, red);
+            background: radial-gradient(circle, red, red);
         }
 
         /* Left Panel */
         .left-panel {
-            /* opacity: 50%;
-            filter: blur(2px); */
+            /* opacity: 80%; */
+            /* filter: blur(2px); */
             margin-top: 50px;
             display: flex;
             flex-direction: column;
@@ -201,7 +209,7 @@
             /* transform: rotateZ(-1.5deg); */
         }
 
-     
+
 
         .left-panel .holo {
             transform: rotateY(25deg);
@@ -265,7 +273,8 @@
 
         .left-panel button {
             width: 100%;
-            background-color: var(--secondary-color);
+            background-color: #00000031;
+            backdrop-filter: blur(10px);
             color: var(--text-color);
             border: none;
             padding: calc(var(--padding));
@@ -295,6 +304,10 @@
             padding: var(--gap);
 
 
+        }
+
+        #timerBG {
+            transition: all 1s ease;
         }
 
         .middle-panel .title {
@@ -366,6 +379,7 @@
             margin-left: 15px;
             margin-right: 15px;
             font-weight: bold;
+            /* transition: all 0.5s ease; */
 
         }
 
@@ -719,17 +733,18 @@
 
 
         .bottom-pane {
+            opacity: 1;
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background-color: #3f3f3f74;
             backdrop-filter: blur(30px);
-            background-blend-mode: overlay;
-            transition: height 0.3s ease, opacity 0.3s ease;
+            /* background-blend-mode: overlay; */
+            transition: height 0.5s ease, opacity 0.5s ease;
             ;
             height: 40px;
-            overflow: hidden;
+            overflow: visible;
             z-index: 10000000;
             justify-content: center;
             align-items: center;
@@ -747,22 +762,68 @@
             text-align: center;
             align-self: center;
             display: flexbox;
+            padding-bottom: 10px;
 
 
         }
 
         .bottom-pane:hover {
             border-top: 1px solid #ffffff7c;
-            height: 130px;
+            height: 200px;
             opacity: 1;
             filter: blur(0px);
         }
 
         .bottom-pane>* {
             /* Selects only direct children */
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
             opacity: 0;
             /* Initial opacity */
+        }
+
+        .apps {
+            margin: 0 auto;
+            margin-bottom: 20px;
+            width: 40%;
+            height: 50px;
+
+            left: 30%;
+            /* position: absolute; */
+            background-color: rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+            outline: 2px solid #ffffff10;
+
+            justify-content: flex-start;
+            border-radius: 15px;
+            display: flex;
+            padding: 5px 5px;
+            gap: 5px;
+            overflow-x: scroll;
+        }
+
+        .apps::-webkit-scrollbar {
+            display: none;
+        }
+
+        .apps button {
+            height: 40px;
+            /* width: 40px; */
+            padding: 15px 15px;
+            border: none;
+            /* border-radius: 10px; */
+            background-color: #00000037;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            /* Vertically align icon and text */
+            display: flex;
+            align-content: center;
+            font-size: 15px;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .bottom-pane:hover>* {
@@ -780,7 +841,7 @@
             border-radius: 10px;
             opacity: 1;
             align-self: center;
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
 
         .bottom-pane:hover>#notch {
@@ -820,7 +881,7 @@
             align-content: center;
             text-align: center;
             align-self: center;
-            transition: width 1s ease;
+            transition: width 0.5s ease;
         }
 
         .bottom-pane:hover>.chat-footer {
@@ -864,7 +925,7 @@
             /* Dark text color */
             background-color: rgba(255, 255, 255, 0.1);
             /* Light background color */
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.5s, box-shadow 0.5s;
             /* Smooth transition */
             outline: none;
             /* transition: all 1s ease; */
@@ -992,6 +1053,152 @@
             justify-content: center;
             flex-shrink: 0;
         }
+
+
+
+
+        #toolbar {
+            overflow-x: auto;
+            overflow-y: visible;
+            /* margin-left: 10px; */
+            padding: 0px 10px;
+            display: flex;
+            height: 40px;
+            justify-content: flex-start;
+            /* Align buttons to the left */
+            margin-bottom: 10px;
+            gap: 10px;
+            /* Add some space between buttons */
+            flex-shrink: 0;
+            display: flexbox;
+        }
+
+        #toolbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        #toolbar button {
+            box-sizing: border-box;
+            height: 40px;
+            /* width: 40px; */
+            padding: 15px 15px;
+            border: none;
+            /* border-radius: 10px; */
+            /* background-color: #00000037; */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.5s ease;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            /* Vertically align icon and text */
+            display: flex;
+            align-content: center;
+            font-size: 15px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #toolbar .other-button {
+            text-align: center;
+            background-color: #00000037;
+
+        }
+
+        #toolbar .color-button {
+            height: 40px;
+
+            width: 40px;
+            box-sizing: border-box;
+            border: 2px solid #ffffff4a;
+            flex-shrink: 0;
+            opacity: 0.5;
+        }
+
+        .color-button[data-color="yellow"] {
+            background-color: var(--google-yellow);
+        }
+
+        .color-button[data-color="white"] {
+            background-color: white;
+        }
+
+
+        .color-button[data-color="green"] {
+            background-color: var(--google-green);
+        }
+
+        .color-button[data-color="red"] {
+            background-color: #FF2941;
+        }
+
+        .color-button[data-color="blue"] {
+            background-color: var(--contrast-color);
+        }
+
+        #toolbar button i {
+            /* Style Font Awesome icons */
+            text-align: center;
+            align-self: center;
+        }
+
+
+        #editor {
+            width: calc(100%-5px);
+            min-height: 300px;
+            height: calc(100% - 130px);
+            flex-grow: 1;
+            border: none;
+            padding: 10px;
+            overflow: auto;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            box-sizing: border-box;
+            border-radius: 10px;
+            font-size: 24px;
+            outline: none;
+            text-align: left;
+            overflow-y: auto;
+            line-height: 1.5;
+            margin-top: 0px;
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-bottom: 100px;
+            /* overflow: scroll; */
+        }
+
+
+
+        #file-selector {
+            flex-shrink: 0;
+            width: 170px;
+            background-color: var(--box-color);
+            padding: 3px;
+            border: 2px solid #cccccc47;
+            outline: none;
+            border-radius: 10px;
+            font-size: 16px;
+            height: 40px;
+            /* color: white; */
+            outline: none;
+
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 10px;
+
+        }
+
+        #file-selector option {
+            width: 100%;
+            margin-top: 10px;
+            background-color: var(--box-color);
+
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -999,7 +1206,7 @@
     <!-- <div id="skybox"></div> -->
     <div class="background-container">
         <!-- <img src="desert.jpg" alt="Desert Landscape"> -->
-      </div>
+    </div>
     <div class="container">
         <!-- Header -->
         <div class="header">
@@ -1038,10 +1245,10 @@
                 <div class="box" style="height: 100%;width: 100%;">
                     <div class="pane" style="display: flex;">
                         <p style="flex-grow: 1; width: 100%; text-align: left;">Note Area</p>
-                        <button onclick="saveToStorage('noteArea')">Save</button>
-                        <button onclick="clearTextarea('noteArea')">Clear</button>
+                        <button onclick="saveToStorage('sketches')">Save</button>
+                        <button onclick="clearTextarea('sketches')">Clear</button>
                     </div>
-                    <textarea id="noteArea" style="height: 160px;"
+                    <textarea id="sketches" style="height: 160px;"
                         placeholder="Jot down any events or reminders here..."></textarea><br>
                 </div>
             </div>
@@ -1051,7 +1258,7 @@
         <!-- Middle Panel -->
         <div class="middle-panel">
             <div id="timerBG"
-                style="border-radius: 30px; height: 100%; background-image: linear-gradient(#0fbd8c00 37%, #0fbd8c60); width: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; justify-content: space-between; ">
+                style="transition: all 1s ease; border-radius: 30px; height: 100%; background-image: linear-gradient(#0fbd8c00 37%, #0fbd8c60); width: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; justify-content: space-between; ">
                 <div class="title" onclick="openPopup('timerPopup')" style="margin-bottom: 10px;">
                     <p style="margin-bottom: 0px; font-size: 30px; width: 95%; height: 70px; text-align: center; align-items: center; align-self: center; align-content: center;"
                         id="timerTitle">Chinese Language</p>
@@ -1281,9 +1488,21 @@
     </div>
     <div class="bottom-pane" id="bottom-pane">
         <div class="sub-container" id="notch"></div>
+        <div class="apps">
+            <button onclick="advancedSearch(this.textContent)">IAL</button>
+            <button onclick="advancedSearch(this.textContent)">Notes</button>
+            <button onclick="advancedSearch(this.textContent)">Calculator</button>
+            <button onclick="advancedSearch(this.textContent)">Camera</button>
+            <button onclick="advancedSearch(this.textContent)">Interview Pro</button>
+            <button>Notes</button>
+            <button>Notes</button>
+            <button>Notes</button>
+            <button>Notes</button>
+            <button>Notes</button>
+        </div>
         <div class="bottom-pane-content">
             <div class="chat-footer">
-                <input type="text" id="user-input" placeholder="Physics Unit 5 June 2022 QP"
+                <input type="text" id="user-input" autocomplete="off" placeholder="Physics Unit 5 June 2022 QP"
                     onkeydown="searchtyping(this)">
                 <button id="searchButton" onclick="search()">
                     <i class="fas fa-search"></i>
@@ -1301,8 +1520,363 @@
         <p>DIV</p>
       </div> -->
 
+    <div class="tab" id="tab-notes"
+        style="display: none; width: 500px; height: 400px; overflow: hidden; transform: none;">
+        <div class="tab-header">
+            <p>Notes</p>
+            <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
+            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
+
+            <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+                    class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
+        </div>
+        <div class="sub-container" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
+            <div class="toolbar" id="toolbar">
+                <select id="file-selector">
+                    <option value="">Select a file</option>
+                    <option value="new">+ Create New File</option>
+                </select>
+                <button onclick="saveFile()" class="other-button" style="font-weight: bold;">Save</button>
+                <button onclick="document.execCommand('bold',false,null)" class="other-button"><i
+                        class="fas fa-bold"></i></button>
+                <button onclick="document.execCommand('italic',false,null)" class="other-button"><i
+                        class="fas fa-italic"></i></button>
+                <button onclick="document.execCommand('underline',false,null)" class="other-button"><i
+                        class="fas fa-underline"></i></button>
+                <button class="color-button" data-color="white" onclick="setColor('white')"></button>
+                <button class="color-button" data-color="yellow" onclick="setColor('#FBBC0570')"></button>
+                <button class="color-button" data-color="green" onclick="setColor('#34A85370')"></button>
+                <button class="color-button" data-color="red" onclick="setColor('#FF294170')"></button>
+                <button class="color-button" data-color="blue" onclick="setColor('#4081FF70')"></button>
+                <button onclick="setHeading('h1')" class="other-button">H1</button>
+                <button onclick="setHeading('h2')" class="other-button">H2</button>
+                <button onclick="setHeading('h3')" class="other-button">H3</button>
+                <button onclick="setHeading('')" class="other-button">Normal</button>
+                <button onclick="deleteFile()" class="other-button"
+                    style="border: 2px solid #FF2941; font-weight: bold; background-color: #ff294276;">Delete</button>
+            </div>
+            <div id="editor" contenteditable="true" spellcheck="false" style="flex-grow: 1; overflow-y: auto;">
+            </div>
+        </div>
+        <div class="resizer-right"></div>
+        <div class="resizer-bottom"></div>
+        <div class="resizer-both"></div>
+    </div>
+
+    <!-- <div class="sub-container" style="height: 20px; width: 100%;flex-shrink: 0;"></div> -->
 
 
+
+    </div>
+
+
+    <script> //initialize tab-notes
+        const buttons = document.querySelectorAll('#tab-notes .tab-header button'); // More efficient selector
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // Good practice to prevent default behavior
+                const action = this.id; // Use the ID as an action identifier
+
+                switch (action) {
+                    case 'pinbutton':
+                        pinTab('tab-notes');
+                        break;
+                    case 'lockbutton':
+                        togglelock('tab-notes');
+                        break;
+                    case 'closebutton':
+                        closeTab('tab-notes');
+                        break;
+                    // Add cases for other buttons (snapbutton, maximizebutton) as needed
+                    default:
+                        console.warn(`Unhandled button action: ${action}`);
+                }
+            });
+        });
+    </script>
+
+
+
+    <script>
+
+        function getDisplayName(fileName) {
+            const parts = fileName.split('_');
+            return parts.slice(0, parts.length - 1).join('_'); // Join all parts except the last one
+        }
+        const LOCAL_STORAGE_KEY = "fileSystemFiles";
+        const fileSelector = document.getElementById('file-selector');
+        const editor = document.getElementById('editor');
+
+        // Load files from local storage when the page loads
+        window.addEventListener('load', loadFilesFromLocalStorage);
+
+        // Function to save a file
+        // Function to save a file
+        function saveFile() {
+            const content = editor.innerHTML.trim(); // Get the content from the editor
+
+            if (!content) {
+                alert('Cannot save an empty file.');
+                return;
+            }
+
+            const currentFile = fileSelector.value;
+            const files = getFilesFromLocalStorage();
+
+            if (currentFile === 'new' || !currentFile) {
+                const firstLine = getFirstLineText(content) || 'Untitled'; // Extract the first sentence or fallback
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                const fileName = `${firstLine}_${timestamp}`; // Create a unique filename
+                files[fileName] = content;
+
+                // Add the new file to the file selector
+                const option = document.createElement('option');
+                option.value = fileName;
+                option.textContent = getDisplayName(fileName);
+                fileSelector.appendChild(option);
+
+                fileSelector.value = fileName;
+                alert(`File saved as "${fileName}".`);
+            } else {
+                files[currentFile] = content;
+                alert(`File "${currentFile}" updated.`);
+            }
+
+            saveFilesToLocalStorage(files); // Save all files back to localStorage
+        }
+        // Function to delete a file
+        function deleteFile() {
+            const currentFile = fileSelector.value;
+
+            if (!currentFile || currentFile === "new") {
+                alert("No file selected to delete.");
+                return;
+            }
+
+            const files = getFilesFromLocalStorage();
+            delete files[currentFile];
+
+            saveFilesToLocalStorage(files);
+            loadFilesFromLocalStorage();
+
+            editor.innerHTML = '';
+            fileSelector.value = "new";
+            alert(`File "${currentFile}" has been deleted.`);
+        }
+
+        // Function to load files into the file selector
+        function loadFilesFromLocalStorage() {
+            const files = getFilesFromLocalStorage();
+            fileSelector.innerHTML = `
+                <option value="" disabled selected>Select a file</option>
+                <option value="new">+ Create New File</option>
+            `;
+
+            for (const fileName in files) {
+                const option = document.createElement('option');
+                option.value = fileName;
+                option.textContent = getDisplayName(fileName);
+                fileSelector.appendChild(option);
+            }
+        }
+
+        // Function to handle file selection
+        fileSelector.addEventListener('change', (event) => {
+            const selectedFile = event.target.value;
+            const files = getFilesFromLocalStorage();
+
+            if (selectedFile === 'new') {
+                editor.innerHTML = '';
+            } else if (files[selectedFile]) {
+                editor.innerHTML = files[selectedFile];
+            }
+        });
+
+        // Function to get files from local storage
+        function getFilesFromLocalStorage() {
+            const files = localStorage.getItem(LOCAL_STORAGE_KEY);
+            return files ? JSON.parse(files) : {};
+        }
+
+        // Function to save files to local storage
+        function saveFilesToLocalStorage(files) {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(files));
+        }
+
+        // Function to extract the first line of text (ignoring HTML tags)
+
+        function getFirstLineText(content) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            let firstLineText = "";
+
+            // Iterate through child nodes
+            const childNodes = tempDiv.childNodes;
+            for (let i = 0; i < childNodes.length; i++) {
+                const node = childNodes[i];
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.nodeValue;
+                    const newlineIndex = text.indexOf('\n');
+                    firstLineText += (newlineIndex === -1) ? text.trim() : text.substring(0, newlineIndex).trim();
+                    break; //Stop after processing the first text node
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Handle Element Nodes.  Recursively get first line text from children.
+                    const firstLineFromElement = getFirstLineText(node.innerHTML);
+                    if (firstLineFromElement) {
+                        firstLineText = firstLineFromElement;
+                        break; //Stop after processing the first element node
+                    }
+                }
+            }
+
+            return firstLineText;
+        }
+
+        function setColor(color) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+
+                if (color === 'white') {
+                    resetSelectionStyles(range);
+                    selection.removeAllRanges(); // Added this line
+                    return;
+                }
+
+                const newNode = document.createElement('span');
+                newNode.style.backgroundColor = color;
+                newNode.appendChild(range.extractContents());
+                range.insertNode(newNode);
+                selection.removeAllRanges(); // Added this line
+            }
+        }
+
+        // Function to reset styles
+        function resetSelectionStyles(range) {
+            const selectedNode = range.startContainer.nodeType === Node.TEXT_NODE
+                ? range.startContainer.parentNode
+                : range.startContainer;
+
+            if (selectedNode.style) {
+                selectedNode.style.backgroundColor = '';
+            }
+        }
+
+        function setHeading(heading) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+
+                if (heading) {
+                    const newHeading = document.createElement(heading);
+                    newHeading.textContent = selectedText;
+                    range.deleteContents();
+                    range.insertNode(newHeading);
+                    selection.removeAllRanges(); // Added this line
+                } else {
+                    //Remove heading if selected text is a heading
+                    const parentNode = selection.anchorNode.parentNode;
+                    if (parentNode.tagName && parentNode.tagName.startsWith('H')) {
+                        const normalText = document.createTextNode(parentNode.textContent);
+                        parentNode.parentNode.replaceChild(normalText, parentNode);
+                        const newRange = document.createRange();
+                        newRange.selectNode(normalText);
+                        selection.removeAllRanges(); //This line was already present, but crucial for consistency
+                        selection.addRange(newRange);
+                        selection.removeAllRanges(); // Added this line for deselection after replacement
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- <script>
+        let isWhiteBackground = false; // Flag to track current background state
+
+        function toggleEditorBackground() {
+            isWhiteBackground = !isWhiteBackground;
+            document.getElementById('editor').style.backgroundColor = isWhiteBackground ? 'white' : 'transparent';
+        }
+
+
+        function setColor(color) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+
+                //Check if the color is white. If so, reset styles
+                if (color === 'white') {
+                    resetSelectionStyles(range);
+                    return; //Exit the function after resetting
+                }
+
+
+                //Find existing span with background color
+                let existingSpan = findAncestor(range.startContainer, 'SPAN');
+
+                if (existingSpan && existingSpan.style.backgroundColor) {
+                    //If a span with background color exists, replace its color.
+                    existingSpan.style.backgroundColor = color;
+                } else {
+                    //If no span exists, create a new one.
+                    const newNode = document.createElement('span');
+                    newNode.style.backgroundColor = color;
+                    newNode.appendChild(range.extractContents());
+                    range.insertNode(newNode);
+                }
+            }
+        }
+
+        //Helper function to find an ancestor node of a given type
+        function findAncestor(node, type) {
+            while (node) {
+                if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() === type.toLowerCase()) {
+                    return node;
+                }
+                node = node.parentNode;
+            }
+            return null;
+        }
+
+
+        function resetSelectionStyles(range) {
+            let selectedNode = range.startContainer;
+            if (selectedNode.nodeType === Node.TEXT_NODE) {
+                selectedNode = selectedNode.parentNode;
+            }
+
+            //Remove background color and other styles (add more as needed)
+            selectedNode.style.backgroundColor = '';
+            selectedNode.style.color = ''; // Reset text color
+            selectedNode.style.fontWeight = ''; // Reset font weight
+            selectedNode.style.fontStyle = ''; // Reset font style
+            selectedNode.style.textDecoration = ''; //Reset text decoration
+
+            //Handle nested spans by recursively removing styles
+            removeNestedSpans(selectedNode);
+        }
+
+        function removeNestedSpans(node) {
+            for (let i = 0; i < node.childNodes.length; i++) {
+                let child = node.childNodes[i];
+                if (child.nodeType === Node.ELEMENT_NODE && child.tagName.toLowerCase() === 'span') {
+                    //Remove inline styles from the span
+                    child.removeAttribute('style');
+                    //Recursively call the function for nested spans
+                    removeNestedSpans(child);
+                } else {
+                    removeNestedSpans(child);
+                }
+            }
+        }
+
+
+
+    </script> -->
 
     <script>
 
@@ -1325,6 +1899,7 @@
         let timersubject = [];
         let timercolor = [];
         let timerpaused = false;
+
 
 
         let timertimemax = [];
@@ -1353,13 +1928,7 @@
             document.getElementById(popupId).style.display = "none";
         }
 
-        function closeTab(button) {
-            const tab = button.closest('.tab');
-            if (tab) {
-                tab.style.display = 'none';
-                tab.remove();
-            }
-        }
+
         // Save textarea content to local storage
         function saveToStorage(id) {
             const value = document.getElementById(id).value;
@@ -1380,7 +1949,7 @@
             if (value) {
                 document.getElementById(id).value = value;
             } else {
-                // ["noteArea", "timers", "utilities", "ammo"];
+                // ["sketches", "timers", "utilities", "ammo"];
                 if (id == 'timers') {
                     document.getElementById(id).value = `Chinese Language
 1
@@ -1435,6 +2004,12 @@ fas fa-star
 
         });
 
+
+
+
+
+
+
         function initialize() {
 
             timerid = 1;
@@ -1446,7 +2021,7 @@ fas fa-star
 
             timertimemax = [];
 
-            const areas = ["noteArea", "timers", "utilities", "ammo"];
+            const areas = ["sketches", "timers", "utilities", "ammo"];
             areas.forEach(loadFromStorage);
 
 
@@ -1480,6 +2055,9 @@ fas fa-star
                 }
             });
 
+            initDragElement(document.getElementById('tab-notes'));
+            initResizeElement(document.getElementById('tab-notes'));
+            document.getElementById('tab-notes').style.transform = '';
             timertotal = counter;
             // alert(`Done. Total timers: ${timertotal}`);
 
@@ -1615,6 +2193,7 @@ fas fa-star
 
             timerBG.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0) 37%, ${timercolor[timerid - 1]} 150%)`;
 
+
             timerDisplay.style.background = `linear-gradient(var(--background-color), var(--background-color)) padding-box, conic-gradient(${timercolor[timerid - 1]} ${timepercent}, var(--box-color) ${timepercent}) border-box`;
         }
 
@@ -1745,173 +2324,182 @@ fas fa-star
 
         // Function to create a new tab
         function createNewTab(url) {
-            const tabContainer = document.createElement('div');
-            tabContainer.classList.add('tab');
-            tabContainer.style.display = 'block'; // Make it visible
-            tabContainer.style.zIndex = ++currentZIndex; // Bring to top
-            const rect = tabContainer.getBoundingClientRect(); // Get the tab's dimensions
-            const top = window.innerHeight / 2 - rect.height / 2;
-            const left = window.innerWidth / 2 - rect.width / 2;
 
-            tabContainer.style.top = `${top - tabContainer.height / 2}px`;
-            tabContainer.style.left = `${left - tabContainer.width / 2}px`;
+            if (url == 'Notes') {
+                let tabnotes = document.getElementById('tab-notes');
 
-            const uniqueId = `tab-${Date.now()}`; // Generate a unique ID
-            tabContainer.id = uniqueId;
+                tabnotes.style.display = 'flex';
+                tabnotes.style.zIndex = ++currentZIndex;
+            } else {
+                const tabContainer = document.createElement('div');
+                tabContainer.classList.add('tab');
+                tabContainer.style.display = 'block'; // Make it visible
+                tabContainer.style.zIndex = ++currentZIndex; // Bring to top
+                const rect = tabContainer.getBoundingClientRect(); // Get the tab's dimensions
+                const top = window.innerHeight / 2 - rect.height / 2;
+                const left = window.innerWidth / 2 - rect.width / 2;
 
-            // Tab header
-            const tabHeader = document.createElement('div');
-    tabHeader.classList.add('tab-header');
-    tabHeader.innerHTML = `
+                tabContainer.style.top = `${top - tabContainer.height / 2}px`;
+                tabContainer.style.left = `${left - tabContainer.width / 2}px`;
+
+                const uniqueId = `tab-${Date.now()}`; // Generate a unique ID
+                tabContainer.id = uniqueId;
+
+                // Tab header
+                const tabHeader = document.createElement('div');
+                tabHeader.classList.add('tab-header');
+                tabHeader.innerHTML = `
         <p>${url}</p>
         <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
         <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
-        <button id='snapbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-columns" style="font-size: 10px; color: #ffffff80"></i></button>
-        <button id='maximizebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-external-link" style="font-size: 10px; color: #ffffff80"></i></button>
+    
         <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
     `;
-    tabContainer.appendChild(tabHeader);
+
+                // <button id='snapbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-columns" style="font-size: 10px; color: #ffffff80"></i></button>
+                // <button id='maximizebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-external-link" style="font-size: 10px; color: #ffffff80"></i></button>
+                tabContainer.appendChild(tabHeader);
 
 
-    // Add event listeners AFTER the elements are created
-    const buttons = tabHeader.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function(ev) {
-            const buttonId = this.id;
-            if (buttonId === 'pinbutton') pinTab(uniqueId);
-            else if (buttonId === 'lockbutton') togglelock(uniqueId);
-            else if (buttonId === 'snapbutton') snappingTab(uniqueId);
-            else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
-            else if (buttonId === 'closebutton') closeTab(uniqueId);
-        });
-        button.addEventListener('touchend', function(ev) {  // Add touchend listener
-            ev.preventDefault(); // Prevent default touch behavior
-            const buttonId = this.id;
-            if (buttonId === 'pinbutton') pinTab(uniqueId);
-            else if (buttonId === 'lockbutton') togglelock(uniqueId);
-            else if (buttonId === 'snapbutton') snappingTab(uniqueId);
-            else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
-            else if (buttonId === 'closebutton') closeTab(uniqueId);
-        });
-    });
+                // Add event listeners AFTER the elements are created
+                const buttons = tabHeader.querySelectorAll('button');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function (ev) {
+                        const buttonId = this.id;
+                        if (buttonId === 'pinbutton') pinTab(uniqueId);
+                        else if (buttonId === 'lockbutton') togglelock(uniqueId);
+                        else if (buttonId === 'snapbutton') snappingTab(uniqueId);
+                        else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
+                        else if (buttonId === 'closebutton') closeTab(uniqueId);
+                    });
+                    button.addEventListener('touchend', function (ev) {  // Add touchend listener
+                        ev.preventDefault(); // Prevent default touch behavior
+                        const buttonId = this.id;
+                        if (buttonId === 'pinbutton') pinTab(uniqueId);
+                        else if (buttonId === 'lockbutton') togglelock(uniqueId);
+                        else if (buttonId === 'snapbutton') snappingTab(uniqueId);
+                        else if (buttonId === 'maximizebutton') maximizeTab(uniqueId);
+                        else if (buttonId === 'closebutton') closeTab(uniqueId);
+                    });
+                });
 
 
 
 
-            if (url == 'Camera') {
-                let video = document.createElement('video');
+                if (url == 'Camera') {
+                    let video = document.createElement('video');
 
-                video.id = 'video';
+                    video.id = 'video';
 
-                // Set the autoplay attribute.  Note that autoplay is often unreliable due to browser restrictions.
-                video.autoplay = true;
+                    // Set the autoplay attribute.  Note that autoplay is often unreliable due to browser restrictions.
+                    video.autoplay = true;
 
-                video.style.transform = 'scaleX(-1)';
-
-
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: true })
-                        .then(function (stream) {
-                            video.srcObject = stream;
-                            console.log('camera');
-                        })
-                        .catch(function (err) {
-                            console.error("An error occurred: " + err);
-                            // Handle the error appropriately, e.g., display an error message to the user.
-                            const errorMessage = document.createElement('p');
-                            errorMessage.textContent = "Camera access denied. Please check your browser settings.";
-                            document.body.appendChild(errorMessage);
-                        });
-                } else {
-                    console.error("getUserMedia is not supported by your browser.");
-                    // Handle the case where getUserMedia is not supported.
-                    const errorMessage = document.createElement('p');
-                    errorMessage.textContent = "Your browser does not support webcam access.";
-                    document.body.appendChild(errorMessage);
-
-                }
-                tabContainer.style.overflowY = 'hidden';
-                video.style.width = '100%';
-                video.style.minWidth = '100%';
-
-                // video.style.height = 'calc(100% - 50px)';
-
-                video.style.border = '0px';
-                tabContainer.appendChild(video);
-            }
-
-            else {
-                let iframe = document.createElement('iframe');
-                iframe.src = url;
-                iframe.style.width = 'calc(100% - 0px)';
-                iframe.style.height = 'calc(100% - 50px)';
-
-                iframe.style.border = '0px';
+                    video.style.transform = 'scaleX(-1)';
 
 
-                // iframe.onload = function () {
-                //     if (iframe.contents().find("html body").children() > 0) {
-                //         showErrorPage(tabContainer, url, "The website refused the connection.")
-                //     }
-                // };
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        navigator.mediaDevices.getUserMedia({ video: true })
+                            .then(function (stream) {
+                                video.srcObject = stream;
+                                console.log('camera');
+                            })
+                            .catch(function (err) {
+                                console.error("An error occurred: " + err);
+                                // Handle the error appropriately, e.g., display an error message to the user.
+                                const errorMessage = document.createElement('p');
+                                errorMessage.textContent = "Camera access denied. Please check your browser settings.";
+                                document.body.appendChild(errorMessage);
+                            });
+                    } else {
+                        console.error("getUserMedia is not supported by your browser.");
+                        // Handle the case where getUserMedia is not supported.
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = "Your browser does not support webcam access.";
+                        document.body.appendChild(errorMessage);
 
-                // iframe.onerror = function () {
-                //     showErrorPage(tabContainer, url, "The website refused the connection.")
+                    }
+                    tabContainer.style.overflowY = 'hidden';
+                    video.style.width = '100%';
+                    video.style.minWidth = '100%';
 
-                // };
+                    // video.style.height = 'calc(100% - 50px)';
 
-
-                tabContainer.appendChild(iframe);
-            }
-
-
-            function showErrorPage(container, url, message) {
-                // Find the iframe within the container
-                const iframe = container.querySelector('iframe');
-                if (iframe) {
-                    container.removeChild(iframe); // Remove only the iframe
+                    video.style.border = '0px';
+                    tabContainer.appendChild(video);
                 }
 
-                const errorDiv = document.createElement('div');
-                errorDiv.style.textAlign = 'center';
-                errorDiv.style.alignSelf = 'center';
-                errorDiv.style.padding = '20px';
-                errorDiv.style.color = '#ffffff77';
-                errorDiv.style.justifyContent = 'center';
-                errorDiv.innerHTML = `
+                else {
+                    let iframe = document.createElement('iframe');
+                    iframe.src = url;
+                    iframe.style.width = 'calc(100% - 0px)';
+                    iframe.style.height = 'calc(100% - 50px)';
+
+                    iframe.style.border = '0px';
+
+
+                    // iframe.onload = function () {
+                    //     if (iframe.contents().find("html body").children() > 0) {
+                    //         showErrorPage(tabContainer, url, "The website refused the connection.")
+                    //     }
+                    // };
+
+                    // iframe.onerror = function () {
+                    //     showErrorPage(tabContainer, url, "The website refused the connection.")
+
+                    // };
+
+
+                    tabContainer.appendChild(iframe);
+                }
+
+
+                function showErrorPage(container, url, message) {
+                    // Find the iframe within the container
+                    const iframe = container.querySelector('iframe');
+                    if (iframe) {
+                        container.removeChild(iframe); // Remove only the iframe
+                    }
+
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.textAlign = 'center';
+                    errorDiv.style.alignSelf = 'center';
+                    errorDiv.style.padding = '20px';
+                    errorDiv.style.color = '#ffffff77';
+                    errorDiv.style.justifyContent = 'center';
+                    errorDiv.innerHTML = `
     <i class="fas fa-exclamation-circle" style="font-size: 100px; color: #ffffff77; margin: 20px 0px"></i>
         <h1 style="margin: 20px">Error Loading URL</h1>
         <p>There was an error loading the URL: ${url}</p>
         <p>${message}</p>
     `;
-                container.appendChild(errorDiv); // Add the error message
+                    container.appendChild(errorDiv); // Add the error message
+                }
+
+
+                // iframe.style.border = '0px';
+                // tabContainer.appendChild(iframe);
+
+                // Resizers
+                const resizerRight = document.createElement('div');
+                resizerRight.className = 'resizer-right';
+                tabContainer.appendChild(resizerRight);
+
+                const resizerBottom = document.createElement('div');
+                resizerBottom.className = 'resizer-bottom';
+                tabContainer.appendChild(resizerBottom);
+
+                const resizerBoth = document.createElement('div');
+                resizerBoth.className = 'resizer-both';
+                tabContainer.appendChild(resizerBoth);
+
+                document.body.appendChild(tabContainer);
+
+                // Initialize drag and resize functionality for the new tab
+                initDragElement(tabContainer);
+                initResizeElement(tabContainer);
+                // applyBlurBasedOnZIndex();
+
             }
-
-
-            // iframe.style.border = '0px';
-            // tabContainer.appendChild(iframe);
-
-            // Resizers
-            const resizerRight = document.createElement('div');
-            resizerRight.className = 'resizer-right';
-            tabContainer.appendChild(resizerRight);
-
-            const resizerBottom = document.createElement('div');
-            resizerBottom.className = 'resizer-bottom';
-            tabContainer.appendChild(resizerBottom);
-
-            const resizerBoth = document.createElement('div');
-            resizerBoth.className = 'resizer-both';
-            tabContainer.appendChild(resizerBoth);
-
-            document.body.appendChild(tabContainer);
-
-            // Initialize drag and resize functionality for the new tab
-            initDragElement(tabContainer);
-            initResizeElement(tabContainer);
-            // applyBlurBasedOnZIndex();
-
-
         }
 
         function minMagnitude(a, b) {
@@ -1924,25 +2512,30 @@ fas fa-star
             }
         }
 
-        function addholo(tab) {
+        function addholo(tab, type) {
             let rect = tab.getBoundingClientRect();
             let tabCenterX = rect.left + rect.width / 2;
             let tabCenterY = rect.top + rect.height / 2;
 
 
             let distanceX = (tabCenterX - centerX) / 30; // Scale factor adjusts sensitivity
-            let distanceY = (tabCenterY - centerY) * 0; // Scale factor adjusts sensitivity
+            let distanceY = (tabCenterY - centerY) / 50; // Scale factor adjusts sensitivity
 
 
+            if (type == 'normal') {
+                tab.style.transform = `rotateY(${minMagnitude(45 * -distanceX / Math.abs(distanceX), -distanceX)}deg) rotateZ(${0}deg) rotateX(${minMagnitude(45 * distanceY / Math.abs(distanceY), distanceY)}deg)`;
+            } else {
+                tab.style.transform = `rotateY(${minMagnitude(45 * -distanceX / Math.abs(distanceX), -distanceX)}deg) rotateZ(${0}deg) rotateX(0deg)`;
+            }
 
 
-            tab.style.transform = `rotateY(${minMagnitude(45 * -distanceX / Math.abs(distanceX), -distanceX)}deg) rotateZ(${0}deg) rotateX(${minMagnitude(45 * distanceY / Math.abs(distanceY), distanceY)}deg)`;
             // tab.style.transform = `rotateY(${-distanceX}deg) rotateZ(${0}deg) rotateX(${distanceY}deg)`;
 
         }
+
         // Initialize dragging for a specific element
         function initDragElement(tab) {
-            addholo(tab);
+            addholo(tab, 'normal');
 
 
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -1970,7 +2563,7 @@ fas fa-star
                 tab.style.top = (tab.offsetTop - pos2) + "px";
                 tab.style.left = (tab.offsetLeft - pos1) + "px";
                 tab.style.borderRadius = '10px';
-                addholo(tab);
+                addholo(tab, 'normal');
             }
 
 
@@ -1999,7 +2592,7 @@ fas fa-star
                 tab.style.left = (tab.offsetLeft - pos1) + "px";
                 tab.style.borderRadius = '10px';
 
-                addholo(tab);
+                addholo(tab, 'normal');
 
             }
 
@@ -2139,7 +2732,7 @@ fas fa-star
                         tab.style.height = (startHeight + deltaY) + "px";
                     }
                     tab.style.borderRadius = '10px';
-                    addholo(tab);
+                    addholo(tab, 'normal');
                 }
 
                 function stopResizeTouch() {
@@ -2174,7 +2767,7 @@ fas fa-star
                         tab.style.height = (startHeight + e.clientY - startY) + "px";
                     }
                     tab.style.borderRadius = '10px';
-                    addholo(tab);
+                    addholo(tab, 'normal');
 
 
                 }
@@ -2187,12 +2780,15 @@ fas fa-star
         }
 
 
-        // Close a tab
         function closeTab(tabId) {
             const tab = document.getElementById(tabId);
             if (tab) {
-                tab.remove();
-                // applyBlurBasedOnZIndex();
+                if (tabId === 'tab-notes') {
+                    tab.style.display = 'none';
+                } else {
+                    tab.remove();
+                }
+                // applyBlurBasedOnZIndex(); //This line remains unchanged
             }
         }
 
@@ -2220,18 +2816,18 @@ fas fa-star
         function pinTab(tabId) {
             const tab = document.getElementById(tabId);
 
-            tab.style.transition = "transform 0.3s ease";
+            tab.style.transition = "transform 0.5s ease";
 
             tab.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
             setTimeout(() => {
                 tab.style.transition = '';
 
-            }, 300); // Slightly longer than the 0.5s transition
+            }, 500); // Slightly longer than the 0.5s transition
         }
         function snappingTab(tabId) {
             const tab = document.getElementById(tabId);
 
-            // tab.style.transition = "transform 0.3s ease";
+            // tab.style.transition = "transform 0.5s ease";
 
             // tab.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
             // setTimeout(() => {
@@ -2262,12 +2858,12 @@ fas fa-star
         function maximizeTab(tabId) {
             const tab = document.getElementById(tabId);
 
-            tab.style.transition = "all 0.3s ease";
+            tab.style.transition = "all 0.5s ease";
 
             tab.style.width = `${window.innerWidth * 0.9}px`;
-            tab.style.height = `${window.innerHeight * 0.9}px`;
+            tab.style.height = `${window.innerHeight * 0.85}px`;
 
-            const top = window.innerHeight * 0.05;
+            const top = window.innerHeight * 0.075;
             const left = window.innerWidth * 0.05;
 
             tab.style.top = `${top}px`;
@@ -2294,7 +2890,7 @@ fas fa-star
 
             setTimeout(() => {
                 tab.style.transition = '';
-            }, 300); // Slightly longer than the 0.5s transition
+            }, 500); // Slightly longer than the 0.5s transition
         }
 
 
@@ -2334,7 +2930,10 @@ fas fa-star
 
         function applySnapping(tab, type) {
 
-            tab.style.transition = "all 0.3s ease";
+
+            tab.style.transition = "all 0.5s ease";
+
+            addholo(tab, 'horizontal');
             let rect = tab.getBoundingClientRect();
             let tabCenterX = rect.left + rect.width / 2;
             let tabCenterY = rect.top + rect.height / 2;
@@ -2351,9 +2950,9 @@ fas fa-star
             } else if (type == 'left') {
 
                 tab.style.width = `${window.innerWidth * 0.45}px`;
-                tab.style.height = `${window.innerHeight * 0.9}px`;
+                tab.style.height = `${window.innerHeight * 0.85}px`;
 
-                const top = window.innerHeight * 0.05;
+                const top = window.innerHeight * 0.075;
                 const left = window.innerWidth * 0.05;
 
                 tab.style.top = `${top}px`;
@@ -2365,9 +2964,9 @@ fas fa-star
 
 
                 tab.style.width = `${window.innerWidth * 0.45}px`;
-                tab.style.height = `${window.innerHeight * 0.9}px`;
+                tab.style.height = `${window.innerHeight * 0.85}px`;
 
-                const top = window.innerHeight * 0.05;
+                const top = window.innerHeight * 0.075;
                 const left = window.innerWidth * 0.5;
 
                 tab.style.top = `${top}px`;
@@ -2458,9 +3057,9 @@ fas fa-star
 
 
                 tab.style.width = `${window.innerWidth * 0.9}px`;
-                tab.style.height = `${window.innerHeight * 0.9}px`;
+                tab.style.height = `${window.innerHeight * 0.85}px`;
 
-                const top = window.innerHeight * 0.05;
+                const top = window.innerHeight * 0.075;
                 const left = window.innerWidth * 0.05;
 
                 tab.style.top = `${top}px`;
@@ -2532,7 +3131,7 @@ fas fa-star
                 tab.style.transition = '';
 
 
-            }, 300);
+            }, 500);
 
         }
 
@@ -2714,6 +3313,7 @@ fas fa-star
 
 
         function advancedSearch(inputValue) {
+            console.log(inputValue);
             // Regular expressions for pattern matching
             const subjectRegex = /(physics|chemistry|biology|mathematics)/i;
             const unitRegex = /unit\s*(\d+)/i;
@@ -2758,7 +3358,17 @@ fas fa-star
                 year = year.length === 2 ? "20" + year : year;
 
                 let baseUrl = "https://www.physicsandmathstutor.com/pdf-pages/?pdf=https%3A%2F%2Fpmt.physicsandmathstutor.com%2Fdownload%2F";
-                searchURL = `${baseUrl}${subject}%2FA-level%2FPast-Papers%2FEdexcel-IAL%2F2018-spec%2FUnit-${unit}%2F${type}%2F${series}%20${year}%20(IAL)%20${type}.pdf`;
+
+                if (parseInt(year) > 2019) {
+                    searchURL = `${baseUrl}${subject}%2FA-level%2FPast-Papers%2FEdexcel-IAL%2F2018-spec%2FUnit-${unit}%2F${type}%2F${series}%20${year}%20(IAL)%20${type}.pdf`;
+
+                } else {
+                    searchURL = `${baseUrl}${subject}%2FA-level%2FPast-Papers%2FEdexcel-IAL%2FUnit-${unit}%2F${series}%20${year}%20(IAL)%20${type}%20-%20Unit%20${unit}%20Edexcel%20${subject}%20A-level.pdf`;
+
+                }
+
+
+
 
                 //Construct URL for past papers (adjust as needed for your dynamicpapers.com structure)
                 // searchURL = `https://dynamicpapers.com/wp-content/uploads/20${subject.charAt(0).toUpperCase() + subject.slice(1)}-Unit-${unit}-${series}-${year}.pdf`;
@@ -2772,7 +3382,21 @@ fas fa-star
 
             } else if (inputValue.toLowerCase() === 'camera') {
                 searchURL = 'Camera';
-            } else if (inputValue.toLowerCase() === 'calculator') {
+            }
+            else if (inputValue.toLowerCase() === 'notes') {
+                searchURL = 'Notes';
+            }
+            else if (inputValue.toLowerCase() === 'pmt') {
+                searchURL = 'https://www.physicsandmathstutor.com';
+            }
+            else if (inputValue.toLowerCase() === 'dynamic') {
+                searchURL = 'https://dynamicpapers.com/edexcel-recent-papers/ias-ial/chemistry/';
+            }
+            else if (inputValue.toLowerCase() === 'dynamic papers') {
+                searchURL = 'https://dynamicpapers.com/edexcel-recent-papers/ias-ial/chemistry/';
+            }
+
+            else if (inputValue.toLowerCase() === 'calculator') {
                 searchURL = 'https://www.desmos.com/calculator';
             }
 
@@ -2800,8 +3424,6 @@ fas fa-star
                 b: parseInt(result[3], 16)
             } : null;
         }
-
-
 
 
 
