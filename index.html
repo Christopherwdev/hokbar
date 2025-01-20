@@ -508,6 +508,7 @@
 
 
         .utilities {
+            margin: auto;
             cursor: pointer;
             border-radius: calc(var(--border-radius)/2);
             height: 80px;
@@ -1337,8 +1338,8 @@
                         <button onclick="openPopup('utilitiesPopup')">Edit</button>
                     </div>
                     <div class="sub-container"
-                        style="display: flex;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
-                        <a class="button" target="_blank">
+                        style="display: flexbox;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
+                  
                             <div class="utilities" onclick="advancedSearch('Notes')">
 
                                 <div class="circle">
@@ -1346,7 +1347,7 @@
                                 </div>
                                 Notes
                             </div>
-                        </a>
+                        
 
                         <div class="utilities">
                             <div class="circle" onclick="advancedSearch('Calculator')">
@@ -1693,6 +1694,35 @@
                             console.warn(`Unhandled button action: ${action}`);
                     }
                 });
+            });
+
+            buttons.forEach(button => {
+
+
+                button.addEventListener('touchend', function (ev) {  // Add touchend listener
+                        ev.preventDefault(); // Prevent default touch behavior
+                        const action = this.id; // Use the ID as an action identifier
+
+                    switch (action) {
+                        case 'pinbutton':
+                            pinTab(tabname);
+                            break;
+                        case 'lockbutton':
+                            togglelock(tabname);
+                            break;
+                        case 'closebutton':
+                            closeTab(tabname);
+                            break;
+                        // Add cases for other buttons (snapbutton, maximizebutton) as needed
+                        default:
+                            console.warn(`Unhandled button action: ${action}`);
+                    }
+                });
+
+
+
+
+                
             });
         }
         function initializevideo(video) {
