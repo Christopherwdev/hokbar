@@ -77,14 +77,14 @@
             background-size: cover;
             background-repeat: no-repeat;
             /* backdrop-filter: brightness(0.5); */
-            
+
             background-color: #000000;
             overflow: hidden;
             perspective: 800px;
             align-items: center;
             align-content: center;
-            
- color: var(--text-color);
+
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -539,23 +539,9 @@
             width: 16px;
         }
 
-        .right-panel .sub-container::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 4px solid transparent;
-            border-radius: 50px;
-            background-clip: padding-box;
-        }
-
-        .right-panel .sub-container::-webkit-scrollbar-thumb:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            /* border: 4px solid transparent; */
-            border-radius: 50px;
-            background-clip: padding-box;
-        }
-
 
         .right-panel .sub-container::-webkit-scrollbar {
-            width: 15px;
+            display: hidden;
         }
 
         .utilities:hover {
@@ -564,6 +550,7 @@
         }
 
         .utilities .circle {
+            margin: auto;
             align-items: center;
             justify-content: center;
             align-content: center;
@@ -778,7 +765,7 @@
         .bottom-pane:hover {
             border-top: 1px solid #ffffff7c;
             height: 200px;
-     
+
             filter: blur(0px);
         }
 
@@ -960,7 +947,7 @@
             z-index: 9;
             text-align: center;
             min-height: 100px;
-    min-width: 100px;
+            min-width: 100px;
             background-color: #4a4a4a83;
             backdrop-filter: blur(20px);
             background-blend-mode: overlay;
@@ -1253,7 +1240,7 @@
 <body>
     <!-- <div id="skybox"></div> -->
     <div class="background-container" id="background-container">
-   
+
     </div>
 
 
@@ -1338,16 +1325,16 @@
                         <button onclick="openPopup('utilitiesPopup')">Edit</button>
                     </div>
                     <div class="sub-container"
-                        style="display: flexbox;width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
-                  
-                            <div class="utilities" onclick="advancedSearch('Notes')">
+                        style="display: flexbox; width: 300px; height: auto; overflow-x: auto; scrollbar-width: 1px; padding: 5px 5px 0px 5px;">
 
-                                <div class="circle">
-                                    <i class="fas fa-pencil-square"></i>
-                                </div>
-                                Notes
+                        <div class="utilities" onclick="advancedSearch('Notes')">
+
+                            <div class="circle">
+                                <i class="fas fa-pencil-square"></i>
                             </div>
-                        
+                            Notes
+                        </div>
+
 
                         <div class="utilities">
                             <div class="circle" onclick="advancedSearch('Calculator')">
@@ -1355,7 +1342,7 @@
                             </div>
                             Calculator
                         </div>
-                                                <div class="utilities" onclick="advancedSearch('InterviewPro')">
+                        <div class="utilities" onclick="advancedSearch('InterviewPro')">
                             <div class="circle">
                                 <i class="fas fa-microphone"></i>
                             </div>
@@ -1384,40 +1371,7 @@
                     </div>
                     <div class="sub-container" id="ammo-container"
                         style="overflow-y:auto;height: 100%; flex-grow: 1; width: 100%; display: block; margin-bottom: 0px;border-radius: 0px 0px 10px 10px; height: 260px">
-                        <!-- <div class="sub-container" style="height: auto;">
-                        <div class="files">
-                            <div class="circle">
-                                <i class="fas fa-file-word"></i>
-                            </div>
 
-                            <div class="sub-container">
-
-                                <h4>Med Interview Prep</h4>
-                                <div class="link">
-                                    https://docs.google.com/document/d/11o8vSXbH2aGCdsKxTwfBTJfVSF-vN9rZCvtDHlUEC9c/edit?tab=t.0
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="sub-container" style="height: auto;">
-                        <div class="files">
-                            <div class="circle">
-                                <i class="fas fa-microphone"></i>
-                            </div>
-
-                            <div class="sub-container">
-
-                                <h4>Med Interview Prep</h4>
-                                <div class="link">
-                                    https://docs.google.com/document/d/11o8vSXbH2aGCdsKxTwfBTJfVSF-vN9rZCvtDHlUEC9c/edit?tab=t.0
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div> -->
 
                     </div>
                 </div>
@@ -1425,7 +1379,7 @@
 
         </div>
     </div>
-    
+
 
     <!-- Popup Overlays -->
     <div id="timerPopup" class="popup-overlay">
@@ -1581,7 +1535,8 @@
             <p>Notes</p>
             <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
                     class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
-            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
+            <button id='lockbutton'
+                style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
                     class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
 
             <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
@@ -1627,7 +1582,8 @@
             <p>InterviewPro</p>
             <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
                     class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
-            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
+            <button id='lockbutton'
+                style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
                     class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
 
             <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
@@ -1641,25 +1597,24 @@
                 </div>
             </div>
             <div class=" toolbar" id="toolbar" style="margin-bottom: 20px; margin-top: 10px; justify-content: center;">
-                    <button onclick="startSpeechRecognition()" class="other-button" id="interviewprostart"
-                        style="font-weight: bold; background-color: #0FBD8C; width: 70px;text-align: center; align-self: center; justify-content: center;">Start</button>
-                    <button id='timerButton' class="other-button"
-                        style="font-size: 25px; font-weight: bold;">0:00</button>
-                    <button onclick="createNewTab('Camera')" class="other-button"
-                        id="interviewprostart" style="width: 70px;">
-                        <i id='interviewprocamicon' class="fas fa-video-camera"></i>
-                    </button>
+                <button onclick="startSpeechRecognition()" class="other-button" id="interviewprostart"
+                    style="font-weight: bold; background-color: #0FBD8C; width: 70px;text-align: center; align-self: center; justify-content: center;">Start</button>
+                <button id='timerButton' class="other-button" style="font-size: 25px; font-weight: bold;">0:00</button>
+                <button onclick="createNewTab('Camera')" class="other-button" id="interviewprostart"
+                    style="width: 70px;">
+                    <i id='interviewprocamicon' class="fas fa-video-camera"></i>
+                </button>
 
 
 
-                </div>
             </div>
-            <div class="resizer-right"></div>
-            <div class="resizer-bottom"></div>
-            <div class="resizer-both"></div>
         </div>
+        <div class="resizer-right"></div>
+        <div class="resizer-bottom"></div>
+        <div class="resizer-both"></div>
+    </div>
 
-        <!-- <div class="sub-container" style="height: 20px; width: 100%;flex-shrink: 0;"></div> -->
+    <!-- <div class="sub-container" style="height: 20px; width: 100%;flex-shrink: 0;"></div> -->
 
 
 
@@ -1676,7 +1631,7 @@
         function initializetabbuttons(buttons, tabname) {
             buttons.forEach(button => {
                 button.addEventListener('click', function (event) {
-                    event.preventDefault(); // Good practice to prevent default behavior
+                    // event.preventDefault();
                     const action = this.id; // Use the ID as an action identifier
 
                     switch (action) {
@@ -1697,11 +1652,9 @@
             });
 
             buttons.forEach(button => {
-
-
                 button.addEventListener('touchend', function (ev) {  // Add touchend listener
-                        ev.preventDefault(); // Prevent default touch behavior
-                        const action = this.id; // Use the ID as an action identifier
+                    // ev.preventDefault();
+                    const action = this.id; // Use the ID as an action identifier
 
                     switch (action) {
                         case 'pinbutton':
@@ -1718,11 +1671,6 @@
                             console.warn(`Unhandled button action: ${action}`);
                     }
                 });
-
-
-
-
-                
             });
         }
         function initializevideo(video) {
@@ -2316,7 +2264,7 @@ fas fa-star
             const rightpanel = document.getElementById('right-panel');
             const header = document.getElementById('header');
             const background = document.getElementById('background-container');
-            
+
             leftpanel.style.filter = '';
             rightpanel.style.filter = '';
             header.style.filter = '';
@@ -2377,7 +2325,7 @@ fas fa-star
             const rightpanel = document.getElementById('right-panel');
             const header = document.getElementById('header');
             const background = document.getElementById('background-container');
-            
+
             leftpanel.style.filter = 'blur(10px)';
             rightpanel.style.filter = 'blur(10px)';
             header.style.filter = 'blur(10px)';
@@ -2432,13 +2380,13 @@ fas fa-star
                 circlebuttonleft.style.display = "block";
                 circlebuttonright.style.display = "block";
 
-            leftpanel.style.filter = '';
-            rightpanel.style.filter = '';
-            header.style.filter = '';
-            leftpanel.style.opacity = '';
-            rightpanel.style.opacity = '';
-            header.style.opacity = '';
-            background.style.opacity = 'var(--backgroundopacity)';
+                leftpanel.style.filter = '';
+                rightpanel.style.filter = '';
+                header.style.filter = '';
+                leftpanel.style.opacity = '';
+                rightpanel.style.opacity = '';
+                header.style.opacity = '';
+                background.style.opacity = 'var(--backgroundopacity)';
 
 
             } else if (timerStart.textContent == "RESUME") {
@@ -2626,8 +2574,8 @@ fas fa-star
             let tabCenterY = rect.top + rect.height / 2;
 
 
-            let distanceX = (tabCenterX - centerX) / 30 * 1500 / rect.width; 
-            let distanceY = (tabCenterY - centerY) / 30 * 500 / rect.height; 
+            let distanceX = (tabCenterX - centerX) / 30 * 1500 / rect.width;
+            let distanceY = (tabCenterY - centerY) / 30 * 500 / rect.height;
 
 
             if (type == 'normal') {
