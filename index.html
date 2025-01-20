@@ -25,6 +25,7 @@
             --google-red: #EA4335;
             --google-yellow: #FBBC05;
             --google-green: #34A853;
+            --backgroundopacity: 50%;
         }
 
         * {
@@ -55,7 +56,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -100000;
             /* Important: Negative z-index to place it behind other content */
             background-image: url('desert.jpg');
             /* background-color: #000000; */
@@ -65,6 +66,8 @@
             background-repeat: no-repeat;
             background-position: center center;
             /* filter: blur(0px) brightness(0.5); */
+            opacity: 40%;
+            transition: all 0.3s ease;
         }
 
         body {
@@ -80,6 +83,7 @@
             perspective: 800px;
             align-items: center;
             align-content: center;
+            
  color: var(--text-color);
             display: flex;
             justify-content: center;
@@ -135,14 +139,14 @@
 
         .container {
             /* filter: blur(0.7px); */
-            /* background-color: #4a4a4a83;
-            backdrop-filter: blur(20px); */
+            /* background-color: #0000003f; */
+            /* backdrop-filter: blur(20px); */
             /* background-blend-mode: overlay; */
             /* opacity: 0.8; */
             width: 1200px;
             height: 650px;
             /* background-color: var(--background-color); */
-            /* border: 2px solid var(--primary-color); */
+            /* border: 1px solid var(--primary-color); */
             /* background-image: url('desert.jpg');
   background-size: cover; 
   background-repeat: no-repeat; */
@@ -153,6 +157,10 @@
             gap: var(--gap);
             padding: var(--gap);
             overflow: hidden;
+            z-index: -100;
+            justify-content: center;
+            /* align-items: center; */
+            /* align-content: center; */
             /* box-shadow: #0fbd8c24 0px 5px 50px 20px; */
         }
 
@@ -164,9 +172,11 @@
         /* Header Panel */
         .header {
             grid-column: 1 / span 3;
+            padding: 0px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
 
         }
 
@@ -198,6 +208,7 @@
             justify-content: space-between;
             padding: var(--gap);
             perspective: 1000px;
+            transition: all 0.3s ease;
             /* transform: rotateZ(-1.5deg); */
         }
 
@@ -206,7 +217,7 @@
         .left-panel .holo {
             transform: rotateY(25deg);
 
-            z-index: 1;
+            /* z-index: 1; */
             height: 200px;
 
         }
@@ -391,11 +402,12 @@
             padding: var(--gap);
             perspective: 1000px;
             /* transform: rotateZ(1.5deg); */
+            transition: all 0.3s ease;
         }
 
         .right-panel .holo {
             transform: rotateY(-25deg);
-            z-index: 1;
+            /* z-index: 1; */
             height: 300px;
 
         }
@@ -418,8 +430,8 @@
             width: 100%;
             height: 40px;
             /* display: flex; */
-            /* background-color: var(--contrast-color); */
-            background-color: #00000000;
+            background-color: var(--contrast-color);
+            /* background-color: #00000000; */
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             text-align: center;
             padding: 10px;
@@ -501,6 +513,7 @@
             height: 80px;
             width: 80px;
             background-color: #00000000;
+            display: flexbox;
             align-items: center;
             justify-content: center;
             align-content: center;
@@ -727,7 +740,7 @@
 
 
         .bottom-pane {
-            opacity: 1;
+
             position: absolute;
             bottom: 0;
             left: 0;
@@ -764,7 +777,7 @@
         .bottom-pane:hover {
             border-top: 1px solid #ffffff7c;
             height: 200px;
-            opacity: 1;
+     
             filter: blur(0px);
         }
 
@@ -945,8 +958,8 @@
             display: flexbox;
             z-index: 9;
             text-align: center;
-            /* max-height: 700px;
-    max-width: 1200px; */
+            min-height: 100px;
+    min-width: 100px;
             background-color: #4a4a4a83;
             backdrop-filter: blur(20px);
             background-blend-mode: overlay;
@@ -956,8 +969,8 @@
             flex-direction: column;
             position: absolute;
             overflow: auto;
-            width: 500px;
-            height: 400px;
+            width: 400px;
+            height: 300px;
             box-shadow: #0000005f 0px 10px 30px 0px;
 
         }
@@ -1238,12 +1251,14 @@
 
 <body>
     <!-- <div id="skybox"></div> -->
-    <div class="background-container">
+    <div class="background-container" id="background-container">
    
     </div>
+
+
     <div class="container">
         <!-- Header -->
-        <div class="header">
+        <div class="header" id="header">
             <div class="logo" id="topic">HOKBAR</div>
             <div class="profile">
                 <div class="avatar"></div>
@@ -1252,7 +1267,7 @@
         </div>
 
         <!-- Left Panel -->
-        <div class="left-panel">
+        <div class="left-panel" id='left-panel'>
             <div class="holo">
                 <div style="margin-bottom: 0px;">
                     <div class="date" id="date">Jan 17 MON</div>
@@ -1313,7 +1328,7 @@
         </div>
 
         <!-- Right Panel -->
-        <div class="right-panel">
+        <div class="right-panel" id="right-panel">
             <div class="holo">
                 <div class="box" style="height: 140px; margin-bottom: 20px;">
                     <div class="pane" style="display: flex; width: 100%;">
@@ -1409,6 +1424,7 @@
 
         </div>
     </div>
+    
 
     <!-- Popup Overlays -->
     <div id="timerPopup" class="popup-overlay">
@@ -1559,12 +1575,12 @@
       </div> -->
 
     <div class="tab" id="tab-notes"
-        style="display: none; width: 500px; height: 470px; overflow: hidden; transform: none;">
+        style="display: none; width: 400px; height: 300px; overflow: hidden; transform: none;">
         <div class="tab-header">
             <p>Notes</p>
             <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
                     class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
-            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
                     class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
 
             <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
@@ -1605,12 +1621,12 @@
 
 
     <div class="tab" id="tab-interviewpro"
-        style="display: none; width: 500px; height: 470px; overflow: hidden; transform: none;">
+        style="display: none; width: 400px; height: 300px; overflow: hidden; transform: none;">
         <div class="tab-header">
             <p>InterviewPro</p>
             <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
                     class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
-            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
+            <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: rgba(255, 255, 255, 0.5)"><i
                     class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
 
             <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i
@@ -2205,12 +2221,26 @@ fas fa-star
             const timerTitle = document.getElementById('timerTitle');
             const timerStart = document.getElementById('timerStart')
 
+
             const input = document.getElementById('timers').value;
 
             timerpaused = false; // Set the flag to false to pause the timer
             timerStart.textContent = "START NOW";
             timerStart.style.backgroundColor = `${timercolor[timerid - 1]}`;
             timerStart.style.color = "white";
+
+            const leftpanel = document.getElementById('left-panel');
+            const rightpanel = document.getElementById('right-panel');
+            const header = document.getElementById('header');
+            const background = document.getElementById('background-container');
+
+            leftpanel.style.filter = '';
+            rightpanel.style.filter = '';
+            header.style.filter = '';
+            leftpanel.style.opacity = '';
+            rightpanel.style.opacity = '';
+            header.style.opacity = '';
+            background.style.opacity = 'var(--backgroundopacity)';
 
             const circlebuttonleft = document.getElementById("circle-button-left");
             const circlebuttonright = document.getElementById("circle-button-right");
@@ -2251,6 +2281,19 @@ fas fa-star
             timerStart.textContent = "START NOW";
             timerStart.style.backgroundColor = `${timercolor[timerid - 1]}`;
             timerStart.style.color = "white";
+
+            const leftpanel = document.getElementById('left-panel');
+            const rightpanel = document.getElementById('right-panel');
+            const header = document.getElementById('header');
+            const background = document.getElementById('background-container');
+            
+            leftpanel.style.filter = '';
+            rightpanel.style.filter = '';
+            header.style.filter = '';
+            leftpanel.style.opacity = '';
+            rightpanel.style.opacity = '';
+            header.style.opacity = '';
+            background.style.opacity = 'var(--backgroundopacity)';
 
             const circlebuttonleft = document.getElementById("circle-button-left");
             const circlebuttonright = document.getElementById("circle-button-right");
@@ -2300,6 +2343,19 @@ fas fa-star
             const circlebuttonleft = document.getElementById("circle-button-left");
             const circlebuttonright = document.getElementById("circle-button-right");
 
+            const leftpanel = document.getElementById('left-panel');
+            const rightpanel = document.getElementById('right-panel');
+            const header = document.getElementById('header');
+            const background = document.getElementById('background-container');
+            
+            leftpanel.style.filter = 'blur(10px)';
+            rightpanel.style.filter = 'blur(10px)';
+            header.style.filter = 'blur(10px)';
+            leftpanel.style.opacity = '30%';
+            rightpanel.style.opacity = '30%';
+            header.style.opacity = '30%';
+            background.style.opacity = '20%';
+
             if (timerpaused == false) {
 
 
@@ -2345,6 +2401,14 @@ fas fa-star
                 timertime[timerid - 1] = countdownTime / 60;
                 circlebuttonleft.style.display = "block";
                 circlebuttonright.style.display = "block";
+
+            leftpanel.style.filter = '';
+            rightpanel.style.filter = '';
+            header.style.filter = '';
+            leftpanel.style.opacity = '';
+            rightpanel.style.opacity = '';
+            header.style.opacity = '';
+            background.style.opacity = 'var(--backgroundopacity)';
 
 
             } else if (timerStart.textContent == "RESUME") {
@@ -2400,7 +2464,7 @@ fas fa-star
                 tabHeader.innerHTML = `
         <p>${url}</p>
         <button id='pinbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-cube" style="font-size: 10px; color: #ffffff80"></i></button>
-        <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-lock" style="font-size: 10px; color: white"></i></button>
+        <button id='lockbutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-lock" style="font-size: 10px; color: rgba(255, 255, 255, 0.5)"></i></button>
     
         <button id='closebutton' style="margin-left: 5px; width: 20px; flex-grow: 0; color: white"><i class="fas fa-times" style="font-size: 10px; color: #ffffff80"></i></button>
     `;
@@ -2532,8 +2596,8 @@ fas fa-star
             let tabCenterY = rect.top + rect.height / 2;
 
 
-            let distanceX = (tabCenterX - centerX) / 30 * 800 / rect.height; // Scale factor adjusts sensitivity
-            let distanceY = (tabCenterY - centerY) / 30 * 800 / rect.height; // Scale factor adjusts sensitivity
+            let distanceX = (tabCenterX - centerX) / 30 * 1500 / rect.width; 
+            let distanceY = (tabCenterY - centerY) / 30 * 500 / rect.height; 
 
 
             if (type == 'normal') {
