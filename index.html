@@ -25,7 +25,7 @@
             --google-red: #EA4335;
             --google-yellow: #FBBC05;
             --google-green: #34A853;
-            --backgroundopacity: 50%;
+            --backgroundopacity: 100%;
         }
 
         * {
@@ -415,7 +415,7 @@
         .box {
             /* background-color: var(--box-color); */
 
-            background-color: #00000031;
+            background-color: #5656563d;
             backdrop-filter: blur(15px);
             background-blend-mode: overlay;
 
@@ -2387,6 +2387,9 @@ fas fa-star
                 rightpanel.style.opacity = '';
                 header.style.opacity = '';
                 background.style.opacity = 'var(--backgroundopacity)';
+
+                reminders = document.querySelector('.reminders');
+                reminders.style.borderRadius = '10px';
 
 
             } else if (timerStart.textContent == "RESUME") {
