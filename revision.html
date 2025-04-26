@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             --ios-blue: #007aff;
             --ios-light-blue: #5ac8fa;
             --ios-bg: rgba(242, 242, 247, 1);
-            --ios-card: rgba(255, 255, 255, 0.9);
+            --ios-card: rgba(255, 255, 255, 0.7);
             --ios-text: #1c1c1e;
             --ios-secondary-text: #8e8e93;
             --ios-border: rgba(209, 209, 214, 0.5);
@@ -18,8 +19,10 @@
             --panel-gap: 1%;
             --tab-height: 44px;
             --header-height: 64px;
-            --footer-height: 50px;
             --blur-amount: 15px;
+            --chat-width: 400px;
+            --chat-height: 500px;
+            --chat-border-radius: 15px;
         }
 
         .dark-mode {
@@ -83,7 +86,7 @@
             font-size: 24px;
             cursor: pointer;
             padding: 8px;
-            border-radius: 50%;
+            border-radius: 100px;
             transition: background-color 0.2s ease;
         }
 
@@ -115,6 +118,9 @@
             position: relative;
             cursor: col-resize;
             background-color: var(--ios-border);
+            user-select: none;
+            -webkit-user-select: none;
+            z-index: 100;
         }
 
         .panel-gap::after {
@@ -128,6 +134,7 @@
             background-color: var(--ios-secondary-text);
             border-radius: 4px;
             opacity: 0.3;
+            pointer-events: none;
         }
 
         .tabs {
@@ -198,335 +205,6 @@
             border: none;
         }
 
-        .fallback-message {
-            padding: 20px;
-            color: var(--ios-secondary-text);
-            text-align: center;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .fallback-message i {
-            font-size: 48px;
-            color: var(--ios-light-blue);
-        }
-
-        .app-footer {
-            height: var(--footer-height);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: var(--ios-card);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
-            border-top: 1px solid var(--ios-border);
-            z-index: 10;
-        }
-
-        .footer-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 5px 0;
-            color: var(--ios-secondary-text);
-            text-decoration: none;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .footer-button i {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        .footer-button.active {
-            color: var(--ios-blue);
-        }
-
-        /* Notes feature */
-        .notes-container {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .notes-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .note-item {
-            background-color: var(--ios-card);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--ios-border);
-            transition: transform 0.2s ease;
-        }
-
-        .note-item:hover {
-            transform: translateY(-2px);
-        }
-
-        .note-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .note-content {
-            color: var(--ios-secondary-text);
-            font-size: 14px;
-        }
-
-        .note-date {
-            font-size: 12px;
-            color: var(--ios-secondary-text);
-            margin-top: 10px;
-            text-align: right;
-        }
-
-        .add-note-btn {
-            position: fixed;
-            bottom: 70px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 25px;
-            background-color: var(--ios-blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 100;
-            transition: transform 0.2s ease;
-        }
-
-        .add-note-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: var(--ios-card);
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--ios-secondary-text);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: var(--ios-secondary-text);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid var(--ios-border);
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            font-size: 16px;
-            transition: border-color 0.2s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--ios-blue);
-        }
-
-        textarea.form-control {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background-color: var(--ios-blue);
-            color: white;
-        }
-
-        .btn-secondary {
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            border: 1px solid var(--ios-border);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Search feature */
-        .search-container {
-            display: none;
-            height: 100%;
-            flex-direction: column;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .search-header {
-            margin-bottom: 15px;
-        }
-
-        .search-input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--ios-secondary-text);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border-radius: 10px;
-            border: 1px solid var(--ios-border);
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
-            font-size: 16px;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--ios-blue);
-        }
-
-        .search-results {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .search-result-item {
-            background-color: var(--ios-card);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--ios-border);
-            transition: transform 0.2s ease;
-        }
-
-        .search-result-item:hover {
-            transform: translateY(-2px);
-        }
-
-        .search-result-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--ios-blue);
-        }
-
-        .search-result-snippet {
-            font-size: 14px;
-            color: var(--ios-secondary-text);
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 120px;
-            background-color: var(--ios-card);
-            color: var(--ios-text);
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            font-size: 12px;
-            border: 1px solid var(--ios-border);
-        }
-
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
         /* Loading animation */
         .loader-container {
             display: flex;
@@ -545,8 +223,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive adjustments */
@@ -578,27 +261,221 @@
         }
 
         @keyframes theme-fade {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Chatbot styles */
+        .chat-toggler {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--ios-blue);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s ease;
+            margin: 0px auto;
+            padding: 0px;
+        }
+
+        .chat-toggler:hover {
+            transform: scale(1.05);
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: var(--chat-width);
+            height: var(--chat-height);
+            background-color: var(--ios-card);
+            border-radius: var(--chat-border-radius);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+            overflow: hidden;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--ios-border);
+            cursor: grab; /* Show a grab cursor for dragging */
+            z-index: 1000;
+        }
+
+        .chat-window.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-window.dragging {
+    cursor: grabbing; /* Change cursor to grabbing while dragging */
+}
+        .chat-header {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            border-bottom: 1px solid var(--ios-border);
+            background-color: var(--ios-card);
+        }
+
+        .chat-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-action {
+            background: none;
+            border: none;
+            color: var(--ios-blue);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .chat-container {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            
+            padding: 10px 12px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .user-message {
+            max-width: 80%;
+            align-self: flex-end;
+            background-color: var(--ios-blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-message {
+    align-self: flex-start;
+    border: 1px solid var(--ios-border);
+    border-bottom-left-radius: 4px;
+    gap: 10px;
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.ai-message p {
+    margin: 10px 0;
+}
+
+.ai-message h1, .ai-message h2, .ai-message h3 {
+    margin: 15px 0;
+}
+
+.ai-message ul, .ai-message ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.ai-message blockquote {
+    margin: 15px 0;
+    padding: 10px 15px;
+    border-left: 4px solid var(--ios-border);
+    background-color: rgba(0, 0, 0, 0.05);
+    font-style: italic;
+    color: var(--ios-secondary-text);
+}
+
+        .chat-input-area {
+            padding: 10px 15px;
+            border-top: 1px solid var(--ios-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 18px;
+            border: 1px solid var(--ios-border);
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+        }
+
+        .send-button {
+            background: none;
+            border: none;
+            color: var(--ios-blue);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .send-button:disabled {
+            color: var(--ios-secondary-text);
+            cursor: not-allowed;
+        }
+
+        .status {
+            font-size: 12px;
+            color: var(--ios-secondary-text);
+            text-align: center;
+            padding: 5px 0;
+        }
+
+        /* Prevent text selection while dragging */
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <header class="app-header">
             <h1 class="app-title">Rie Vision</h1>
-            <div class="header-actions" style="display: none">
-                <button class="action-button tooltip" id="theme-toggle">
+            <div class="header-actions">
+                <button class="action-button tooltip" id="theme-toggle" style="width: 50px; height: 50px;">
                     <i class="bi bi-moon"></i>
-                    <span class="tooltip-text">Toggle Dark Mode</span>
-                </button>
-                <button class="action-button tooltip" id="sync-button">
-                    <i class="bi bi-arrow-repeat"></i>
-                    <span class="tooltip-text">Sync Notes</span>
-                </button>
-                <button class="action-button tooltip" id="settings-button">
-                    <i class="bi bi-gear"></i>
-                    <span class="tooltip-text">Settings</span>
+                    <!-- <span class="tooltip-text">Toggle Dark Mode</span> -->
                 </button>
             </div>
         </header>
@@ -609,51 +486,28 @@
                     <div class="tab active" data-tab="bio-unit5-left">Bio Unit 5</div>
                     <div class="tab" data-tab="chem-unit5-left">Chem Unit 5</div>
                     <div class="tab" data-tab="phy-unit5-left">Phy Unit 5</div>
-                    <div class="tab" data-tab="notes-left">Notes</div>
-                    <div class="tab" data-tab="search-left">Search</div>
                 </div>
                 <div class="content-area">
                     <div class="iframe-container active" id="bio-unit5-left">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="chem-unit5-left">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="phy-unit5-left">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
-                    </div>
-                    <div class="iframe-container" id="notes-left">
-                        <div class="notes-container">
-                            <div class="notes-header">
-                                <h2>Left Panel Notes</h2>
-                            </div>
-                            <div class="notes-list">
-                                
-                            </div>
-                        </div>
-                    </div>
-                    <div class="iframe-container" id="search-left">
-                        <div class="search-container">
-                            <div class="search-header">
-                                <h2>Search</h2>
-                            </div>
-                            <div class="search-input-group">
-                                <i class="bi bi-search"></i>
-                                <input type="text" class="search-input" placeholder="Search notes and documents...">
-                            </div>
-                            <div class="search-results">
-                                
-                            </div>
-                        </div>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                 </div>
             </div>
@@ -665,127 +519,75 @@
                     <div class="tab active" data-tab="bio-unit5-right">Bio Unit 5</div>
                     <div class="tab" data-tab="chem-unit5-right">Chem Unit 5</div>
                     <div class="tab" data-tab="phy-unit5-right">Phy Unit 5</div>
-                    <div class="tab" data-tab="notes-right">Notes</div>
-                    <div class="tab" data-tab="search-right">Search</div>
                 </div>
                 <div class="content-area">
                     <div class="iframe-container active" id="bio-unit5-right">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="chem-unit5-right">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="phy-unit5-right">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
-                    </div>
-                    <div class="iframe-container" id="notes-right">
-                        <div class="notes-container">
-                            <div class="notes-header">
-                                <h2>Right Panel Notes</h2>
-                            </div>
-                            <div class="notes-list">
-                             
-                            </div>
-                        </div>
-                    </div>
-                    <div class="iframe-container" id="search-right">
-                        <div class="search-container">
-                            <div class="search-header">
-                                <h2>Search</h2>
-                            </div>
-                            <div class="search-input-group">
-                                <i class="bi bi-search"></i>
-                                <input type="text" class="search-input" placeholder="Search notes and documents...">
-                            </div>
-                            <div class="search-results">
-                               
-                            </div>
-                        </div>
+                        <iframe class="doc-iframe"
+                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                 </div>
             </div>
         </div>
-
-        <footer class="app-footer">
-            <div class="footer-button active">
-                <i class="bi bi-book"></i>
-                <span>Study</span>
-            </div>
-            <div class="footer-button">
-                <i class="bi bi-journal-text"></i>
-                <span>Notes</span>
-            </div>
-            <div class="footer-button">
-                <i class="bi bi-search"></i>
-                <span>Search</span>
-            </div>
-            <div class="footer-button">
-                <i class="bi bi-bookmark"></i>
-                <span>Bookmarks</span>
-            </div>
-        </footer>
     </div>
 
-    <div class="add-note-btn" id="add-note-btn">
-        <i class="bi bi-plus"></i>
+    <!-- Chatbot UI -->
+    <div class="chat-toggler" id="chat-toggler">
+        <i class="bi bi-chat-dots-fill"></i>
     </div>
 
-    <div class="modal" id="note-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Note</h3>
-                <button class="modal-close" id="close-modal">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="note-title">Title</label>
-                <input type="text" class="form-control" id="note-title" placeholder="Enter note title">
-            </div>
-            <div class="form-group">
-                <label for="note-content">Content</label>
-                <textarea class="form-control" id="note-content" placeholder="Enter your notes here..."></textarea>
-            </div>
-            <div class="form-group">
-                <label for="note-subject">Subject</label>
-                <select class="form-control" id="note-subject">
-                    <option value="bio">Biology</option>
-                    <option value="chem">Chemistry</option>
-                    <option value="phy">Physics</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" id="cancel-note">Cancel</button>
-                <button class="btn btn-primary" id="save-note">Save Note</button>
+    <div class="chat-window" id="chat-window">
+        <div class="chat-header">
+            <div class="chat-title">AI (unlimited, feel free to use)</div>
+            <div class="chat-actions">
+                <button class="chat-action" id="minimize-chat">
+                    <i class="bi bi-dash"></i>
+                </button>
             </div>
         </div>
+        <div class="chat-container" id="chat-container"></div>
+        <div class="status" id="status">Initializing...</div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="message-input" placeholder="Ask a question...">
+            <button class="send-button" id="send-button">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
     </div>
-
+ <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Check for dark mode preference
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
+                document.documentElement.classList.add('dark-mode');
                 document.getElementById('theme-toggle').innerHTML = '<i class="bi bi-sun"></i>';
             }
 
             // Dark mode toggle
             const themeToggle = document.getElementById('theme-toggle');
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 document.body.classList.add('theme-transition');
-                if (document.documentElement.classList.contains('dark')) {
-                    document.documentElement.classList.remove('dark');
+                if (document.documentElement.classList.contains('dark-mode')) {
+                    document.documentElement.classList.remove('dark-mode');
                     this.innerHTML = '<i class="bi bi-moon"></i>';
                 } else {
-                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.add('dark-mode');
                     this.innerHTML = '<i class="bi bi-sun"></i>';
                 }
                 setTimeout(() => {
@@ -796,10 +598,10 @@
             // Listen for color scheme changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
                 if (event.matches) {
-                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.add('dark-mode');
                     themeToggle.innerHTML = '<i class="bi bi-sun"></i>';
                 } else {
-                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.remove('dark-mode');
                     themeToggle.innerHTML = '<i class="bi bi-moon"></i>';
                 }
             });
@@ -808,32 +610,23 @@
             function setupTabs(tabsEl, panelId) {
                 const tabs = tabsEl.querySelectorAll('.tab');
                 tabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
+                    tab.addEventListener('click', function () {
                         // Remove active class from all tabs
                         tabs.forEach(t => t.classList.remove('active'));
                         // Add active class to clicked tab
                         this.classList.add('active');
-                        
+
                         // Show the corresponding content
                         const tabId = this.getAttribute('data-tab');
                         const contentContainer = document.getElementById(tabId);
-                        
+
                         // Hide all content containers
                         const containers = document.querySelectorAll(`#${panelId} .iframe-container`);
                         containers.forEach(c => c.classList.remove('active'));
-                        
+
                         // Show the selected container
                         if (contentContainer) {
                             contentContainer.classList.add('active');
-                            
-                            // If it's a notes or search tab, show the container
-                            if (tabId.includes('notes')) {
-                                const notesContainer = contentContainer.querySelector('.notes-container');
-                                if (notesContainer) notesContainer.style.display = 'flex';
-                            } else if (tabId.includes('search')) {
-                                const searchContainer = contentContainer.querySelector('.search-container');
-                                if (searchContainer) searchContainer.style.display = 'flex';
-                            }
                         }
                     });
                 });
@@ -843,231 +636,331 @@
             setupTabs(document.getElementById('left-tabs'), 'left-panel');
             setupTabs(document.getElementById('right-tabs'), 'right-panel');
 
-            // Panel resizing
+            // Improved panel resizing
             const panelResizer = document.getElementById('panel-resizer');
             const leftPanel = document.getElementById('left-panel');
             const rightPanel = document.getElementById('right-panel');
+            const mainContent = document.querySelector('.main-content');
             let isResizing = false;
-            let lastX, lastY;
+            let initialWidth, initialX, initialY;
 
-            panelResizer.addEventListener('mousedown', (e) => {
+            function startResize(e) {
+                // Prevent text selection during resize
+                document.body.classList.add('no-select');
+
                 isResizing = true;
-                lastX = e.clientX;
-                lastY = e.clientY;
-                document.addEventListener('mousemove', handleResize);
-                document.addEventListener('mouseup', stopResize);
-                document.body.style.cursor = window.innerWidth > 768 ? 'col-resize' : 'row-resize';
-                panelResizer.style.opacity = '1';
-            });
+                initialWidth = leftPanel.offsetWidth;
 
-            panelResizer.addEventListener('touchstart', (e) => {
-                isResizing = true;
-                lastX = e.touches[0].clientX;
-                lastY = e.touches[0].clientY;
-                document.addEventListener('touchmove', handleTouchResize);
-                document.addEventListener('touchend', stopResize);
-                panelResizer.style.opacity = '1';
-            });
+                if (e.type === 'touchstart') {
+                    initialX = e.touches[0].clientX;
+                    initialY = e.touches[0].clientY;
+                } else {
+                    initialX = e.clientX;
+                    initialY = e.clientY;
+                }
 
-            function handleResize(e) {
+                // Add event listeners for movement and end
+                if (e.type === 'touchstart') {
+                    document.addEventListener('touchmove', resizeHandler, { passive: false });
+                    document.addEventListener('touchend', stopResize);
+                } else {
+                    document.addEventListener('mousemove', resizeHandler);
+                    document.addEventListener('mouseup', stopResize);
+                }
+
+                panelResizer.style.opacity = '1';
+                e.preventDefault();
+            }
+
+            function resizeHandler(e) {
                 if (!isResizing) return;
-                const dx = e.clientX - lastX;
-                const dy = e.clientY - lastY;
-                
+
+                let currentX, currentY;
+
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                    // Prevent scrolling while resizing
+                    e.preventDefault();
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+
+                const containerWidth = mainContent.offsetWidth;
+                const containerHeight = mainContent.offsetHeight;
+
                 if (window.innerWidth > 768) {
                     // Horizontal resizing
-                    const leftWidth = parseFloat(getComputedStyle(leftPanel).width);
-                    const containerWidth = leftPanel.parentElement.offsetWidth;
-                    const newLeftWidth = Math.max(200, Math.min(leftWidth + dx, containerWidth - 200));
+                    const dx = currentX - initialX;
+                    const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
                     const percentWidth = (newLeftWidth / containerWidth) * 100;
-                    
+
                     document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
-                    lastX = e.clientX;
                 } else {
                     // Vertical resizing
-                    const leftHeight = parseFloat(getComputedStyle(leftPanel).height);
-                    const containerHeight = leftPanel.parentElement.offsetHeight;
-                    const newLeftHeight = Math.max(150, Math.min(leftHeight + dy, containerHeight - 150));
+                    const dy = currentY - initialY;
+                    const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
+                    const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
                     const percentHeight = (newLeftHeight / containerHeight) * 100;
-                    
+
                     leftPanel.style.height = percentHeight + '%';
                     rightPanel.style.height = (100 - percentHeight) + '%';
-                    lastY = e.clientY;
+                }
+
+                // Use requestAnimationFrame for smoother resizing
+                if (!window.requestAnimationFrame) {
+                    // Apply changes immediately if requestAnimationFrame is not available
+                    applyResize();
+                } else {
+                    requestAnimationFrame(applyResize);
                 }
             }
 
-            function handleTouchResize(e) {
-                if (!isResizing) return;
-                const touchX = e.touches[0].clientX;
-                const touchY = e.touches[0].clientY;
-                
-                if (window.innerWidth > 768) {
-                    // Horizontal resizing
-                    const dx = touchX - lastX;
-                    const leftWidth = parseFloat(getComputedStyle(leftPanel).width);
-                    const containerWidth = leftPanel.parentElement.offsetWidth;
-                    const newLeftWidth = Math.max(200, Math.min(leftWidth + dx, containerWidth - 200));
-                    const percentWidth = (newLeftWidth / containerWidth) * 100;
-                    
-                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
-                    lastX = touchX;
-                } else {
-                    // Vertical resizing
-                    const dy = touchY - lastY;
-                    const leftHeight = parseFloat(getComputedStyle(leftPanel).height);
-                    const containerHeight = leftPanel.parentElement.offsetHeight;
-                    const newLeftHeight = Math.max(150, Math.min(leftHeight + dy, containerHeight - 150));
-                    const percentHeight = (newLeftHeight / containerHeight) * 100;
-                    
-                    leftPanel.style.height = percentHeight + '%';
-                    rightPanel.style.height = (100 - percentHeight) + '%';
-                    lastY = touchY;
-                }
-                
-                e.preventDefault(); // Prevent scrolling while resizing
+            function applyResize() {
+                // This function intentionally left empty as we're modifying CSS variables
+                // which apply immediately. It's here for potential future optimizations.
             }
 
             function stopResize() {
                 isResizing = false;
-                document.removeEventListener('mousemove', handleResize);
+                document.body.classList.remove('no-select');
+
+                // Remove event listeners
+                document.removeEventListener('mousemove', resizeHandler);
                 document.removeEventListener('mouseup', stopResize);
-                document.removeEventListener('touchmove', handleTouchResize);
+                document.removeEventListener('touchmove', resizeHandler);
                 document.removeEventListener('touchend', stopResize);
-                document.body.style.cursor = '';
+
                 panelResizer.style.opacity = '';
             }
 
-            // Footer navigation
-            const footerButtons = document.querySelectorAll('.footer-button');
-            footerButtons.forEach((button, index) => {
-                button.addEventListener('click', function() {
-                    footerButtons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Handle navigation actions
-                    if (index === 0) { // Study
-                        const leftTab = document.querySelector('#left-tabs .tab:first-child');
-                        const rightTab = document.querySelector('#right-tabs .tab:first-child');
-                        if (leftTab) leftTab.click();
-                        if (rightTab) rightTab.click();
-                    } else if (index === 1) { // Notes
-                        const leftNotesTab = document.querySelector('#left-tabs .tab[data-tab="notes-left"]');
-                        const rightNotesTab = document.querySelector('#right-tabs .tab[data-tab="notes-right"]');
-                        if (leftNotesTab) leftNotesTab.click();
-                        if (rightNotesTab) rightNotesTab.click();
-                    } else if (index === 2) { // Search
-                        const leftSearchTab = document.querySelector('#left-tabs .tab[data-tab="search-left"]');
-                        const rightSearchTab = document.querySelector('#right-tabs .tab[data-tab="search-right"]');
-                        if (leftSearchTab) leftSearchTab.click();
-                        if (rightSearchTab) rightSearchTab.click();
-                    } else if (index === 3) { // Bookmarks
-                        // We could implement a bookmarks feature here
-                        alert('Bookmarks feature coming soon!');
-                    }
-                });
-            });
-
-            // Note modal functionality
-            const addNoteBtn = document.getElementById('add-note-btn');
-            const noteModal = document.getElementById('note-modal');
-            const closeModal = document.getElementById('close-modal');
-            const cancelNote = document.getElementById('cancel-note');
-            const saveNote = document.getElementById('save-note');
-
-            addNoteBtn.addEventListener('click', function() {
-                noteModal.style.display = 'flex';
-            });
-
-            function closeNoteModal() {
-                noteModal.style.display = 'none';
-                document.getElementById('note-title').value = '';
-                document.getElementById('note-content').value = '';
-            }
-
-            closeModal.addEventListener('click', closeNoteModal);
-            cancelNote.addEventListener('click', closeNoteModal);
-
-            saveNote.addEventListener('click', function() {
-                const title = document.getElementById('note-title').value;
-                const content = document.getElementById('note-content').value;
-                const subject = document.getElementById('note-subject').value;
-                
-                if (!title || !content) {
-                    alert('Please enter both title and content for your note');
-                    return;
-                }
-                
-                // Create new note
-                const newNote = document.createElement('div');
-                newNote.className = 'note-item';
-                
-                const noteTitle = document.createElement('div');
-                noteTitle.className = 'note-title';
-                noteTitle.textContent = title;
-                
-                const noteContent = document.createElement('div');
-                noteContent.className = 'note-content';
-                noteContent.textContent = content;
-                
-                const noteDate = document.createElement('div');
-                noteDate.className = 'note-date';
-                noteDate.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                
-                newNote.appendChild(noteTitle);
-                newNote.appendChild(noteContent);
-                newNote.appendChild(noteDate);
-                
-                // Add to both note panels
-                const leftNotesList = document.querySelector('#notes-left .notes-list');
-                const rightNotesList = document.querySelector('#notes-right .notes-list');
-                
-                if (leftNotesList) leftNotesList.prepend(newNote.cloneNode(true));
-                if (rightNotesList) rightNotesList.prepend(newNote.cloneNode(true));
-                
-                // Close modal
-                closeNoteModal();
-            });
-
-            // Search functionality
-            const searchInputs = document.querySelectorAll('.search-input');
-            searchInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const searchResults = this.parentElement.nextElementSibling;
-                    
-                    if (searchTerm.length < 2) {
-                        // Show default results
-                        searchResults.querySelectorAll('.search-result-item').forEach(item => {
-                            item.style.display = 'block';
-                        });
-                        return;
-                    }
-                    
-                    // Filter results (in a real app, this would search through actual data)
-                    searchResults.querySelectorAll('.search-result-item').forEach(item => {
-                        const title = item.querySelector('.search-result-title').textContent.toLowerCase();
-                        const snippet = item.querySelector('.search-result-snippet').textContent.toLowerCase();
-                        
-                        if (title.includes(searchTerm) || snippet.includes(searchTerm)) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
-            });
+            // Add event listeners for both mouse and touch
+            panelResizer.addEventListener('mousedown', startResize);
+            panelResizer.addEventListener('touchstart', startResize, { passive: false });
 
             // Handle iframe loading
             const iframes = document.querySelectorAll('.doc-iframe');
             iframes.forEach(iframe => {
-                iframe.addEventListener('load', function() {
+                iframe.addEventListener('load', function () {
                     const loaderContainer = this.previousElementSibling;
                     if (loaderContainer && loaderContainer.classList.contains('loader-container')) {
                         loaderContainer.style.display = 'none';
                     }
                 });
             });
+
+            // Chatbot functionality
+            const chatToggler = document.getElementById('chat-toggler');
+            // const chatWindow = document.getElementById('chat-window');
+            const minimizeChat = document.getElementById('minimize-chat');
+
+            chatToggler.addEventListener('click', function () {
+                chatWindow.classList.toggle('active');
+            });
+
+            minimizeChat.addEventListener('click', function () {
+                chatWindow.classList.remove('active');
+            });
+
+            // Text selection in iframes
+            iframes.forEach(iframe => {
+                iframe.addEventListener('load', function () {
+                    // Attempt to add selection listener to the iframe
+                    try {
+                        const iframeDoc = this.contentDocument || this.contentWindow.document;
+
+                        // Listen for mouseup event which typically indicates text selection
+                        iframeDoc.addEventListener('mouseup', function () {
+                            try {
+                                const selection = iframeDoc.getSelection();
+                                const selectedText = selection.toString().trim();
+
+                                if (selectedText && selectedText.length > 5) {
+                                    // Only process significant selections (more than 5 chars)
+                                    chatWindow.classList.add('active'); // Open chat window
+                                    console.log(selectedText);
+                                    sendSelectedTextToChat(selectedText);
+                                }
+                            } catch (err) {
+                                console.log("Error getting selection from iframe:", err);
+                            }
+                        });
+                    } catch (err) {
+                        console.log("Cannot access iframe content due to same-origin policy:", err);
+                        // Google Docs iframes are cross-origin, so direct access may be blocked
+                        // We would need a different approach if this doesn't work
+                    }
+                });
+            });
+
+            function sendSelectedTextToChat(selectedText) {
+                const messageInput = document.getElementById('message-input');
+                messageInput.value = `Can you explain this: "${selectedText}"`;
+
+                // Focus on the input to allow the user to modify the question if needed
+                messageInput.focus();
+            }
+
+            // Chat API implementation
+            let currentChatId = null;
+            const chatContainer = document.getElementById('chat-container');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const statusDiv = document.getElementById('status');
+
+            // Start a new chat session when the page loads
+            async function startNewChat() {
+                try {
+                    const response = await fetch('https://server-ef04.onrender.com/api/chat/new', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        currentChatId = data.chatId;
+                        updateStatus('Connected to chat session');
+                    } else {
+                        throw new Error(data.error || 'Failed to start chat session');
+                    }
+                } catch (error) {
+                    updateStatus('Error: ' + error.message, true);
+                }
+            }
+
+            // Send a message to the AI
+            async function sendMessage(message) {
+                if (!currentChatId) {
+                    updateStatus('No active chat session', true);
+                    return;
+                }
+
+                try {
+                    appendMessage(message, 'user');
+                    disableInput(true);
+
+                    const response = await fetch('https://server-ef04.onrender.com/api/chat/message', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chatId: currentChatId,
+                            message: message
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        appendMessage(data.response, 'ai');
+                    } else {
+                        throw new Error(data.error || 'Failed to get response');
+                    }
+                } catch (error) {
+                    updateStatus('Error: ' + error.message, true);
+                } finally {
+                    disableInput(false);
+                }
+            }
+
+            // UI Helper Functions
+            function appendMessage(message, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', `${sender}-message`);
+                messageDiv.innerHTML = marked.parse(message);
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            function updateStatus(message, isError = false) {
+                statusDiv.textContent = message;
+                statusDiv.style.color = isError ? '#dc3545' : '#666';
+            }
+
+            function disableInput(disabled) {
+                messageInput.disabled = disabled;
+                sendButton.disabled = disabled;
+            }
+
+            // Event Listeners for chat
+            sendButton.addEventListener('click', () => {
+                const message = messageInput.value.trim();
+                if (message) {
+                    sendMessage(message);
+                    messageInput.value = '';
+                }
+            });
+
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const message = messageInput.value.trim();
+                    if (message) {
+                        sendMessage(message);
+                        messageInput.value = '';
+                    }
+                }
+            });
+
+            // Initialize chat session when page loads
+            startNewChat();
+
+            const chatWindow = document.getElementById('chat-window'); // Chat window element
+    let isDragging = false;
+    let startX = 0, startY = 0; // Initial touch/mouse starting positions
+    let offsetX = 0, offsetY = 0; // Offset for the window's new position
+
+    // Start dragging
+    function startDrag(e) {
+        isDragging = true;
+        chatWindow.classList.add('dragging');
+
+        // Determine the starting point
+        const event = e.type === 'touchstart' ? e.touches[0] : e;
+        startX = event.clientX - chatWindow.offsetLeft;
+        startY = event.clientY - chatWindow.offsetTop;
+
+        // Prevent text selection
+        document.body.style.userSelect = 'none';
+    }
+
+    // Perform dragging
+    function drag(e) {
+        if (!isDragging) return;
+
+        const event = e.type === 'touchmove' ? e.touches[0] : e;
+        offsetX = event.clientX - startX;
+        offsetY = event.clientY - startY;
+
+        // Update the position of the chat window
+        chatWindow.style.left = `${Math.max(0, Math.min(window.innerWidth - chatWindow.offsetWidth, offsetX))}px`;
+        chatWindow.style.top = `${Math.max(0, Math.min(window.innerHeight - chatWindow.offsetHeight, offsetY))}px`;
+
+        // Prevent scrolling on mobile during drag
+        e.preventDefault();
+    }
+
+    // Stop dragging
+    function stopDrag() {
+        isDragging = false;
+        chatWindow.classList.remove('dragging');
+
+        // Allow text selection again
+        document.body.style.userSelect = '';
+    }
+
+    // Event listeners for mouse and touch events
+    chatWindow.addEventListener('mousedown', startDrag);
+    chatWindow.addEventListener('touchstart', startDrag, { passive: false });
+
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('touchmove', drag, { passive: false });
+
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
         });
     </script>
 </body>
+
 </html>
