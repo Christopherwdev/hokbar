@@ -206,6 +206,60 @@
             margin: 0 auto 16px;
         }
 
+        .fallback-message {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 122, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 12px;
+            border-radius: 10px;
+            margin: 0 20px;
+            text-align: center;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 20;
+        }
+
+        .dark .fallback-message {
+            background-color: rgba(0, 122, 255, 0.2);
+        }
+        
+        .fallback-message a {
+            color: var(--ios-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .dark .fallback-message a {
+            color: #66b0ff;
+        }
+        
+        .fallback-message a:hover {
+            text-decoration: underline;
+        }
+
+        .iframe-error {
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: var(--ios-border-radius);
+            margin: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .iframe-error {
+            background-color: rgba(40, 40, 40, 0.8);
+        }
+        
+        .iframe-error h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -250,21 +304,30 @@
                             <div class="spinner"></div>
                             <div>Loading Biology Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal" title="Biology Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" title="Biology Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                     <div class="tab-content" id="left-chem-unit5">
                         <div class="loading-indicator">
                             <div class="spinner"></div>
                             <div>Loading Chemistry Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal" title="Chemistry Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" title="Chemistry Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                     <div class="tab-content" id="left-phy-unit5">
                         <div class="loading-indicator">
                             <div class="spinner"></div>
                             <div>Loading Physics Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0&rm=minimal" title="Physics Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" title="Physics Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -282,21 +345,30 @@
                             <div class="spinner"></div>
                             <div>Loading Biology Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal" title="Biology Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" title="Biology Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                     <div class="tab-content" id="right-chem-unit5">
                         <div class="loading-indicator">
                             <div class="spinner"></div>
                             <div>Loading Chemistry Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal" title="Chemistry Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" title="Chemistry Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                     <div class="tab-content" id="right-phy-unit5">
                         <div class="loading-indicator">
                             <div class="spinner"></div>
                             <div>Loading Physics Unit 5...</div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0&rm=minimal" title="Physics Unit 5"></iframe>
+                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" title="Physics Unit 5"></iframe>
+                        <div class="fallback-message">
+                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -362,15 +434,72 @@
             });
         }
         
-        // Hide loading indicator when iframe is loaded
+        // Handle iframe loading and errors
         function setupIframeLoadHandlers() {
             const iframes = document.querySelectorAll('iframe');
+            
             iframes.forEach(iframe => {
+                // Show an error message if Google Docs fails to load after 8 seconds
+                const timeoutId = setTimeout(() => {
+                    // Show fallback message more prominently if loading takes too long
+                    const fallbackMsg = iframe.nextElementSibling;
+                    if (fallbackMsg && fallbackMsg.classList.contains('fallback-message')) {
+                        fallbackMsg.style.bottom = '50%';
+                        fallbackMsg.style.transform = 'translateY(50%)';
+                        fallbackMsg.style.backgroundColor = 'rgba(0, 122, 255, 0.25)';
+                        fallbackMsg.style.padding = '20px';
+                        fallbackMsg.style.fontSize = '16px';
+                        fallbackMsg.innerHTML = '<p>This document is taking a long time to load. You may need to:</p>' +
+                            '<ul style="text-align: left; margin: 10px 0;">' +
+                            '<li>Check if you have access to this document</li>' +
+                            '<li>Sign in to your Google account</li>' +
+                            '<li>Try opening it directly instead</li>' +
+                            '</ul>' +
+                            '<a href="' + iframe.src + '" target="_blank" rel="noopener noreferrer" ' +
+                            'style="display: inline-block; margin-top: 10px; background-color: var(--ios-blue); color: white; ' +
+                            'padding: 8px 16px; border-radius: 18px; text-decoration: none;">Open Document</a>';
+                    }
+                }, 8000);
+                
+                // Handle successful load
                 iframe.addEventListener('load', function() {
+                    clearTimeout(timeoutId);
                     const loadingIndicator = this.previousElementSibling;
                     if (loadingIndicator && loadingIndicator.classList.contains('loading-indicator')) {
                         loadingIndicator.style.display = 'none';
                     }
+                    
+                    // Hide the fallback message after successful load
+                    const fallbackMsg = this.nextElementSibling;
+                    if (fallbackMsg && fallbackMsg.classList.contains('fallback-message')) {
+                        fallbackMsg.style.display = 'none';
+                    }
+                });
+                
+                // Handle errors
+                iframe.addEventListener('error', function() {
+                    clearTimeout(timeoutId);
+                    const loadingIndicator = this.previousElementSibling;
+                    if (loadingIndicator && loadingIndicator.classList.contains('loading-indicator')) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                    
+                    // Create an error message
+                    const container = this.parentElement;
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'iframe-error';
+                    errorDiv.innerHTML = '<h3>Error Loading Document</h3>' +
+                        '<p>There was a problem loading the Google Doc. Please try:</p>' +
+                        '<ul style="text-align: left; margin: 10px auto; max-width: 400px;">' +
+                        '<li>Checking your internet connection</li>' +
+                        '<li>Confirming you have access to this document</li>' +
+                        '<li>Signing in to your Google account</li>' +
+                        '</ul>' +
+                        '<a href="' + this.src + '" target="_blank" rel="noopener noreferrer" ' +
+                        'style="display: inline-block; margin-top: 10px; background-color: var(--ios-blue); color: white; ' +
+                        'padding: 8px 16px; border-radius: 18px; text-decoration: none;">Open Directly</a>';
+                    
+                    container.appendChild(errorDiv);
                 });
             });
         }
