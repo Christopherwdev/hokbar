@@ -4,131 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Revision App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root {
-            --ios-blue: #007AFF;
-            --ios-blue-dark: #0062CC;
-            --ios-light-bg: rgba(245, 245, 247, 0.8);
-            --ios-dark-bg: rgba(28, 28, 30, 0.8);
-            --ios-border-radius: 13px;
+            --ios-blue: #007aff;
+            --ios-light-blue: #5ac8fa;
+            --ios-bg: rgba(242, 242, 247, 1);
+            --ios-card: rgba(255, 255, 255, 0.9);
+            --ios-text: #1c1c1e;
+            --ios-secondary-text: #8e8e93;
+            --ios-border: rgba(209, 209, 214, 0.5);
+            --panel-width: 49.5%;
+            --panel-gap: 1%;
+            --tab-height: 44px;
+            --header-height: 64px;
+            --footer-height: 50px;
+            --blur-amount: 15px;
+        }
+
+        .dark-mode {
+            --ios-bg: rgba(28, 28, 30, 1);
+            --ios-card: rgba(44, 44, 46, 0.9);
+            --ios-text: #ffffff;
+            --ios-secondary-text: #8e8e93;
+            --ios-border: rgba(99, 99, 102, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            height: 100vh;
-            margin: 0;
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
             overflow: hidden;
-        }
-
-        body.dark {
-            background: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
-            color: white;
-        }
-
-        .dark .app-container {
-            background-color: rgba(30, 30, 30, 0.7);
-        }
-
-        .dark .tab-bar {
-            background-color: rgba(30, 30, 30, 0.9);
-            border-bottom: 1px solid rgba(150, 150, 150, 0.2);
-        }
-
-        .dark .tab {
-            background-color: rgba(60, 60, 60, 0.4);
-            color: #eaeaea;
-        }
-
-        .dark .tab.active {
-            background-color: rgba(80, 80, 80, 0.6);
-            color: white;
-        }
-
-        .dark .screen-section {
-            background-color: rgba(40, 40, 40, 0.7);
+            height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
         .app-container {
-            max-width: 1280px;
-            height: calc(100vh - 40px);
-            margin: 20px auto;
-            display: flex;
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: var(--ios-border-radius);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .split-screen {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            height: 100%;
-        }
-
-        .screen-section {
-            flex: 1;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: var(--ios-border-radius);
-            overflow: hidden;
-            position: relative;
-            transition: flex 0.3s ease;
         }
 
-        .screen-section + .screen-section {
-            margin-left: 10px;
-        }
-
-        .tab-bar {
+        .app-header {
+            height: var(--header-height);
             display: flex;
-            padding: 12px 16px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background-color: var(--ios-card);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-bottom: 1px solid var(--ios-border);
             z-index: 10;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-button {
+            background: none;
+            border: none;
+            color: var(--ios-blue);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .action-button:hover {
+            background-color: rgba(0, 122, 255, 0.1);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .panel {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            max-width: var(--panel-width);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: var(--ios-bg);
+            transition: max-width 0.3s ease;
+        }
+
+        .panel-gap {
+            width: var(--panel-gap);
+            height: 100%;
+            position: relative;
+            cursor: col-resize;
+            background-color: var(--ios-border);
+        }
+
+        .panel-gap::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 50px;
+            background-color: var(--ios-secondary-text);
+            border-radius: 4px;
+            opacity: 0.3;
+        }
+
+        .tabs {
+            height: var(--tab-height);
+            display: flex;
+            background-color: var(--ios-card);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-bottom: 1px solid var(--ios-border);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
         }
 
         .tab {
-            padding: 8px 16px;
-            margin: 0 6px;
-            background-color: rgba(240, 240, 240, 0.6);
-            color: #333;
-            border-radius: 18px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 0 15px;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .tab:first-child {
-            margin-left: 0;
-        }
-
-        .tab:last-child {
-            margin-right: 0;
-        }
-
-        .tab:hover {
-            background-color: rgba(230, 230, 230, 0.8);
-            transform: translateY(-1px);
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--ios-secondary-text);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .tab.active {
-            background-color: var(--ios-blue);
-            color: white;
-            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+            color: var(--ios-blue);
+            border-bottom-color: var(--ios-blue);
+        }
+
+        .tab:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
         .content-area {
@@ -137,127 +179,369 @@
             overflow: hidden;
         }
 
-        .tab-content {
+        .iframe-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            display: none;
         }
 
-        .tab-content.active {
-            opacity: 1;
-            visibility: visible;
+        .iframe-container.active {
+            display: block;
         }
 
-        iframe {
+        .doc-iframe {
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 0 0 var(--ios-border-radius) var(--ios-border-radius);
         }
 
-        .theme-toggle {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            z-index: 100;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
+        .fallback-message {
+            padding: 20px;
+            color: var(--ios-secondary-text);
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .fallback-message i {
+            font-size: 48px;
+            color: var(--ios-light-blue);
+        }
+
+        .app-footer {
+            height: var(--footer-height);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: var(--ios-card);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border-top: 1px solid var(--ios-border);
+            z-index: 10;
+        }
+
+        .footer-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px 0;
+            color: var(--ios-secondary-text);
+            text-decoration: none;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .footer-button i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .footer-button.active {
+            color: var(--ios-blue);
+        }
+
+        /* Notes feature */
+        .notes-container {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .note-item {
+            background-color: var(--ios-card);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--ios-border);
+            transition: transform 0.2s ease;
+        }
+
+        .note-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .note-content {
+            color: var(--ios-secondary-text);
+            font-size: 14px;
+        }
+
+        .note-date {
+            font-size: 12px;
+            color: var(--ios-secondary-text);
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .add-note-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: var(--ios-blue);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            transition: transform 0.2s ease;
+        }
+
+        .add-note-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--ios-card);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--ios-secondary-text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: var(--ios-secondary-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--ios-border);
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .dark .theme-toggle {
-            background-color: rgba(0, 0, 0, 0.3);
+        .btn-primary {
+            background-color: var(--ios-blue);
+            color: white;
         }
 
-        .theme-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        .btn-secondary {
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            border: 1px solid var(--ios-border);
         }
 
-        .loading-indicator {
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Search feature */
+        .search-container {
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .search-header {
+            margin-bottom: 15px;
+        }
+
+        .search-input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input-group i {
             position: absolute;
+            left: 15px;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
+            transform: translateY(-50%);
+            color: var(--ios-secondary-text);
         }
 
-        .spinner {
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border-radius: 10px;
+            border: 1px solid var(--ios-border);
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ios-blue);
+        }
+
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .search-result-item {
+            background-color: var(--ios-card);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--ios-border);
+            transition: transform 0.2s ease;
+        }
+
+        .search-result-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--ios-blue);
+        }
+
+        .search-result-snippet {
+            font-size: 14px;
+            color: var(--ios-secondary-text);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--ios-card);
+            color: var(--ios-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 12px;
+            border: 1px solid var(--ios-border);
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Loading animation */
+        .loader-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .loader {
             width: 40px;
             height: 40px;
             border: 4px solid rgba(0, 122, 255, 0.3);
             border-radius: 50%;
-            border-top-color: var(--ios-blue);
+            border-top: 4px solid var(--ios-blue);
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        .fallback-message {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 122, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 12px;
-            border-radius: 10px;
-            margin: 0 20px;
-            text-align: center;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            z-index: 20;
-        }
-
-        .dark .fallback-message {
-            background-color: rgba(0, 122, 255, 0.2);
-        }
-        
-        .fallback-message a {
-            color: var(--ios-blue);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        
-        .dark .fallback-message a {
-            color: #66b0ff;
-        }
-        
-        .fallback-message a:hover {
-            text-decoration: underline;
-        }
-
-        .iframe-error {
-            text-align: center;
-            padding: 30px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: var(--ios-border-radius);
-            margin: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .dark .iframe-error {
-            background-color: rgba(40, 40, 40, 0.8);
-        }
-        
-        .iframe-error h3 {
-            color: #e74c3c;
-            margin-bottom: 10px;
         }
 
         @keyframes spin {
@@ -265,251 +549,556 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Media query for mobile devices */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .split-screen {
+            .main-content {
                 flex-direction: column;
             }
 
-            .screen-section + .screen-section {
-                margin-left: 0;
-                margin-top: 10px;
+            .panel {
+                max-width: 100%;
+                height: 50%;
             }
 
-            .app-container {
-                height: calc(100vh - 20px);
-                margin: 10px;
+            .panel-gap {
+                width: 100%;
+                height: var(--panel-gap);
+                cursor: row-resize;
             }
 
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
+            .panel-gap::after {
+                width: 50px;
+                height: 4px;
             }
+        }
+
+        /* Theme transition animation */
+        .theme-transition {
+            animation: theme-fade 0.5s ease;
+        }
+
+        @keyframes theme-fade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <div class="split-screen">
-            <!-- Left Section -->
-            <div class="screen-section" id="left-section">
-                <div class="tab-bar" id="left-tabs">
-                    <div class="tab active" data-tab="bio-unit5">Bio Unit 5</div>
-                    <div class="tab" data-tab="chem-unit5">Chem Unit 5</div>
-                    <div class="tab" data-tab="phy-unit5">Phy Unit 5</div>
+        <header class="app-header">
+            <h1 class="app-title">iOS Revision App</h1>
+            <div class="header-actions">
+                <button class="action-button tooltip" id="theme-toggle">
+                    <i class="bi bi-moon"></i>
+                    <span class="tooltip-text">Toggle Dark Mode</span>
+                </button>
+                <button class="action-button tooltip" id="sync-button">
+                    <i class="bi bi-arrow-repeat"></i>
+                    <span class="tooltip-text">Sync Notes</span>
+                </button>
+                <button class="action-button tooltip" id="settings-button">
+                    <i class="bi bi-gear"></i>
+                    <span class="tooltip-text">Settings</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="panel" id="left-panel">
+                <div class="tabs" id="left-tabs">
+                    <div class="tab active" data-tab="bio-unit5-left">Bio Unit 5</div>
+                    <div class="tab" data-tab="chem-unit5-left">Chem Unit 5</div>
+                    <div class="tab" data-tab="phy-unit5-left">Phy Unit 5</div>
+                    <div class="tab" data-tab="notes-left">Notes</div>
+                    <div class="tab" data-tab="search-left">Search</div>
                 </div>
                 <div class="content-area">
-                    <div class="tab-content active" id="left-bio-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Biology Unit 5...</div>
+                    <div class="iframe-container active" id="bio-unit5-left">
+                        <div class="loader-container">
+                            <div class="loader"></div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" title="Biology Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="chem-unit5-left">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="phy-unit5-left">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="notes-left">
+                        <div class="notes-container">
+                            <div class="notes-header">
+                                <h2>Left Panel Notes</h2>
+                            </div>
+                            <div class="notes-list">
+                                <div class="note-item">
+                                    <div class="note-title">Biology: Photosynthesis Process</div>
+                                    <div class="note-content">The light-dependent reactions of photosynthesis take place in the thylakoid membrane and produce ATP and NADPH, which are used in the Calvin cycle.</div>
+                                    <div class="note-date">Nov 15, 2023</div>
+                                </div>
+                                <div class="note-item">
+                                    <div class="note-title">Chemistry: Redox Reactions</div>
+                                    <div class="note-content">Redox reactions involve the transfer of electrons. Oxidation is the loss of electrons (OIL RIG - Oxidation Is Loss, Reduction Is Gain).</div>
+                                    <div class="note-date">Nov 12, 2023</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tab-content" id="left-chem-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Chemistry Unit 5...</div>
-                        </div>
-                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" title="Chemistry Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
-                        </div>
-                    </div>
-                    <div class="tab-content" id="left-phy-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Physics Unit 5...</div>
-                        </div>
-                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" title="Physics Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                    <div class="iframe-container" id="search-left">
+                        <div class="search-container">
+                            <div class="search-header">
+                                <h2>Search</h2>
+                            </div>
+                            <div class="search-input-group">
+                                <i class="bi bi-search"></i>
+                                <input type="text" class="search-input" placeholder="Search notes and documents...">
+                            </div>
+                            <div class="search-results">
+                                <div class="search-result-item">
+                                    <div class="search-result-title">Bio Unit 5 - Cell Respiration</div>
+                                    <div class="search-result-snippet">Cellular respiration is the process by which organisms break down glucose to produce energy in the form of ATP...</div>
+                                </div>
+                                <div class="search-result-item">
+                                    <div class="search-result-title">Chem Unit 5 - Oxidation States</div>
+                                    <div class="search-result-snippet">The oxidation state of an element in a compound is the charge it would have if the compound consisted of ions...</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Section -->
-            <div class="screen-section" id="right-section">
-                <div class="tab-bar" id="right-tabs">
-                    <div class="tab active" data-tab="bio-unit5">Bio Unit 5</div>
-                    <div class="tab" data-tab="chem-unit5">Chem Unit 5</div>
-                    <div class="tab" data-tab="phy-unit5">Phy Unit 5</div>
+            <div class="panel-gap" id="panel-resizer"></div>
+
+            <div class="panel" id="right-panel">
+                <div class="tabs" id="right-tabs">
+                    <div class="tab active" data-tab="bio-unit5-right">Bio Unit 5</div>
+                    <div class="tab" data-tab="chem-unit5-right">Chem Unit 5</div>
+                    <div class="tab" data-tab="phy-unit5-right">Phy Unit 5</div>
+                    <div class="tab" data-tab="notes-right">Notes</div>
+                    <div class="tab" data-tab="search-right">Search</div>
                 </div>
                 <div class="content-area">
-                    <div class="tab-content active" id="right-bio-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Biology Unit 5...</div>
+                    <div class="iframe-container active" id="bio-unit5-right">
+                        <div class="loader-container">
+                            <div class="loader"></div>
                         </div>
-                        <iframe src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" title="Biology Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="chem-unit5-right">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="phy-unit5-right">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                        <iframe class="doc-iframe" src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
+                    </div>
+                    <div class="iframe-container" id="notes-right">
+                        <div class="notes-container">
+                            <div class="notes-header">
+                                <h2>Right Panel Notes</h2>
+                            </div>
+                            <div class="notes-list">
+                                <div class="note-item">
+                                    <div class="note-title">Physics: Quantum Mechanics</div>
+                                    <div class="note-content">Quantum mechanics describes the behavior of matter and energy at the atomic and subatomic levels. Key concepts include wave-particle duality and the uncertainty principle.</div>
+                                    <div class="note-date">Nov 18, 2023</div>
+                                </div>
+                                <div class="note-item">
+                                    <div class="note-title">Chemistry: Organic Compounds</div>
+                                    <div class="note-content">Organic compounds contain carbon and hydrogen. The main types include alkanes, alkenes, alkynes, and aromatic compounds.</div>
+                                    <div class="note-date">Nov 10, 2023</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="tab-content" id="right-chem-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Chemistry Unit 5...</div>
-                        </div>
-                        <iframe src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" title="Chemistry Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
-                        </div>
-                    </div>
-                    <div class="tab-content" id="right-phy-unit5">
-                        <div class="loading-indicator">
-                            <div class="spinner"></div>
-                            <div>Loading Physics Unit 5...</div>
-                        </div>
-                        <iframe src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" title="Physics Unit 5"></iframe>
-                        <div class="fallback-message">
-                            <p>If the document isn't loading, <a href="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?tab=t.0" target="_blank" rel="noopener noreferrer">open it directly</a>.</p>
+                    <div class="iframe-container" id="search-right">
+                        <div class="search-container">
+                            <div class="search-header">
+                                <h2>Search</h2>
+                            </div>
+                            <div class="search-input-group">
+                                <i class="bi bi-search"></i>
+                                <input type="text" class="search-input" placeholder="Search notes and documents...">
+                            </div>
+                            <div class="search-results">
+                                <div class="search-result-item">
+                                    <div class="search-result-title">Phy Unit 5 - Electromagnetic Waves</div>
+                                    <div class="search-result-snippet">Electromagnetic waves are produced by the acceleration of charged particles. They can travel through a vacuum and don't require a medium...</div>
+                                </div>
+                                <div class="search-result-item">
+                                    <div class="search-result-title">Bio Unit 5 - Genetic Engineering</div>
+                                    <div class="search-result-snippet">Genetic engineering involves manipulating an organism's genes using biotechnology. Applications include creating insulin-producing bacteria...</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Theme Toggle Button -->
-        <div class="theme-toggle" id="theme-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-            </svg>
+        <footer class="app-footer">
+            <div class="footer-button active">
+                <i class="bi bi-book"></i>
+                <span>Study</span>
+            </div>
+            <div class="footer-button">
+                <i class="bi bi-journal-text"></i>
+                <span>Notes</span>
+            </div>
+            <div class="footer-button">
+                <i class="bi bi-search"></i>
+                <span>Search</span>
+            </div>
+            <div class="footer-button">
+                <i class="bi bi-bookmark"></i>
+                <span>Bookmarks</span>
+            </div>
+        </footer>
+    </div>
+
+    <div class="add-note-btn" id="add-note-btn">
+        <i class="bi bi-plus"></i>
+    </div>
+
+    <div class="modal" id="note-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Note</h3>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="note-title">Title</label>
+                <input type="text" class="form-control" id="note-title" placeholder="Enter note title">
+            </div>
+            <div class="form-group">
+                <label for="note-content">Content</label>
+                <textarea class="form-control" id="note-content" placeholder="Enter your notes here..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="note-subject">Subject</label>
+                <select class="form-control" id="note-subject">
+                    <option value="bio">Biology</option>
+                    <option value="chem">Chemistry</option>
+                    <option value="phy">Physics</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" id="cancel-note">Cancel</button>
+                <button class="btn btn-primary" id="save-note">Save Note</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Initialize tabs functionality
-        function initTabs(sectionId) {
-            const tabBar = document.getElementById(`${sectionId}-tabs`);
-            const tabs = tabBar.querySelectorAll('.tab');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs in this section
-                    tabBar.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Hide all content areas in this section
-                    const contentArea = document.querySelector(`#${sectionId} .content-area`);
-                    contentArea.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    // Show the corresponding content
-                    const tabId = tab.getAttribute('data-tab');
-                    const activeContent = document.getElementById(`${sectionId}-${tabId}`);
-                    activeContent.classList.add('active');
-                });
-            });
-        }
-        
-        // Initialize theme toggle functionality
-        function initThemeToggle() {
-            const themeToggle = document.getElementById('theme-toggle');
-            
-            // Check for user preference
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for dark mode preference
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.classList.add('dark');
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-toggle').innerHTML = '<i class="bi bi-sun"></i>';
             }
-            
-            // Listen for preference changes
+
+            // Dark mode toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.add('theme-transition');
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    this.innerHTML = '<i class="bi bi-moon"></i>';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    this.innerHTML = '<i class="bi bi-sun"></i>';
+                }
+                setTimeout(() => {
+                    document.body.classList.remove('theme-transition');
+                }, 500);
+            });
+
+            // Listen for color scheme changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
                 if (event.matches) {
-                    document.body.classList.add('dark');
+                    document.documentElement.classList.add('dark');
+                    themeToggle.innerHTML = '<i class="bi bi-sun"></i>';
                 } else {
-                    document.body.classList.remove('dark');
+                    document.documentElement.classList.remove('dark');
+                    themeToggle.innerHTML = '<i class="bi bi-moon"></i>';
                 }
             });
-            
-            // Toggle theme on button click
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark');
+
+            // Tab switching functionality
+            function setupTabs(tabsEl, panelId) {
+                const tabs = tabsEl.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // Remove active class from all tabs
+                        tabs.forEach(t => t.classList.remove('active'));
+                        // Add active class to clicked tab
+                        this.classList.add('active');
+                        
+                        // Show the corresponding content
+                        const tabId = this.getAttribute('data-tab');
+                        const contentContainer = document.getElementById(tabId);
+                        
+                        // Hide all content containers
+                        const containers = document.querySelectorAll(`#${panelId} .iframe-container`);
+                        containers.forEach(c => c.classList.remove('active'));
+                        
+                        // Show the selected container
+                        if (contentContainer) {
+                            contentContainer.classList.add('active');
+                            
+                            // If it's a notes or search tab, show the container
+                            if (tabId.includes('notes')) {
+                                const notesContainer = contentContainer.querySelector('.notes-container');
+                                if (notesContainer) notesContainer.style.display = 'flex';
+                            } else if (tabId.includes('search')) {
+                                const searchContainer = contentContainer.querySelector('.search-container');
+                                if (searchContainer) searchContainer.style.display = 'flex';
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Setup tabs for both panels
+            setupTabs(document.getElementById('left-tabs'), 'left-panel');
+            setupTabs(document.getElementById('right-tabs'), 'right-panel');
+
+            // Panel resizing
+            const panelResizer = document.getElementById('panel-resizer');
+            const leftPanel = document.getElementById('left-panel');
+            const rightPanel = document.getElementById('right-panel');
+            let isResizing = false;
+            let lastX, lastY;
+
+            panelResizer.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                document.addEventListener('mousemove', handleResize);
+                document.addEventListener('mouseup', stopResize);
+                document.body.style.cursor = window.innerWidth > 768 ? 'col-resize' : 'row-resize';
+                panelResizer.style.opacity = '1';
             });
-        }
-        
-        // Handle iframe loading and errors
-        function setupIframeLoadHandlers() {
-            const iframes = document.querySelectorAll('iframe');
-            
+
+            panelResizer.addEventListener('touchstart', (e) => {
+                isResizing = true;
+                lastX = e.touches[0].clientX;
+                lastY = e.touches[0].clientY;
+                document.addEventListener('touchmove', handleTouchResize);
+                document.addEventListener('touchend', stopResize);
+                panelResizer.style.opacity = '1';
+            });
+
+            function handleResize(e) {
+                if (!isResizing) return;
+                const dx = e.clientX - lastX;
+                const dy = e.clientY - lastY;
+                
+                if (window.innerWidth > 768) {
+                    // Horizontal resizing
+                    const leftWidth = parseFloat(getComputedStyle(leftPanel).width);
+                    const containerWidth = leftPanel.parentElement.offsetWidth;
+                    const newLeftWidth = Math.max(200, Math.min(leftWidth + dx, containerWidth - 200));
+                    const percentWidth = (newLeftWidth / containerWidth) * 100;
+                    
+                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
+                    lastX = e.clientX;
+                } else {
+                    // Vertical resizing
+                    const leftHeight = parseFloat(getComputedStyle(leftPanel).height);
+                    const containerHeight = leftPanel.parentElement.offsetHeight;
+                    const newLeftHeight = Math.max(150, Math.min(leftHeight + dy, containerHeight - 150));
+                    const percentHeight = (newLeftHeight / containerHeight) * 100;
+                    
+                    leftPanel.style.height = percentHeight + '%';
+                    rightPanel.style.height = (100 - percentHeight) + '%';
+                    lastY = e.clientY;
+                }
+            }
+
+            function handleTouchResize(e) {
+                if (!isResizing) return;
+                const touchX = e.touches[0].clientX;
+                const touchY = e.touches[0].clientY;
+                
+                if (window.innerWidth > 768) {
+                    // Horizontal resizing
+                    const dx = touchX - lastX;
+                    const leftWidth = parseFloat(getComputedStyle(leftPanel).width);
+                    const containerWidth = leftPanel.parentElement.offsetWidth;
+                    const newLeftWidth = Math.max(200, Math.min(leftWidth + dx, containerWidth - 200));
+                    const percentWidth = (newLeftWidth / containerWidth) * 100;
+                    
+                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
+                    lastX = touchX;
+                } else {
+                    // Vertical resizing
+                    const dy = touchY - lastY;
+                    const leftHeight = parseFloat(getComputedStyle(leftPanel).height);
+                    const containerHeight = leftPanel.parentElement.offsetHeight;
+                    const newLeftHeight = Math.max(150, Math.min(leftHeight + dy, containerHeight - 150));
+                    const percentHeight = (newLeftHeight / containerHeight) * 100;
+                    
+                    leftPanel.style.height = percentHeight + '%';
+                    rightPanel.style.height = (100 - percentHeight) + '%';
+                    lastY = touchY;
+                }
+                
+                e.preventDefault(); // Prevent scrolling while resizing
+            }
+
+            function stopResize() {
+                isResizing = false;
+                document.removeEventListener('mousemove', handleResize);
+                document.removeEventListener('mouseup', stopResize);
+                document.removeEventListener('touchmove', handleTouchResize);
+                document.removeEventListener('touchend', stopResize);
+                document.body.style.cursor = '';
+                panelResizer.style.opacity = '';
+            }
+
+            // Footer navigation
+            const footerButtons = document.querySelectorAll('.footer-button');
+            footerButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    footerButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Handle navigation actions
+                    if (index === 0) { // Study
+                        const leftTab = document.querySelector('#left-tabs .tab:first-child');
+                        const rightTab = document.querySelector('#right-tabs .tab:first-child');
+                        if (leftTab) leftTab.click();
+                        if (rightTab) rightTab.click();
+                    } else if (index === 1) { // Notes
+                        const leftNotesTab = document.querySelector('#left-tabs .tab[data-tab="notes-left"]');
+                        const rightNotesTab = document.querySelector('#right-tabs .tab[data-tab="notes-right"]');
+                        if (leftNotesTab) leftNotesTab.click();
+                        if (rightNotesTab) rightNotesTab.click();
+                    } else if (index === 2) { // Search
+                        const leftSearchTab = document.querySelector('#left-tabs .tab[data-tab="search-left"]');
+                        const rightSearchTab = document.querySelector('#right-tabs .tab[data-tab="search-right"]');
+                        if (leftSearchTab) leftSearchTab.click();
+                        if (rightSearchTab) rightSearchTab.click();
+                    } else if (index === 3) { // Bookmarks
+                        // We could implement a bookmarks feature here
+                        alert('Bookmarks feature coming soon!');
+                    }
+                });
+            });
+
+            // Note modal functionality
+            const addNoteBtn = document.getElementById('add-note-btn');
+            const noteModal = document.getElementById('note-modal');
+            const closeModal = document.getElementById('close-modal');
+            const cancelNote = document.getElementById('cancel-note');
+            const saveNote = document.getElementById('save-note');
+
+            addNoteBtn.addEventListener('click', function() {
+                noteModal.style.display = 'flex';
+            });
+
+            function closeNoteModal() {
+                noteModal.style.display = 'none';
+                document.getElementById('note-title').value = '';
+                document.getElementById('note-content').value = '';
+            }
+
+            closeModal.addEventListener('click', closeNoteModal);
+            cancelNote.addEventListener('click', closeNoteModal);
+
+            saveNote.addEventListener('click', function() {
+                const title = document.getElementById('note-title').value;
+                const content = document.getElementById('note-content').value;
+                const subject = document.getElementById('note-subject').value;
+                
+                if (!title || !content) {
+                    alert('Please enter both title and content for your note');
+                    return;
+                }
+                
+                // Create new note
+                const newNote = document.createElement('div');
+                newNote.className = 'note-item';
+                
+                const noteTitle = document.createElement('div');
+                noteTitle.className = 'note-title';
+                noteTitle.textContent = title;
+                
+                const noteContent = document.createElement('div');
+                noteContent.className = 'note-content';
+                noteContent.textContent = content;
+                
+                const noteDate = document.createElement('div');
+                noteDate.className = 'note-date';
+                noteDate.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                newNote.appendChild(noteTitle);
+                newNote.appendChild(noteContent);
+                newNote.appendChild(noteDate);
+                
+                // Add to both note panels
+                const leftNotesList = document.querySelector('#notes-left .notes-list');
+                const rightNotesList = document.querySelector('#notes-right .notes-list');
+                
+                if (leftNotesList) leftNotesList.prepend(newNote.cloneNode(true));
+                if (rightNotesList) rightNotesList.prepend(newNote.cloneNode(true));
+                
+                // Close modal
+                closeNoteModal();
+            });
+
+            // Search functionality
+            const searchInputs = document.querySelectorAll('.search-input');
+            searchInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const searchResults = this.parentElement.nextElementSibling;
+                    
+                    if (searchTerm.length < 2) {
+                        // Show default results
+                        searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                            item.style.display = 'block';
+                        });
+                        return;
+                    }
+                    
+                    // Filter results (in a real app, this would search through actual data)
+                    searchResults.querySelectorAll('.search-result-item').forEach(item => {
+                        const title = item.querySelector('.search-result-title').textContent.toLowerCase();
+                        const snippet = item.querySelector('.search-result-snippet').textContent.toLowerCase();
+                        
+                        if (title.includes(searchTerm) || snippet.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Handle iframe loading
+            const iframes = document.querySelectorAll('.doc-iframe');
             iframes.forEach(iframe => {
-                // Show an error message if Google Docs fails to load after 8 seconds
-                const timeoutId = setTimeout(() => {
-                    // Show fallback message more prominently if loading takes too long
-                    const fallbackMsg = iframe.nextElementSibling;
-                    if (fallbackMsg && fallbackMsg.classList.contains('fallback-message')) {
-                        fallbackMsg.style.bottom = '50%';
-                        fallbackMsg.style.transform = 'translateY(50%)';
-                        fallbackMsg.style.backgroundColor = 'rgba(0, 122, 255, 0.25)';
-                        fallbackMsg.style.padding = '20px';
-                        fallbackMsg.style.fontSize = '16px';
-                        fallbackMsg.innerHTML = '<p>This document is taking a long time to load. You may need to:</p>' +
-                            '<ul style="text-align: left; margin: 10px 0;">' +
-                            '<li>Check if you have access to this document</li>' +
-                            '<li>Sign in to your Google account</li>' +
-                            '<li>Try opening it directly instead</li>' +
-                            '</ul>' +
-                            '<a href="' + iframe.src + '" target="_blank" rel="noopener noreferrer" ' +
-                            'style="display: inline-block; margin-top: 10px; background-color: var(--ios-blue); color: white; ' +
-                            'padding: 8px 16px; border-radius: 18px; text-decoration: none;">Open Document</a>';
-                    }
-                }, 8000);
-                
-                // Handle successful load
                 iframe.addEventListener('load', function() {
-                    clearTimeout(timeoutId);
-                    const loadingIndicator = this.previousElementSibling;
-                    if (loadingIndicator && loadingIndicator.classList.contains('loading-indicator')) {
-                        loadingIndicator.style.display = 'none';
+                    const loaderContainer = this.previousElementSibling;
+                    if (loaderContainer && loaderContainer.classList.contains('loader-container')) {
+                        loaderContainer.style.display = 'none';
                     }
-                    
-                    // Hide the fallback message after successful load
-                    const fallbackMsg = this.nextElementSibling;
-                    if (fallbackMsg && fallbackMsg.classList.contains('fallback-message')) {
-                        fallbackMsg.style.display = 'none';
-                    }
-                });
-                
-                // Handle errors
-                iframe.addEventListener('error', function() {
-                    clearTimeout(timeoutId);
-                    const loadingIndicator = this.previousElementSibling;
-                    if (loadingIndicator && loadingIndicator.classList.contains('loading-indicator')) {
-                        loadingIndicator.style.display = 'none';
-                    }
-                    
-                    // Create an error message
-                    const container = this.parentElement;
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'iframe-error';
-                    errorDiv.innerHTML = '<h3>Error Loading Document</h3>' +
-                        '<p>There was a problem loading the Google Doc. Please try:</p>' +
-                        '<ul style="text-align: left; margin: 10px auto; max-width: 400px;">' +
-                        '<li>Checking your internet connection</li>' +
-                        '<li>Confirming you have access to this document</li>' +
-                        '<li>Signing in to your Google account</li>' +
-                        '</ul>' +
-                        '<a href="' + this.src + '" target="_blank" rel="noopener noreferrer" ' +
-                        'style="display: inline-block; margin-top: 10px; background-color: var(--ios-blue); color: white; ' +
-                        'padding: 8px 16px; border-radius: 18px; text-decoration: none;">Open Directly</a>';
-                    
-                    container.appendChild(errorDiv);
                 });
             });
-        }
-        
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            initTabs('left');
-            initTabs('right');
-            initThemeToggle();
-            setupIframeLoadHandlers();
         });
     </script>
 </body>
