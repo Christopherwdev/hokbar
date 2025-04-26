@@ -20,8 +20,8 @@
             --tab-height: 44px;
             --header-height: 64px;
             --blur-amount: 15px;
-            --chat-width: 400px;
-            --chat-height: 400px;
+            --chat-height: 70vh;
+            --chat-width: 30vw;
             --chat-border-radius: 15px;
         }
 
@@ -764,8 +764,10 @@
 
             chatToggler.addEventListener('click', function () {
                 chatWindow.classList.toggle('active');
-                chatWindow.style.left = "0px";
-                chatWindow.style.top = "0px";
+                // chatWindow.style.top = "auto";
+                // chatWindow.style.left = "auto";
+                // chatWindow.style.bottom = "90px";
+                // chatWindow.style.right = "20px";
             });
 
             minimizeChat.addEventListener('click', function () {
