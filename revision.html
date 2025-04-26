@@ -764,43 +764,46 @@
             });
 
             // Text selection in iframes
-            iframes.forEach(iframe => {
-                iframe.addEventListener('load', function () {
-                    // Attempt to add selection listener to the iframe
-                    try {
-                        const iframeDoc = this.contentDocument || this.contentWindow.document;
+            // iframes.forEach(iframe => {
+            //     iframe.addEventListener('load', function () {
+            //         // Attempt to add selection listener to the iframe
+            //         try {
+            //             const iframeDoc = this.contentDocument || this.contentWindow.document;
 
-                        // Listen for mouseup event which typically indicates text selection
-                        iframeDoc.addEventListener('mouseup', function () {
-                            try {
-                                const selection = iframeDoc.getSelection();
-                                const selectedText = selection.toString().trim();
+            //             // Listen for mouseup event which typically indicates text selection
+            //             iframeDoc.addEventListener('mouseup', function () {
+            //                 try {
+            //                     const selection = iframeDoc.getSelection();
+            //                     const selectedText = selection.toString().trim();
 
-                                if (selectedText && selectedText.length > 5) {
-                                    // Only process significant selections (more than 5 chars)
-                                    chatWindow.classList.add('active'); // Open chat window
-                                    console.log(selectedText);
-                                    sendSelectedTextToChat(selectedText);
-                                }
-                            } catch (err) {
-                                console.log("Error getting selection from iframe:", err);
-                            }
-                        });
-                    } catch (err) {
-                        console.log("Cannot access iframe content due to same-origin policy:", err);
-                        // Google Docs iframes are cross-origin, so direct access may be blocked
-                        // We would need a different approach if this doesn't work
-                    }
-                });
-            });
+            //                     if (selectedText && selectedText.length > 5) {
+            //                         // Only process significant selections (more than 5 chars)
+            //                         chatWindow.classList.add('active'); // Open chat window
+            //                         console.log(selectedText);
+            //                         sendSelectedTextToChat(selectedText);
+            //                     }
+            //                 } catch (err) {
+            //                     console.log("Error getting selection from iframe:", err);
+            //                 }
+            //             });
+            //         } catch (err) {
+            //             console.log("Cannot access iframe content due to same-origin policy:", err);
+            //             // Google Docs iframes are cross-origin, so direct access may be blocked
+            //             // We would need a different approach if this doesn't work
+            //         }
+            //     });
+            // });
 
-            function sendSelectedTextToChat(selectedText) {
-                const messageInput = document.getElementById('message-input');
-                messageInput.value = `Can you explain this: "${selectedText}"`;
+            // function sendSelectedTextToChat(selectedText) {
+            //     const messageInput = document.getElementById('message-input');
+            //     messageInput.value = `Can you explain this: "${selectedText}"`;
 
-                // Focus on the input to allow the user to modify the question if needed
-                messageInput.focus();
-            }
+            //     // Focus on the input to allow the user to modify the question if needed
+            //     messageInput.focus();
+            // }
+
+
+            
 
             // Chat API implementation
             let currentChatId = null;
