@@ -64,8 +64,8 @@
             justify-content: space-between;
             padding: 0 20px;
             background-color: var(--ios-card);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
+            /* backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount)); */
             border-bottom: 1px solid var(--ios-border);
             z-index: 10;
             transition: all 0.3s ease;
@@ -188,8 +188,8 @@
             height: var(--tab-height);
             display: flex;
             background-color: var(--ios-card);
-            backdrop-filter: blur(var(--blur-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount));
+            /* backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount)); */
             border-bottom: 1px solid var(--ios-border);
             position: sticky;
             top: 0;
@@ -372,6 +372,9 @@
             transform: translateY(0);
             opacity: 1;
             visibility: visible;
+      
+            bottom: 90px;
+            right: 20px;
         }
 
         .chat-header {
