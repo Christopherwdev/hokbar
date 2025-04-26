@@ -54,6 +54,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .app-header {
@@ -67,17 +68,29 @@
             -webkit-backdrop-filter: blur(var(--blur-amount));
             border-bottom: 1px solid var(--ios-border);
             z-index: 10;
+            transition: all 0.3s ease;
         }
+        
+        .app-header.minimized{
+    height: 0;
+    overflow: visible;
+    /* padding: 0; */
+    color: rgba(0, 0, 0, 0);
+    border-bottom: none;
+}
 
-        .app-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
+.main-content .tabs {
+    transition: all 0.3s ease;
+    opacity: 1;
+}
 
-        .header-actions {
-            display: flex;
-            gap: 15px;
-        }
+.main-content.minimized .tabs {
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    border-bottom: none;
+    opacity: 0;
+}
 
         .action-button {
             background: none;
@@ -89,6 +102,40 @@
             border-radius: 100px;
             transition: background-color 0.2s ease;
         }
+#minimize-header {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    background-color: var(--ios-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(10px);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 36px;
+    height: 24px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.app-header.minimized #minimize-header {
+    top: 0;
+}
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
 
         .action-button:hover {
             background-color: rgba(0, 122, 255, 0.1);
@@ -207,10 +254,12 @@
 
         /* Loading animation */
         .loader-container {
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
+            background-color: var(--ios-bg);
+            z-index: 5;
         }
 
         .loader {
@@ -316,8 +365,6 @@
             backdrop-filter: blur(var(--blur-amount));
             -webkit-backdrop-filter: blur(var(--blur-amount));
             border: 1px solid var(--ios-border);
-            cursor: grab;
-            /* Show a grab cursor for dragging */
             z-index: 1000;
         }
 
@@ -325,11 +372,6 @@
             transform: translateY(0);
             opacity: 1;
             visibility: visible;
-        }
-
-        .chat-window.dragging {
-            cursor: grabbing;
-            /* Change cursor to grabbing while dragging */
         }
 
         .chat-header {
@@ -340,6 +382,11 @@
             padding: 0 15px;
             border-bottom: 1px solid var(--ios-border);
             background-color: var(--ios-card);
+            cursor: grab;
+        }
+
+        .chat-header.dragging {
+            cursor: grabbing;
         }
 
         .chat-title {
@@ -368,10 +415,10 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .message {
-
             padding: 10px 12px;
             border-radius: 18px;
             font-size: 14px;
@@ -471,17 +518,48 @@
             user-select: none;
             -webkit-user-select: none;
         }
+        
+        /* Error state for iframes */
+        .iframe-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+            color: var(--ios-secondary-text);
+        }
+        
+        .iframe-error i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #dc3545;
+        }
+        
+        .iframe-error button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: var(--ios-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 
 <body>
     <div class="app-container">
-        <header class="app-header">
+        <header class="app-header" id="app-header">
             <h1 class="app-title">Rie Vision</h1>
             <div class="header-actions">
-                <button class="action-button tooltip" id="theme-toggle" style="width: 50px; height: 50px;">
+                <button class="action-button" id="minimize-header" style="width: 50px; height: 50px;">
+                    <i class="bi bi-chevron-up"></i>
+                </button>
+                <button class="action-button tooltip" id="theme-toggle" style="width: 50px; height: 50px; display: none">
                     <i class="bi bi-moon"></i>
-                    <!-- <span class="tooltip-text">Toggle Dark Mode</span> -->
                 </button>
             </div>
         </header>
@@ -498,22 +576,19 @@
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="chem-unit5-left">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="phy-unit5-left">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
                     </div>
                 </div>
             </div>
@@ -531,22 +606,19 @@
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1ReF9Fcp3l3c6Ztpx4jcZrlA5xAOKimL-DNM5vZ4T6LM/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="chem-unit5-right">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1pEi15vqTLsuMoe5NSg5TC-yPAp4cYVrfpEQ_zdF9vGo/edit?tab=t.0&rm=minimal"></iframe>
                     </div>
                     <div class="iframe-container" id="phy-unit5-right">
                         <div class="loader-container">
                             <div class="loader"></div>
                         </div>
-                        <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
+                        <iframe class="doc-iframe lazy-iframe" data-src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
                     </div>
                 </div>
             </div>
@@ -559,7 +631,7 @@
     </div>
 
     <div class="chat-window" id="chat-window">
-        <div class="chat-header">
+        <div class="chat-header" id="chat-header">
             <div class="chat-title">AI (unlimited, feel free to use)</div>
             <div class="chat-actions">
                 <button class="chat-action" id="minimize-chat">
@@ -611,8 +683,25 @@
                     themeToggle.innerHTML = '<i class="bi bi-moon"></i>';
                 }
             });
-
             
+            // Minimize app header
+            const appHeader = document.getElementById('app-header');
+            const appTabs = document.querySelectorAll('tab');
+            
+
+const minimizeHeader = document.getElementById('minimize-header');
+
+minimizeHeader.addEventListener('click', function() {
+    appHeader.classList.toggle('minimized');
+    mainContent.classList.toggle('minimized');
+    
+    if (appHeader.classList.contains('minimized')) {
+        this.innerHTML = '<i class="bi bi-chevron-down"></i>';
+    } else {
+        this.innerHTML = '<i class="bi bi-chevron-up"></i>';
+    }
+});
+
             // Tab switching functionality
             function setupTabs(tabsEl, panelId) {
                 const tabs = tabsEl.querySelectorAll('.tab');
@@ -634,6 +723,12 @@
                         // Show the selected container
                         if (contentContainer) {
                             contentContainer.classList.add('active');
+                            
+                            // Lazy load the iframe if needed
+                            const iframe = contentContainer.querySelector('.lazy-iframe');
+                            if (iframe && !iframe.src && iframe.getAttribute('data-src')) {
+                                iframe.src = iframe.getAttribute('data-src');
+                            }
                         }
                     });
                 });
@@ -643,131 +738,172 @@
             setupTabs(document.getElementById('left-tabs'), 'left-panel');
             setupTabs(document.getElementById('right-tabs'), 'right-panel');
 
-            // // Improved panel resizing
-            // const panelResizer = document.getElementById('panel-resizer');
-            // const leftPanel = document.getElementById('left-panel');
-            // const rightPanel = document.getElementById('right-panel');
-            // const mainContent = document.querySelector('.main-content');
-            // let isResizing = false;
-            // let initialWidth, initialX, initialY;
+            // Panel resizing
+            const panelResizer = document.getElementById('panel-resizer');
+            const leftPanel = document.getElementById('left-panel');
+            const rightPanel = document.getElementById('right-panel');
+            const mainContent = document.querySelector('.main-content');
+            let isResizing = false;
+            let initialWidth, initialX, initialY;
 
-            // function startResize(e) {
-            //     // Prevent text selection during resize
-            //     document.body.classList.add('no-select');
+            function startResize(e) {
+                // Prevent text selection during resize
+                document.body.classList.add('no-select');
 
-            //     isResizing = true;
-            //     initialWidth = leftPanel.offsetWidth;
+                isResizing = true;
+                initialWidth = leftPanel.offsetWidth;
 
-            //     if (e.type === 'touchstart') {
-            //         initialX = e.touches[0].clientX;
-            //         initialY = e.touches[0].clientY;
-            //     } else {
-            //         initialX = e.clientX;
-            //         initialY = e.clientY;
-            //     }
+                if (e.type === 'touchstart') {
+                    initialX = e.touches[0].clientX;
+                    initialY = e.touches[0].clientY;
+                } else {
+                    initialX = e.clientX;
+                    initialY = e.clientY;
+                }
 
-            //     // Add event listeners for movement and end
-            //     if (e.type === 'touchstart') {
-            //         document.addEventListener('touchmove', resizeHandler, { passive: false });
-            //         document.addEventListener('touchend', stopResize);
-            //     } else {
-            //         document.addEventListener('mousemove', resizeHandler);
-            //         document.addEventListener('mouseup', stopResize);
-            //     }
+                // Add event listeners for movement and end
+                if (e.type === 'touchstart') {
+                    document.addEventListener('touchmove', resizeHandler, { passive: false });
+                    document.addEventListener('touchend', stopResize);
+                } else {
+                    document.addEventListener('mousemove', resizeHandler);
+                    document.addEventListener('mouseup', stopResize);
+                }
 
-            //     panelResizer.style.opacity = '1';
-            //     e.preventDefault();
-            // }
+                panelResizer.style.opacity = '1';
+                e.preventDefault();
+            }
 
-            // function resizeHandler(e) {
-            //     if (!isResizing) return;
+            function resizeHandler(e) {
+                if (!isResizing) return;
 
-            //     let currentX, currentY;
+                let currentX, currentY;
 
-            //     if (e.type === 'touchmove') {
-            //         currentX = e.touches[0].clientX;
-            //         currentY = e.touches[0].clientY;
-            //         // Prevent scrolling while resizing
-            //         e.preventDefault();
-            //     } else {
-            //         currentX = e.clientX;
-            //         currentY = e.clientY;
-            //     }
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                    // Prevent scrolling while resizing
+                    e.preventDefault();
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
 
-            //     const containerWidth = mainContent.offsetWidth;
-            //     const containerHeight = mainContent.offsetHeight;
+                const containerWidth = mainContent.offsetWidth;
+                const containerHeight = mainContent.offsetHeight;
 
-            //     if (window.innerWidth > 768) {
-            //         // Horizontal resizing
-            //         const dx = currentX - initialX;
-            //         const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
-            //         const percentWidth = (newLeftWidth / containerWidth) * 100;
+                if (window.innerWidth > 768) {
+                    // Horizontal resizing
+                    const dx = currentX - initialX;
+                    const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
+                    const percentWidth = (newLeftWidth / containerWidth) * 100;
 
-            //         document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
-            //     } else {
-            //         // Vertical resizing
-            //         const dy = currentY - initialY;
-            //         const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
-            //         const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
-            //         const percentHeight = (newLeftHeight / containerHeight) * 100;
+                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
+                } else {
+                    // Vertical resizing
+                    const dy = currentY - initialY;
+                    const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
+                    const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
+                    const percentHeight = (newLeftHeight / containerHeight) * 100;
 
-            //         leftPanel.style.height = percentHeight + '%';
-            //         rightPanel.style.height = (100 - percentHeight) + '%';
-            //     }
+                    leftPanel.style.height = percentHeight + '%';
+                    rightPanel.style.height = (100 - percentHeight) + '%';
+                }
+            }
 
-            //     // Use requestAnimationFrame for smoother resizing
-            //     if (!window.requestAnimationFrame) {
-            //         // Apply changes immediately if requestAnimationFrame is not available
-            //         applyResize();
-            //     } else {
-            //         requestAnimationFrame(applyResize);
-            //     }
-            // }
+            function stopResize() {
+                isResizing = false;
+                document.body.classList.remove('no-select');
 
-            // function applyResize() {
-            //     // This function intentionally left empty as we're modifying CSS variables
-            //     // which apply immediately. It's here for potential future optimizations.
-            // }
+                // Remove event listeners
+                document.removeEventListener('mousemove', resizeHandler);
+                document.removeEventListener('mouseup', stopResize);
+                document.removeEventListener('touchmove', resizeHandler);
+                document.removeEventListener('touchend', stopResize);
 
-            // function stopResize() {
-            //     isResizing = false;
-            //     document.body.classList.remove('no-select');
+                panelResizer.style.opacity = '';
+            }
 
-            //     // Remove event listeners
-            //     document.removeEventListener('mousemove', resizeHandler);
-            //     document.removeEventListener('mouseup', stopResize);
-            //     document.removeEventListener('touchmove', resizeHandler);
-            //     document.removeEventListener('touchend', stopResize);
+            // Add event listeners for both mouse and touch
+            panelResizer.addEventListener('mousedown', startResize);
+            panelResizer.addEventListener('touchstart', startResize, { passive: false });
 
-            //     panelResizer.style.opacity = '';
-            // }
-
-            // // Add event listeners for both mouse and touch
-            // panelResizer.addEventListener('mousedown', startResize);
-            // panelResizer.addEventListener('touchstart', startResize, { passive: false });
-
-            // Handle iframe loading
-            const iframes = document.querySelectorAll('.doc-iframe');
-            iframes.forEach(iframe => {
-                iframe.addEventListener('load', function () {
-                    const loaderContainer = this.previousElementSibling;
-                    if (loaderContainer && loaderContainer.classList.contains('loader-container')) {
-                        loaderContainer.style.display = 'none';
+            // Lazy load iframes and handle loading errors
+            function loadIframes() {
+                // Only load visible iframes initially
+                const visibleContainers = document.querySelectorAll('.iframe-container.active');
+                visibleContainers.forEach(container => {
+                    const iframe = container.querySelector('.lazy-iframe');
+                    if (iframe && !iframe.src && iframe.getAttribute('data-src')) {
+                        iframe.src = iframe.getAttribute('data-src');
                     }
                 });
-            });
+            }
+            
+            // Handle iframe loading
+            function setupIframeHandlers() {
+                const iframes = document.querySelectorAll('.doc-iframe');
+                iframes.forEach(iframe => {
+                    // Load event
+                    iframe.addEventListener('load', function () {
+                        const loaderContainer = this.previousElementSibling;
+                        if (loaderContainer && loaderContainer.classList.contains('loader-container')) {
+                            loaderContainer.style.display = 'none';
+                        }
+                    });
+                    
+                    // Error event
+                    iframe.addEventListener('error', function () {
+                        const container = this.parentElement;
+                        const loaderContainer = this.previousElementSibling;
+                        
+                        if (loaderContainer) {
+                            loaderContainer.style.display = 'none';
+                        }
+                        
+                        // Create error message
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'iframe-error';
+                        errorDiv.innerHTML = `
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <h3>Failed to load document</h3>
+                            <p>There was a problem loading this document. This might be due to cookie settings or network issues.</p>
+                            <button class="reload-iframe">Try Again</button>
+                        `;
+                        container.appendChild(errorDiv);
+                        
+                        // Add reload button functionality
+                        const reloadBtn = errorDiv.querySelector('.reload-iframe');
+                        reloadBtn.addEventListener('click', () => {
+                            errorDiv.remove();
+                            loaderContainer.style.display = 'flex';
+                            
+                            // Add a small delay before reloading
+                            setTimeout(() => {
+                                const src = iframe.getAttribute('data-src');
+                                iframe.src = '';
+                                
+                                setTimeout(() => {
+                                    iframe.src = src;
+                                }, 100);
+                            }, 300);
+                        });
+                    });
+                });
+            }
+            
+            // Call setup functions
+            loadIframes();
+            setupIframeHandlers();
 
             // Chatbot functionality
             const chatToggler = document.getElementById('chat-toggler');
-            // const chatWindow = document.getElementById('chat-window');
+            const chatWindow = document.getElementById('chat-window');
+            const chatHeader = document.getElementById('chat-header');
             const minimizeChat = document.getElementById('minimize-chat');
 
             chatToggler.addEventListener('click', function () {
                 chatWindow.classList.toggle('active');
-                // chatWindow.style.top = "auto";
-                // chatWindow.style.left = "auto";
-                // chatWindow.style.bottom = "90px";
-                // chatWindow.style.right = "20px";
             });
 
             minimizeChat.addEventListener('click', function () {
@@ -775,6 +911,7 @@
             });
 
             // Text selection in iframes
+            const iframes = document.querySelectorAll('.doc-iframe');
             iframes.forEach(iframe => {
                 iframe.addEventListener('load', function () {
                     // Attempt to add selection listener to the iframe
@@ -917,59 +1054,74 @@
             // Initialize chat session when page loads
             startNewChat();
 
-            const chatWindow = document.getElementById('chat-window'); // Chat window element
+            // Chat window dragging functionality (only from the header)
             let isDragging = false;
-            let startX = 0, startY = 0; // Initial touch/mouse starting positions
-            let offsetX = 0, offsetY = 0; // Offset for the window's new position
+            let startX = 0, startY = 0;
+            let offsetX = 0, offsetY = 0;
 
             // Start dragging
             function startDrag(e) {
                 isDragging = true;
-                chatWindow.classList.add('dragging');
+                chatHeader.classList.add('dragging');
 
-                // Determine the starting point
+                // Get the starting coordinates
                 const event = e.type === 'touchstart' ? e.touches[0] : e;
                 startX = event.clientX - chatWindow.offsetLeft;
                 startY = event.clientY - chatWindow.offsetTop;
 
-                // Prevent text selection
-                document.body.style.userSelect = 'none';
+                // Add event listeners for moving and stopping
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag, { passive: false });
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchend', stopDrag);
+                
+                // Prevent default to avoid text selection
+                e.preventDefault();
             }
 
-            // Perform dragging
+            // Drag function
             function drag(e) {
                 if (!isDragging) return;
 
+                // Get current cursor/touch position
                 const event = e.type === 'touchmove' ? e.touches[0] : e;
+                
+                // Calculate new position
                 offsetX = event.clientX - startX;
                 offsetY = event.clientY - startY;
 
-                // Update the position of the chat window
-                chatWindow.style.left = `${Math.max(0, Math.min(window.innerWidth - chatWindow.offsetWidth, offsetX))}px`;
-                chatWindow.style.top = `${Math.max(0, Math.min(window.innerHeight - chatWindow.offsetHeight, offsetY))}px`;
-
-                // Prevent scrolling on mobile during drag
+                // Constrain to window boundaries
+                const maxX = window.innerWidth - chatWindow.offsetWidth;
+                const maxY = window.innerHeight - chatWindow.offsetHeight;
+                
+                chatWindow.style.left = `${Math.max(0, Math.min(maxX, offsetX))}px`;
+                chatWindow.style.top = `${Math.max(0, Math.min(maxY, offsetY))}px`;
+                
+                // Remove default position if it was set
+                chatWindow.style.right = 'auto';
+                chatWindow.style.bottom = 'auto';
+                
+                // Prevent default to stop scrolling on mobile
                 e.preventDefault();
             }
 
             // Stop dragging
             function stopDrag() {
+                if (!isDragging) return;
+                
                 isDragging = false;
-                chatWindow.classList.remove('dragging');
-
-                // Allow text selection again
-                document.body.style.userSelect = '';
+                chatHeader.classList.remove('dragging');
+                
+                // Remove the event listeners
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('touchmove', drag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchend', stopDrag);
             }
 
-            // Event listeners for mouse and touch events
-            chatWindow.addEventListener('mousedown', startDrag);
-            chatWindow.addEventListener('touchstart', startDrag, { passive: false });
-
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('touchmove', drag, { passive: false });
-
-            document.addEventListener('mouseup', stopDrag);
-            document.addEventListener('touchend', stopDrag);
+            // Add event listeners to chat header only
+            chatHeader.addEventListener('mousedown', startDrag);
+            chatHeader.addEventListener('touchstart', startDrag, { passive: false });
         });
     </script>
 </body>
