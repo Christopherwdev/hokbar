@@ -21,7 +21,7 @@
             --header-height: 64px;
             --blur-amount: 15px;
             --chat-width: 400px;
-            --chat-height: 500px;
+            --chat-height: 400px;
             --chat-border-radius: 15px;
         }
 
@@ -207,7 +207,7 @@
 
         /* Loading animation */
         .loader-container {
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             height: 100%;
@@ -316,7 +316,8 @@
             backdrop-filter: blur(var(--blur-amount));
             -webkit-backdrop-filter: blur(var(--blur-amount));
             border: 1px solid var(--ios-border);
-            cursor: grab; /* Show a grab cursor for dragging */
+            cursor: grab;
+            /* Show a grab cursor for dragging */
             z-index: 1000;
         }
 
@@ -327,8 +328,10 @@
         }
 
         .chat-window.dragging {
-    cursor: grabbing; /* Change cursor to grabbing while dragging */
-}
+            cursor: grabbing;
+            /* Change cursor to grabbing while dragging */
+        }
+
         .chat-header {
             height: 50px;
             display: flex;
@@ -368,7 +371,7 @@
         }
 
         .message {
-            
+
             padding: 10px 12px;
             border-radius: 18px;
             font-size: 14px;
@@ -385,36 +388,39 @@
         }
 
         .ai-message {
-    align-self: flex-start;
-    border: 1px solid var(--ios-border);
-    border-bottom-left-radius: 4px;
-    gap: 10px;
-    padding: 5px 15px;
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
+            align-self: flex-start;
+            border: 1px solid var(--ios-border);
+            border-bottom-left-radius: 4px;
+            gap: 10px;
+            padding: 5px 15px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
 
-.ai-message p {
-    margin: 10px 0;
-}
+        .ai-message p {
+            margin: 10px 0;
+        }
 
-.ai-message h1, .ai-message h2, .ai-message h3 {
-    margin: 15px 0;
-}
+        .ai-message h1,
+        .ai-message h2,
+        .ai-message h3 {
+            margin: 15px 0;
+        }
 
-.ai-message ul, .ai-message ol {
-    margin: 10px 0;
-    padding-left: 20px;
-}
+        .ai-message ul,
+        .ai-message ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
 
-.ai-message blockquote {
-    margin: 15px 0;
-    padding: 10px 15px;
-    border-left: 4px solid var(--ios-border);
-    background-color: rgba(0, 0, 0, 0.05);
-    font-style: italic;
-    color: var(--ios-secondary-text);
-}
+        .ai-message blockquote {
+            margin: 15px 0;
+            padding: 10px 15px;
+            border-left: 4px solid var(--ios-border);
+            background-color: rgba(0, 0, 0, 0.05);
+            font-style: italic;
+            color: var(--ios-secondary-text);
+        }
 
         .chat-input-area {
             padding: 10px 15px;
@@ -507,7 +513,7 @@
                             <div class="loader"></div>
                         </div>
                         <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
+                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
                     </div>
                 </div>
             </div>
@@ -540,7 +546,7 @@
                             <div class="loader"></div>
                         </div>
                         <iframe class="doc-iframe"
-                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMQuElbtPy-c/edit?tab=t.0&rm=minimal"></iframe>
+                            src="https://docs.google.com/document/d/1unS8y0iX1s7IP1m7wNndzj0wy6a5YvASMquElbtPy-c/edit?rm=minimal&tab=t.0"></iframe>
                     </div>
                 </div>
             </div>
@@ -570,7 +576,7 @@
             </button>
         </div>
     </div>
- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Check for dark mode preference
@@ -606,6 +612,7 @@
                 }
             });
 
+            
             // Tab switching functionality
             function setupTabs(tabsEl, panelId) {
                 const tabs = tabsEl.querySelectorAll('.tab');
@@ -636,108 +643,108 @@
             setupTabs(document.getElementById('left-tabs'), 'left-panel');
             setupTabs(document.getElementById('right-tabs'), 'right-panel');
 
-            // Improved panel resizing
-            const panelResizer = document.getElementById('panel-resizer');
-            const leftPanel = document.getElementById('left-panel');
-            const rightPanel = document.getElementById('right-panel');
-            const mainContent = document.querySelector('.main-content');
-            let isResizing = false;
-            let initialWidth, initialX, initialY;
+            // // Improved panel resizing
+            // const panelResizer = document.getElementById('panel-resizer');
+            // const leftPanel = document.getElementById('left-panel');
+            // const rightPanel = document.getElementById('right-panel');
+            // const mainContent = document.querySelector('.main-content');
+            // let isResizing = false;
+            // let initialWidth, initialX, initialY;
 
-            function startResize(e) {
-                // Prevent text selection during resize
-                document.body.classList.add('no-select');
+            // function startResize(e) {
+            //     // Prevent text selection during resize
+            //     document.body.classList.add('no-select');
 
-                isResizing = true;
-                initialWidth = leftPanel.offsetWidth;
+            //     isResizing = true;
+            //     initialWidth = leftPanel.offsetWidth;
 
-                if (e.type === 'touchstart') {
-                    initialX = e.touches[0].clientX;
-                    initialY = e.touches[0].clientY;
-                } else {
-                    initialX = e.clientX;
-                    initialY = e.clientY;
-                }
+            //     if (e.type === 'touchstart') {
+            //         initialX = e.touches[0].clientX;
+            //         initialY = e.touches[0].clientY;
+            //     } else {
+            //         initialX = e.clientX;
+            //         initialY = e.clientY;
+            //     }
 
-                // Add event listeners for movement and end
-                if (e.type === 'touchstart') {
-                    document.addEventListener('touchmove', resizeHandler, { passive: false });
-                    document.addEventListener('touchend', stopResize);
-                } else {
-                    document.addEventListener('mousemove', resizeHandler);
-                    document.addEventListener('mouseup', stopResize);
-                }
+            //     // Add event listeners for movement and end
+            //     if (e.type === 'touchstart') {
+            //         document.addEventListener('touchmove', resizeHandler, { passive: false });
+            //         document.addEventListener('touchend', stopResize);
+            //     } else {
+            //         document.addEventListener('mousemove', resizeHandler);
+            //         document.addEventListener('mouseup', stopResize);
+            //     }
 
-                panelResizer.style.opacity = '1';
-                e.preventDefault();
-            }
+            //     panelResizer.style.opacity = '1';
+            //     e.preventDefault();
+            // }
 
-            function resizeHandler(e) {
-                if (!isResizing) return;
+            // function resizeHandler(e) {
+            //     if (!isResizing) return;
 
-                let currentX, currentY;
+            //     let currentX, currentY;
 
-                if (e.type === 'touchmove') {
-                    currentX = e.touches[0].clientX;
-                    currentY = e.touches[0].clientY;
-                    // Prevent scrolling while resizing
-                    e.preventDefault();
-                } else {
-                    currentX = e.clientX;
-                    currentY = e.clientY;
-                }
+            //     if (e.type === 'touchmove') {
+            //         currentX = e.touches[0].clientX;
+            //         currentY = e.touches[0].clientY;
+            //         // Prevent scrolling while resizing
+            //         e.preventDefault();
+            //     } else {
+            //         currentX = e.clientX;
+            //         currentY = e.clientY;
+            //     }
 
-                const containerWidth = mainContent.offsetWidth;
-                const containerHeight = mainContent.offsetHeight;
+            //     const containerWidth = mainContent.offsetWidth;
+            //     const containerHeight = mainContent.offsetHeight;
 
-                if (window.innerWidth > 768) {
-                    // Horizontal resizing
-                    const dx = currentX - initialX;
-                    const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
-                    const percentWidth = (newLeftWidth / containerWidth) * 100;
+            //     if (window.innerWidth > 768) {
+            //         // Horizontal resizing
+            //         const dx = currentX - initialX;
+            //         const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
+            //         const percentWidth = (newLeftWidth / containerWidth) * 100;
 
-                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
-                } else {
-                    // Vertical resizing
-                    const dy = currentY - initialY;
-                    const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
-                    const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
-                    const percentHeight = (newLeftHeight / containerHeight) * 100;
+            //         document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
+            //     } else {
+            //         // Vertical resizing
+            //         const dy = currentY - initialY;
+            //         const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
+            //         const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
+            //         const percentHeight = (newLeftHeight / containerHeight) * 100;
 
-                    leftPanel.style.height = percentHeight + '%';
-                    rightPanel.style.height = (100 - percentHeight) + '%';
-                }
+            //         leftPanel.style.height = percentHeight + '%';
+            //         rightPanel.style.height = (100 - percentHeight) + '%';
+            //     }
 
-                // Use requestAnimationFrame for smoother resizing
-                if (!window.requestAnimationFrame) {
-                    // Apply changes immediately if requestAnimationFrame is not available
-                    applyResize();
-                } else {
-                    requestAnimationFrame(applyResize);
-                }
-            }
+            //     // Use requestAnimationFrame for smoother resizing
+            //     if (!window.requestAnimationFrame) {
+            //         // Apply changes immediately if requestAnimationFrame is not available
+            //         applyResize();
+            //     } else {
+            //         requestAnimationFrame(applyResize);
+            //     }
+            // }
 
-            function applyResize() {
-                // This function intentionally left empty as we're modifying CSS variables
-                // which apply immediately. It's here for potential future optimizations.
-            }
+            // function applyResize() {
+            //     // This function intentionally left empty as we're modifying CSS variables
+            //     // which apply immediately. It's here for potential future optimizations.
+            // }
 
-            function stopResize() {
-                isResizing = false;
-                document.body.classList.remove('no-select');
+            // function stopResize() {
+            //     isResizing = false;
+            //     document.body.classList.remove('no-select');
 
-                // Remove event listeners
-                document.removeEventListener('mousemove', resizeHandler);
-                document.removeEventListener('mouseup', stopResize);
-                document.removeEventListener('touchmove', resizeHandler);
-                document.removeEventListener('touchend', stopResize);
+            //     // Remove event listeners
+            //     document.removeEventListener('mousemove', resizeHandler);
+            //     document.removeEventListener('mouseup', stopResize);
+            //     document.removeEventListener('touchmove', resizeHandler);
+            //     document.removeEventListener('touchend', stopResize);
 
-                panelResizer.style.opacity = '';
-            }
+            //     panelResizer.style.opacity = '';
+            // }
 
-            // Add event listeners for both mouse and touch
-            panelResizer.addEventListener('mousedown', startResize);
-            panelResizer.addEventListener('touchstart', startResize, { passive: false });
+            // // Add event listeners for both mouse and touch
+            // panelResizer.addEventListener('mousedown', startResize);
+            // panelResizer.addEventListener('touchstart', startResize, { passive: false });
 
             // Handle iframe loading
             const iframes = document.querySelectorAll('.doc-iframe');
@@ -757,6 +764,8 @@
 
             chatToggler.addEventListener('click', function () {
                 chatWindow.classList.toggle('active');
+                chatWindow.style.left = "0px";
+                chatWindow.style.top = "0px";
             });
 
             minimizeChat.addEventListener('click', function () {
@@ -764,46 +773,43 @@
             });
 
             // Text selection in iframes
-            // iframes.forEach(iframe => {
-            //     iframe.addEventListener('load', function () {
-            //         // Attempt to add selection listener to the iframe
-            //         try {
-            //             const iframeDoc = this.contentDocument || this.contentWindow.document;
+            iframes.forEach(iframe => {
+                iframe.addEventListener('load', function () {
+                    // Attempt to add selection listener to the iframe
+                    try {
+                        const iframeDoc = this.contentDocument || this.contentWindow.document;
 
-            //             // Listen for mouseup event which typically indicates text selection
-            //             iframeDoc.addEventListener('mouseup', function () {
-            //                 try {
-            //                     const selection = iframeDoc.getSelection();
-            //                     const selectedText = selection.toString().trim();
+                        // Listen for mouseup event which typically indicates text selection
+                        iframeDoc.addEventListener('mouseup', function () {
+                            try {
+                                const selection = iframeDoc.getSelection();
+                                const selectedText = selection.toString().trim();
 
-            //                     if (selectedText && selectedText.length > 5) {
-            //                         // Only process significant selections (more than 5 chars)
-            //                         chatWindow.classList.add('active'); // Open chat window
-            //                         console.log(selectedText);
-            //                         sendSelectedTextToChat(selectedText);
-            //                     }
-            //                 } catch (err) {
-            //                     console.log("Error getting selection from iframe:", err);
-            //                 }
-            //             });
-            //         } catch (err) {
-            //             console.log("Cannot access iframe content due to same-origin policy:", err);
-            //             // Google Docs iframes are cross-origin, so direct access may be blocked
-            //             // We would need a different approach if this doesn't work
-            //         }
-            //     });
-            // });
+                                if (selectedText && selectedText.length > 5) {
+                                    // Only process significant selections (more than 5 chars)
+                                    chatWindow.classList.add('active'); // Open chat window
+                                    console.log(selectedText);
+                                    sendSelectedTextToChat(selectedText);
+                                }
+                            } catch (err) {
+                                console.log("Error getting selection from iframe:", err);
+                            }
+                        });
+                    } catch (err) {
+                        console.log("Cannot access iframe content due to same-origin policy:", err);
+                        // Google Docs iframes are cross-origin, so direct access may be blocked
+                        // We would need a different approach if this doesn't work
+                    }
+                });
+            });
 
-            // function sendSelectedTextToChat(selectedText) {
-            //     const messageInput = document.getElementById('message-input');
-            //     messageInput.value = `Can you explain this: "${selectedText}"`;
+            function sendSelectedTextToChat(selectedText) {
+                const messageInput = document.getElementById('message-input');
+                messageInput.value = `Can you explain this: "${selectedText}"`;
 
-            //     // Focus on the input to allow the user to modify the question if needed
-            //     messageInput.focus();
-            // }
-
-
-            
+                // Focus on the input to allow the user to modify the question if needed
+                messageInput.focus();
+            }
 
             // Chat API implementation
             let currentChatId = null;
@@ -910,58 +916,58 @@
             startNewChat();
 
             const chatWindow = document.getElementById('chat-window'); // Chat window element
-    let isDragging = false;
-    let startX = 0, startY = 0; // Initial touch/mouse starting positions
-    let offsetX = 0, offsetY = 0; // Offset for the window's new position
+            let isDragging = false;
+            let startX = 0, startY = 0; // Initial touch/mouse starting positions
+            let offsetX = 0, offsetY = 0; // Offset for the window's new position
 
-    // Start dragging
-    function startDrag(e) {
-        isDragging = true;
-        chatWindow.classList.add('dragging');
+            // Start dragging
+            function startDrag(e) {
+                isDragging = true;
+                chatWindow.classList.add('dragging');
 
-        // Determine the starting point
-        const event = e.type === 'touchstart' ? e.touches[0] : e;
-        startX = event.clientX - chatWindow.offsetLeft;
-        startY = event.clientY - chatWindow.offsetTop;
+                // Determine the starting point
+                const event = e.type === 'touchstart' ? e.touches[0] : e;
+                startX = event.clientX - chatWindow.offsetLeft;
+                startY = event.clientY - chatWindow.offsetTop;
 
-        // Prevent text selection
-        document.body.style.userSelect = 'none';
-    }
+                // Prevent text selection
+                document.body.style.userSelect = 'none';
+            }
 
-    // Perform dragging
-    function drag(e) {
-        if (!isDragging) return;
+            // Perform dragging
+            function drag(e) {
+                if (!isDragging) return;
 
-        const event = e.type === 'touchmove' ? e.touches[0] : e;
-        offsetX = event.clientX - startX;
-        offsetY = event.clientY - startY;
+                const event = e.type === 'touchmove' ? e.touches[0] : e;
+                offsetX = event.clientX - startX;
+                offsetY = event.clientY - startY;
 
-        // Update the position of the chat window
-        chatWindow.style.left = `${Math.max(0, Math.min(window.innerWidth - chatWindow.offsetWidth, offsetX))}px`;
-        chatWindow.style.top = `${Math.max(0, Math.min(window.innerHeight - chatWindow.offsetHeight, offsetY))}px`;
+                // Update the position of the chat window
+                chatWindow.style.left = `${Math.max(0, Math.min(window.innerWidth - chatWindow.offsetWidth, offsetX))}px`;
+                chatWindow.style.top = `${Math.max(0, Math.min(window.innerHeight - chatWindow.offsetHeight, offsetY))}px`;
 
-        // Prevent scrolling on mobile during drag
-        e.preventDefault();
-    }
+                // Prevent scrolling on mobile during drag
+                e.preventDefault();
+            }
 
-    // Stop dragging
-    function stopDrag() {
-        isDragging = false;
-        chatWindow.classList.remove('dragging');
+            // Stop dragging
+            function stopDrag() {
+                isDragging = false;
+                chatWindow.classList.remove('dragging');
 
-        // Allow text selection again
-        document.body.style.userSelect = '';
-    }
+                // Allow text selection again
+                document.body.style.userSelect = '';
+            }
 
-    // Event listeners for mouse and touch events
-    chatWindow.addEventListener('mousedown', startDrag);
-    chatWindow.addEventListener('touchstart', startDrag, { passive: false });
+            // Event listeners for mouse and touch events
+            chatWindow.addEventListener('mousedown', startDrag);
+            chatWindow.addEventListener('touchstart', startDrag, { passive: false });
 
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
 
-    document.addEventListener('mouseup', stopDrag);
-    document.addEventListener('touchend', stopDrag);
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchend', stopDrag);
         });
     </script>
 </body>
