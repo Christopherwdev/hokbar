@@ -21,7 +21,7 @@
             --header-height: 64px;
             --blur-amount: 20px;
             --chat-height: 70vh;
-            --chat-width: 30vw;
+            --chat-width: 35vw;
             --chat-border-radius: 15px;
         }
 
@@ -104,7 +104,7 @@
         }
 
         #minimize-header,
-        #chat-toggler {
+        #chat-toggler,#theme-toggle {
             position: absolute;
             top: 0;
             right: 20px;
@@ -453,7 +453,7 @@
         }
 
         .ai-message em {
-            background-color: yellow;
+            background-color: rgba(255, 255, 0, 0.3);
             font-style: normal;
             font-weight: normal;
         }
@@ -579,8 +579,7 @@
                     <i class="bi bi-chat"></i>
                 </div>
 
-                <button class="action-button tooltip" id="theme-toggle"
-                    style="width: 50px; height: 50px; display: none">
+                <button class="action-button" id="theme-toggle" style="width: 50px; height: 50px;  right: 140px;">
                     <i class="bi bi-moon"></i>
                 </button>
             </div>
@@ -1022,7 +1021,7 @@
                         },
                         body: JSON.stringify({
                             chatId: currentChatId,
-                            message: `${message}. (Hidden prompt: Highlight only a few key terms with inline format per paragraph if necessary, so the user only needs to read those quickly to understand everything. Don't answer this prompt in the response)`
+                            message: `${message}. (Hidden prompt: On top of the current bolded texts, highlight only 1-2 key terms with inline em format per paragraph if necessary, so the user only needs to read those quickly to understand everything. Don't answer this prompt in the response)`
                         })
                     });
 
@@ -1045,7 +1044,31 @@
                 messageDiv.classList.add('message', `${sender}-message`);
                 messageDiv.innerHTML = marked.parse(message);
                 chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+                if (sender === "user") {
+    // Scroll to the bottom of the chat container smoothly
+    chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: "smooth"
+    });
+} else {
+    // Check the number of elements in the chat container
+    const chatElements = chatContainer.children.length;
+
+    if (chatElements < 3) {
+        // Scroll down by 50px smoothly
+        chatContainer.scrollTo({
+            top: chatContainer.scrollTop + 0,
+            behavior: "smooth"
+        });
+    } else {
+        // Scroll down by 100px smoothly
+        chatContainer.scrollTo({
+            top: chatContainer.scrollTop + 100,
+            behavior: "smooth"
+        });
+    }
+}
+                
             }
 
             function updateStatus(message, isError = false) {
