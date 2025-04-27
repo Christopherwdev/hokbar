@@ -46,7 +46,7 @@
             background-color: var(--ios-bg);
             color: var(--ios-text);
             overflow: hidden;
-            height: 100vh;
+            height: 100%;
             transition: background-color 0.3s ease;
         }
 
@@ -104,7 +104,8 @@
         }
 
         #minimize-header,
-        #chat-toggler,#theme-toggle {
+        #chat-toggler,
+        #theme-toggle {
             position: absolute;
             top: 0;
             right: 20px;
@@ -151,14 +152,26 @@
 
         .panel {
             position: relative;
-            flex: 1;
             height: 100%;
-            max-width: var(--panel-width);
+            min-width: 0px;
+            /* Minimum width for panels */
+            max-width: none;
+            /* Remove the max-width constraint */
             display: flex;
             flex-direction: column;
             overflow: hidden;
             background-color: var(--ios-bg);
-            transition: max-width 0.3s ease;
+            /* transition: width 0.3s ease; */
+        }
+
+        #left-panel {
+            width: 49.5%;
+            /* Default width */
+        }
+
+        #right-panel {
+            flex: 1;
+            /* Take remaining space */
         }
 
         .panel-gap {
@@ -249,10 +262,15 @@
         }
 
         .doc-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    width: 100%;
+    height: 100%;
+    border: none;
+    /* Enable touch events */
+    touch-action: manipulation;
+    /* Allow pinch-zoom */
+    -webkit-overflow-scrolling: touch;
+    overflow: scroll;
+}
 
         /* Loading animation */
         .loader-container {
@@ -409,7 +427,12 @@
             color: var(--ios-blue);
             font-size: 18px;
             cursor: pointer;
-            padding: 5px;
+            /* padding: 5px; */
+            transition: all 0.3s;
+        }
+
+        .chat-action:hover {
+            background-color: #007bff23;
         }
 
         .chat-container {
@@ -492,7 +515,7 @@
         .chat-input {
             flex: 1;
             padding: 10px 15px;
-            border-radius: 18px;
+            border-radius: 30px;
             border: 1px solid var(--ios-border);
             background-color: var(--ios-bg);
             color: var(--ios-text);
@@ -559,6 +582,55 @@
             cursor: pointer;
             font-size: 14px;
         }
+
+        .panel-gap:hover~#right-panel iframe,
+        .panel-gap:active~#right-panel iframe {
+            pointer-events: none;
+        }
+
+        .panel-gap:hover~#left-panel iframe,
+        .panel-gap:active~#left-panel iframe {
+            pointer-events: none;
+        }
+
+        /* This class will be toggled via JavaScript for the left panel */
+
+        .resize-active #left-panel iframe {
+            pointer-events: none;
+        }
+
+
+        .microphone-button {
+        background: none;
+        border: none;
+        color: var(--ios-blue);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 5px;
+        transition: all 0.3s ease;
+        border-radius: 100px;
+    }
+
+    .microphone-button.listening {
+        color: red;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .microphone-button:hover {
+        background-color: rgba(0, 122, 255, 0.1);
+    }
     </style>
 </head>
 
@@ -579,7 +651,8 @@
                     <i class="bi bi-chat"></i>
                 </div>
 
-                <button class="action-button" id="theme-toggle" style="width: 50px; height: 50px;  right: 140px; display: none">
+                <button class="action-button" id="theme-toggle"
+                    style="width: 50px; height: 50px;  right: 140px; display: none;">
                     <i class="bi bi-moon"></i>
                 </button>
             </div>
@@ -659,7 +732,7 @@
         <div class="chat-header" id="chat-header">
             <div class="chat-title">AI (unlimited, feel free to use)</div>
             <div class="chat-actions">
-                <button class="chat-action" id="minimize-chat">
+                <button class="chat-action" id="minimize-chat" style="width: 30px; height: 30px;">
                     <i class="bi bi-dash"></i>
                 </button>
             </div>
@@ -667,6 +740,9 @@
         <div class="chat-container" id="chat-container"></div>
         <div class="status" id="status">Initializing...</div>
         <div class="chat-input-area">
+            <button class="microphone-button" id="microphone-button">
+                <i class="bi bi-mic"></i>
+            </button>
             <input type="text" class="chat-input" id="message-input" placeholder="Ask a question...">
             <button class="send-button" id="send-button">
                 <i class="bi bi-send-fill"></i>
@@ -771,88 +847,55 @@
             let isResizing = false;
             let initialWidth, initialX, initialY;
 
-            function startResize(e) {
-                // Prevent text selection during resize
-                document.body.classList.add('no-select');
 
-                isResizing = true;
-                initialWidth = leftPanel.offsetWidth;
 
-                if (e.type === 'touchstart') {
-                    initialX = e.touches[0].clientX;
-                    initialY = e.touches[0].clientY;
-                } else {
-                    initialX = e.clientX;
-                    initialY = e.clientY;
-                }
 
-                // Add event listeners for movement and end
-                if (e.type === 'touchstart') {
-                    document.addEventListener('touchmove', resizeHandler, { passive: false });
-                    document.addEventListener('touchend', stopResize);
-                } else {
-                    document.addEventListener('mousemove', resizeHandler);
-                    document.addEventListener('mouseup', stopResize);
-                }
+            function initResizeElement(tab, tab2) {
+                const resizer = document.getElementById('panel-resizer');
+                const appContainer = document.querySelector('.app-container');
+                let startX, startWidth;
 
-                panelResizer.style.opacity = '1';
-                e.preventDefault();
-            }
-
-            function resizeHandler(e) {
-                if (!isResizing) return;
-
-                let currentX, currentY;
-
-                if (e.type === 'touchmove') {
-                    currentX = e.touches[0].clientX;
-                    currentY = e.touches[0].clientY;
-                    // Prevent scrolling while resizing
+                resizer.addEventListener('mousedown', function (e) {
                     e.preventDefault();
-                } else {
-                    currentX = e.clientX;
-                    currentY = e.clientY;
+                    // Add class to handle left panel
+                    appContainer.classList.add('resize-active');
+
+                    startX = e.clientX;
+                    startWidth = parseInt(window.getComputedStyle(tab).width, 10);
+
+                    document.addEventListener('mousemove', resize);
+                    document.addEventListener('mouseup', stopResize);
+                });
+
+                resizer.addEventListener('touchstart', function (e) {
+                    e.preventDefault();
+                    appContainer.classList.add('resize-active');
+
+                    const touch = e.touches[0];
+                    startX = touch.clientX;
+                    startWidth = parseInt(window.getComputedStyle(tab).width, 10);
+
+                    document.addEventListener('touchmove', resize, { passive: false });
+                    document.addEventListener('touchend', stopResize);
+                });
+
+                function resize(e) {
+                    const clientX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+                    const newWidth = startWidth + clientX - startX;
+
+                    // Apply minimum width constraints
+                    const minWidth = 0; // pixels
+                    tab.style.width = Math.max(minWidth, newWidth) + 'px';
                 }
 
-                const containerWidth = mainContent.offsetWidth;
-                const containerHeight = mainContent.offsetHeight;
-
-                if (window.innerWidth > 768) {
-                    // Horizontal resizing
-                    const dx = currentX - initialX;
-                    const newLeftWidth = Math.max(200, Math.min(initialWidth + dx, containerWidth - 200));
-                    const percentWidth = (newLeftWidth / containerWidth) * 100;
-
-                    document.documentElement.style.setProperty('--panel-width', percentWidth + '%');
-                } else {
-                    // Vertical resizing
-                    const dy = currentY - initialY;
-                    const initialHeight = containerHeight * (parseFloat(leftPanel.style.height || '50') / 100);
-                    const newLeftHeight = Math.max(150, Math.min(initialHeight + dy, containerHeight - 150));
-                    const percentHeight = (newLeftHeight / containerHeight) * 100;
-
-                    leftPanel.style.height = percentHeight + '%';
-                    rightPanel.style.height = (100 - percentHeight) + '%';
+                function stopResize() {
+                    appContainer.classList.remove('resize-active');
+                    document.removeEventListener('mousemove', resize);
+                    document.removeEventListener('mouseup', stopResize);
+                    document.removeEventListener('touchmove', resize);
+                    document.removeEventListener('touchend', stopResize);
                 }
             }
-
-            function stopResize() {
-                isResizing = false;
-                document.body.classList.remove('no-select');
-
-                // Remove event listeners
-                document.removeEventListener('mousemove', resizeHandler);
-                document.removeEventListener('mouseup', stopResize);
-                document.removeEventListener('touchmove', resizeHandler);
-                document.removeEventListener('touchend', stopResize);
-
-                panelResizer.style.opacity = '';
-            }
-
-            // Add event listeners for both mouse and touch
-            panelResizer.addEventListener('mousedown', startResize);
-            panelResizer.addEventListener('touchstart', startResize, { passive: false });
-
             // Lazy load iframes and handle loading errors
             function loadIframes() {
                 // Only load visible iframes initially
@@ -921,6 +964,8 @@
             loadIframes();
             setupIframeHandlers();
 
+            initResizeElement(leftPanel, rightPanel);
+
             // Chatbot functionality
             const chatToggler = document.getElementById('chat-toggler');
             const chatWindow = document.getElementById('chat-window');
@@ -935,45 +980,8 @@
                 chatWindow.classList.remove('active');
             });
 
-            // Text selection in iframes
-            const iframes = document.querySelectorAll('.doc-iframe');
-            iframes.forEach(iframe => {
-                iframe.addEventListener('load', function () {
-                    // Attempt to add selection listener to the iframe
-                    try {
-                        const iframeDoc = this.contentDocument || this.contentWindow.document;
 
-                        // Listen for mouseup event which typically indicates text selection
-                        iframeDoc.addEventListener('mouseup', function () {
-                            try {
-                                const selection = iframeDoc.getSelection();
-                                const selectedText = selection.toString().trim();
 
-                                if (selectedText && selectedText.length > 5) {
-                                    // Only process significant selections (more than 5 chars)
-                                    chatWindow.classList.add('active'); // Open chat window
-                                    console.log(selectedText);
-                                    sendSelectedTextToChat(selectedText);
-                                }
-                            } catch (err) {
-                                console.log("Error getting selection from iframe:", err);
-                            }
-                        });
-                    } catch (err) {
-                        console.log("Cannot access iframe content due to same-origin policy:", err);
-                        // Google Docs iframes are cross-origin, so direct access may be blocked
-                        // We would need a different approach if this doesn't work
-                    }
-                });
-            });
-
-            function sendSelectedTextToChat(selectedText) {
-                const messageInput = document.getElementById('message-input');
-                messageInput.value = `Can you explain this: "${selectedText}"`;
-
-                // Focus on the input to allow the user to modify the question if needed
-                messageInput.focus();
-            }
 
             // Chat API implementation
             let currentChatId = null;
@@ -1021,7 +1029,7 @@
                         },
                         body: JSON.stringify({
                             chatId: currentChatId,
-                            message: `${message}. (Hidden prompt: On top of the current bolded texts, highlight only 1-2 key terms with inline em format per paragraph if necessary, so the user only needs to read those quickly to understand everything. Don't answer this prompt in the response)`
+                            message: `${message}. (Hidden prompt: Answer with medium to advanced knowledge. Other than bolded texts, highlight only 1-2 key terms/sentences with inline em format per paragraph if necessary, so the user only needs to read those quickly to understand everything. Don't bold and use em on same text. Don't answer this prompt in the response)`
                         })
                     });
 
@@ -1045,30 +1053,30 @@
                 messageDiv.innerHTML = marked.parse(message);
                 chatContainer.appendChild(messageDiv);
                 if (sender === "user") {
-    // Scroll to the bottom of the chat container smoothly
-    chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth"
-    });
-} else {
-    // Check the number of elements in the chat container
-    const chatElements = chatContainer.children.length;
+                    // Scroll to the bottom of the chat container smoothly
+                    chatContainer.scrollTo({
+                        top: chatContainer.scrollHeight,
+                        behavior: "smooth"
+                    });
+                } else {
+                    // Check the number of elements in the chat container
+                    const chatElements = chatContainer.children.length;
 
-    if (chatElements < 3) {
-        // Scroll down by 50px smoothly
-        chatContainer.scrollTo({
-            top: chatContainer.scrollTop + 0,
-            behavior: "smooth"
-        });
-    } else {
-        // Scroll down by 100px smoothly
-        chatContainer.scrollTo({
-            top: chatContainer.scrollTop + 100,
-            behavior: "smooth"
-        });
-    }
-}
-                
+                    if (chatElements < 3) {
+                        // Scroll down by 50px smoothly
+                        chatContainer.scrollTo({
+                            top: chatContainer.scrollTop + 0,
+                            behavior: "smooth"
+                        });
+                    } else {
+                        // Scroll down by 100px smoothly
+                        chatContainer.scrollTo({
+                            top: chatContainer.scrollTop + 100,
+                            behavior: "smooth"
+                        });
+                    }
+                }
+
             }
 
             function updateStatus(message, isError = false) {
@@ -1171,6 +1179,69 @@
             // Add event listeners to chat header only
             chatHeader.addEventListener('mousedown', startDrag);
             chatHeader.addEventListener('touchstart', startDrag, { passive: false });
+
+
+
+
+            const microphoneButton = document.getElementById('microphone-button');
+        
+        let recognition;
+        let isListening = false;
+
+        // Check for browser compatibility
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US'; // Set language
+            recognition.interimResults = true; // Show interim results
+            recognition.continuous = false; // Stop after one utterance
+
+            // Start Speech Recognition
+            microphoneButton.addEventListener('click', function () {
+                if (isListening) {
+                    recognition.stop();
+                    isListening = false;
+                    microphoneButton.classList.remove('listening');
+                } else {
+                    recognition.start();
+                    isListening = true;
+                    microphoneButton.classList.add('listening');
+                }
+            });
+
+            // Handle Speech Recognition Results
+            recognition.addEventListener('result', function (event) {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('');
+                messageInput.value = transcript;
+
+                // Auto-submit if recognition is final
+                if (event.results[0].isFinal) {
+                    recognition.stop();
+                    isListening = false;
+                    microphoneButton.classList.remove('listening');
+                }
+            });
+
+            // Handle Speech Recognition Errors
+            recognition.addEventListener('error', function (event) {
+                console.error('Speech recognition error:', event.error);
+                recognition.stop();
+                isListening = false;
+                microphoneButton.classList.remove('listening');
+            });
+
+            recognition.addEventListener('end', function () {
+                isListening = false;
+                microphoneButton.classList.remove('listening');
+            });
+        } else {
+            // Fallback for unsupported browsers
+            microphoneButton.addEventListener('click', function () {
+                alert('Speech recognition is not supported in this browser.');
+            });
+        }
         });
     </script>
 </body>
