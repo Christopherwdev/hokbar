@@ -20,7 +20,7 @@
             --tab-height: 44px;
             --header-height: 64px;
             --blur-amount: 20px;
-            --chat-height: 60vh;
+            --chat-height: 70vh;
             --chat-width: 35vw;
             --chat-border-radius: 15px;
         }
@@ -399,8 +399,8 @@
         .chat-header {
             height: 50px;
             
-/*             display: flex; */
-            display: none;
+            display: flex;
+/*             display: none; */
             align-items: center;
             justify-content: space-between;
             padding: 0 15px;
@@ -409,7 +409,7 @@
             cursor: grab;
         }
 
-        .chat-input-area.dragging {
+        .chat-header.dragging {
             cursor: grabbing;
         }
 
@@ -972,7 +972,7 @@
             // Chatbot functionality
             const chatToggler = document.getElementById('chat-toggler');
             const chatWindow = document.getElementById('chat-window');
-            const chatHeader = document.getElementById('chat-input-area');
+            const chatHeader = document.getElementById('chat-header');
             const minimizeChat = document.getElementById('minimize-chat');
 
             chatToggler.addEventListener('click', function () {
