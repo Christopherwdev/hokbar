@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biology Test Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#007aff',
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <h1 class="text-3xl font-bold text-center mb-8 text-primary">Rietest</h1>
+        
+        <!-- Question Bank Editor -->
+        <div id="editor-section" class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Question Bank</h2>
+                <div class="space-x-2">
+                    <button onclick="toggleEditor()" id="toggle-editor-btn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        Hide Editor
+                    </button>
+                    <button onclick="startTest()" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-purple-600 transition-colors">
+                        Start Test
+                    </button>
+                </div>
+            </div>
+            <textarea id="question-bank" class="w-full h-96 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-base font-mono resize-y" placeholder="Paste your question bank here..."></textarea>
+        </div>
+
+        <!-- Test Section -->
+        <div id="test-section" class="hidden">
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
+                <h2 id="current-question" class="text-2xl font-semibold mb-4"></h2>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Fill in all three sections below. Each line in the mark scheme is worth 1 point.
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Preliminary Section -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-semibold text-blue-600 dark:text-blue-400">Preliminary</h3>
+                        <span id="preliminary-points" class="text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+                            Points available: <span id="preliminary-max-points">0</span>
+                        </span>
+                    </div>
+                    <textarea id="preliminary-answer" class="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-base resize-y" placeholder="Enter your preliminary considerations..."></textarea>
+                </div>
+
+                <!-- Method Section -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-semibold text-green-600 dark:text-green-400">Method</h3>
+                        <span id="method-points" class="text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
+                            Points available: <span id="method-max-points">0</span>
+                        </span>
+                    </div>
+                    <textarea id="method-answer" class="w-full h-40 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-base resize-y" placeholder="Enter your method..."></textarea>
+                </div>
+
+                <!-- Limitations Section -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-semibold text-red-600 dark:text-red-400">Limitations</h3>
+                        <span id="limitations-points" class="text-sm bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-2 py-1 rounded">
+                            Points available: <span id="limitations-max-points">0</span>
+                        </span>
+                    </div>
+                    <textarea id="limitations-answer" class="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-base resize-y" placeholder="Enter limitations..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="backToEditor()" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    Back to Editor
+                </button>
+                <button onclick="submitAnswers()" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-purple-600 transition-colors">
+                    Submit Answers
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
+                <h2 class="text-2xl font-semibold mb-4">Test Results</h2>
+                <div id="score-summary" class="text-lg mb-4"></div>
+            </div>
+
+            <div class="space-y-6">
+                <div id="preliminary-results" class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700"></div>
+                <div id="method-results" class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700"></div>
+                <div id="limitations-results" class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700"></div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="startNewTest()" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-purple-600 transition-colors">
+                    New Test
+                </button>
+                <button onclick="backToEditor()" class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                    Edit Questions
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <span class="text-lg">Marking your answers...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Default question bank
+        const defaultQuestionBank = `Photosynthesis 
+
+<-> Preliminary
+Find suitable pre-treatment for seeds/plants 
+Find suitable method to identify this species of plant  
+Find a suitable method to measure the volume of oxygen produced  
+Find a suitable timescale to measure the volume of oxygen produced
+Find a suitable method to vary the light intensity received by the plant
+Find a suitable range of distance between lamp and plant to allow photosynthesis 
+Find suitable temp/humidity/light intensity to allow this species to be identified
+Find a suitable mass of plant to produce measurable volume of oxygen gas 
+Find a suitable method to produce CO2 in excess for photosynthesis 
+
+<-> Method 
+The independent variable is the distance between lamp and plant 
+Use of 5 different distances
+e.g. 20cm, 40cm, 60cm, 80cm, 100cm
+Use of a control set-up without the presence of the lamp 
+Standardise the preparation of plants 
+Cut (stem of) plants to the same length with scalpel (same mass, size, surface area, part of stem)
+Use of photosynthometer, test tube, rubber bung, delivery tube, gas syringe 
+Technique
+Use of aseptic technique: rinse plants with distilled water
+Allow the same time, e.g. 5 min, for plants to acclimatise to the environment before measurement 
+Add sodium hydrogencarbonate to provide an excess supply of CO2
+Control/block out all background light 
+The dependent variable is the volume of oxygen produced per unit time 
+Measure the initial volume of gas in the gas syringe 
+After a set time of 30 minutes
+Measure the final volume of gas in the gas syringe, calculate change by subtraction 
+Divide change in volume of gas by time to get rate of oxygen production 
+Repeat and calculate the mean volume of oxygen gas produced per unit time, and SD
+Repeat with another individual plant 
+Controlled abiotic variables: temp, pH, wavelength of light 
+Controlled biotic variables: mass/length of plant, species, source, age 
+
+<-> Limitations
+Difficult to measure small changes in volume of gas in gas syringe with precision, possible errors 
+Difficult to control all abiotic variables affecting rate of photosynthesis, e.g. temp, pH
+Difficult to control all biotic variables affecting rate of photosynthesis, e.g. SA of leaves, genetic variation, age
+Difficult to prevent contamination of plants with bacteria 
+Hard to exclude ambient light 
+O2 dissolves, so volume of gas recorded may not be accurate
+O2 used in respiration apart from photosynthesis
+Actual growth conditions in the river change during a day so results not a fair representation 
+
+
+Quadrat and Transect 
+
+<-> Preliminary
+Find a suitable method to identify this species 
+Find a suitable method to measure the population density / sampling / (OR abundance) 
+Find a suitable size of quadrats to use (OR length of transects to show changes) 
+Find a suitable time of day/season when this animal is the most active 
+Find suitable temp/humidity/light intensity to allow this species to be identified 
+Find a suitable method to stimulate movement of animals 
+
+<-> Method 
+The independent variable is the type of habitat 
+Use of 2 experimental setups, natural gravel area and unused gravel area 
+/ 
+Standardise sampling method 
+Use of 1 m2 quadrats 
+Use of random sampling, random number generator 
+Use of video camera/net 
+Technique: sprinkle water to stimulate movement of grasshoppers
+The dependent variable is the population density in an area / number per area 
+Count the number of living grasshoppers in a quadrat 
+Divide the number by 1 m2 to get population density of that area in m-2
+(OR abundance: count the number of different plants species / find percentage cover) 
+Repeat with different quadrats in the same area, and calculate a mean value and SD 
+Repeat the whole experiment on different days/seasons 
+(OR use a transect parallel to the first / several quadrats at each distance) 
+Controlled abiotic variables: Temp, humidity, light intensity, time of day 
+Controlled biotic variables: species of animal, competition for resources, disease, predators
+
+<-> Limitations 
+Difficult to identify this species 
+Difficult to see animals moving due to camouflage/weather conditions 
+Possible errors in measuring population density, e.g. dead animals counted 
+Difficult to ensure each grasshopper is counted as an individual animal only once 
+Difficult to control environmental variables that affect population density, e.g. temp
+Sampled once only, but population density may vary over seasons 
+
+
+Yeast cell respiration
+
+<-> Preliminary 
+Find a suitable redox indicator 
+Find a suitable method to measure and compare the rate of respiration of yeast cells 
+Find a suitable method to vary the temperature of yeast cells 
+Find a suitable range of temperature that allows respiration of yeast cells  
+Find a suitable pH, glucose conc for maximum rate of respiration of yeast cells 
+Find suitable volume of yeast cells that give measurable time of decolourisation of DCPIP
+
+<-> Method 
+The independent variable is the temperature of yeast cells 
+Vary the temperature by thermostatically-controlled water baths 
+Use of 5 different temperatures 
+e.g 20, 22, 24, 26, 28
+/ 
+Standardise the preparation method
+Use of same standard culture/broth of yeast cell, shake to ensure uniform distribution 
+Use a measuring cylinder to add same volume of yeast cell to a test tube 
+Use a measuring cylinder to add same concentration, same volume of DCPIP to a test tube
+Allow the test tubes with yeast cells and DCPIP to equilibrate separately 
+Allow the same time, e.g. 5 min, for yeast cells to acclimatise to the new environment before mixing 
+Aseptic technique: work near a Bunsen flame/updraft that draws microbes away 
+The dependent variable is the time taken to decolourise the DCPIP from blue 
+Mix the yeast cells and DCPIP, start a stopwatch immediately 
+Measure the time taken for decolourisation
+Use of a tube with yeast cell suspension only (+completely decolourised DCPIP) as a reference/control 
+Use of 1/time to calculate the rate of respiration of yeast cells 
+Repeat and calculate a mean rate of respiration at each temperature, and SD
+Controlled abiotic variables: pH, glucose conc, conc/volume of DCPIP
+Controlled biotic variables: species, source, age, volume of yeast cells 
+
+<-> Limitations 
+Difficult to measure the short time taken for decolourisation with precision
+Difficult to determine the exact end-point of decolourisation 
+Difficult to ensure same number of yeast cells added initially due to uneven distribution
+Difficult to control all abiotic variables affecting rate of respiration, e.g. pH, glucose conc 
+Difficult to control all biotic variables affecting rate of respiration, e.g. age 
+Build-up of waste products may affect enzymes, slow down rate of respiration 
+Yeast cells may change from aerobic to anaerobic respiration
+Difficult to maintain aseptic conditions, prevent contamination with bacteria 
+Only one species of yeast cells was tested`;
+
+        let currentQuestion = null;
+        let currentChatId = null;
+        let questionBank = [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('question-bank').value = defaultQuestionBank;
+            parseQuestionBank();
+            startNewChat();
+        });
+
+        // Parse question bank from text
+        function parseQuestionBank() {
+            const text = document.getElementById('question-bank').value.trim();
+            const questions = [];
+            const blocks = text.split(/\n\s*\n/).filter(block => block.trim());
+            
+            let currentQuestionData = null;
+            
+            for (const block of blocks) {
+                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+                
+                if (lines.length === 0) continue;
+                
+                // Check if this is a question title (no <-> marker)
+                if (!lines[0].includes('<->')) {
+                    // Save previous question if exists
+                    if (currentQuestionData) {
+                        questions.push(currentQuestionData);
+                    }
+                    // Start new question
+                    currentQuestionData = {
+                        title: lines[0],
+                        preliminary: [],
+                        method: [],
+                        limitations: []
+                    };
+                } else {
+                    // This is a section with answers
+                    const sectionType = lines[0].toLowerCase();
+                    const answers = lines.slice(1).filter(line => line && !line.includes('<->'));
+                    
+                    if (currentQuestionData) {
+                        if (sectionType.includes('preliminary')) {
+                            currentQuestionData.preliminary = answers;
+                        } else if (sectionType.includes('method')) {
+                            currentQuestionData.method = answers;
+                        } else if (sectionType.includes('limitations')) {
+                            currentQuestionData.limitations = answers;
+                        }
+                    }
+                }
+            }
+            
+            // Add the last question
+            if (currentQuestionData) {
+                questions.push(currentQuestionData);
+            }
+            
+            questionBank = questions;
+            console.log('Parsed questions:', questionBank);
+        }
+
+        function toggleEditor() {
+            const editor = document.getElementById('question-bank');
+            const btn = document.getElementById('toggle-editor-btn');
+            
+            if (editor.style.display === 'none') {
+                editor.style.display = 'block';
+                btn.textContent = 'Hide Editor';
+            } else {
+                editor.style.display = 'none';
+                btn.textContent = 'Show Editor';
+            }
+        }
+
+        function startTest() {
+            parseQuestionBank();
+            
+            if (questionBank.length === 0) {
+                alert('Please add questions to the question bank first.');
+                return;
+            }
+            
+            // Select random question
+            const randomIndex = Math.floor(Math.random() * questionBank.length);
+            currentQuestion = questionBank[randomIndex];
+            
+            // Update UI
+            document.getElementById('current-question').textContent = currentQuestion.title;
+            document.getElementById('preliminary-max-points').textContent = currentQuestion.preliminary.length;
+            document.getElementById('method-max-points').textContent = currentQuestion.method.length;
+            document.getElementById('limitations-max-points').textContent = currentQuestion.limitations.length;
+            
+            // Clear previous answers
+            document.getElementById('preliminary-answer').value = '';
+            document.getElementById('method-answer').value = '';
+            document.getElementById('limitations-answer').value = '';
+            
+            // Show test section
+            document.getElementById('editor-section').classList.add('hidden');
+            document.getElementById('test-section').classList.remove('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+        }
+
+        function startNewTest() {
+            startTest();
+        }
+
+        function backToEditor() {
+            document.getElementById('editor-section').classList.remove('hidden');
+            document.getElementById('test-section').classList.add('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+        }
+
+        // API Integration
+        async function startNewChat() {
+            try {
+                const response = await fetch('https://server-ef04.onrender.com/api/chat/new', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    currentChatId = data.chatId;
+                    console.log('Connected to chat session');
+                } else {
+                    throw new Error(data.error || 'Failed to start chat session');
+                }
+            } catch (error) {
+                console.error('Error starting chat:', error.message);
+            }
+        }
+
+        async function markAnswers(userAnswers, markScheme) {
+            if (!currentChatId) {
+                console.error('No active chat session');
+                return null;
+            }
+
+            try {
+                const prompt = `Compare the user's answers with the mark scheme and return an array showing which lines the user got correct (1 for correct, 0 for incorrect).
+
+Mark Scheme:
+Preliminary: ${markScheme.preliminary.map((line, i) => `${i + 1}. ${line}`).join('\n')}
+
+Method: ${markScheme.method.map((line, i) => `${i + 1}. ${line}`).join('\n')}
+
+Limitations: ${markScheme.limitations.map((line, i) => `${i + 1}. ${line}`).join('\n')}
+
+User's Answers:
+Preliminary: ${userAnswers.preliminary}
+
+Method: ${userAnswers.method}
+
+Limitations: ${userAnswers.limitations}
+
+Return ONLY a JSON array in this format: [[preliminary_scores], [method_scores], [limitations_scores]]
+For example: [[1,0,1],[1,1,0,1,0,1],[0,1,1,0,1]]
+Each 1 means the user covered that specific point from the mark scheme, 0 means they didn't.`;
+
+                const response = await fetch('https://server-ef04.onrender.com/api/chat/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chatId: currentChatId,
+                        message: prompt
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Extract JSON array from response
+                    const match = data.response.match(/\[\[.*\]\]/);
+                    if (match) {
+                        return JSON.parse(match[0]);
+                    } else {
+                        throw new Error('Invalid response format from marking API');
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to get response');
+                }
+            } catch (error) {
+                console.error('Error marking answers:', error.message);
+                return null;
+            }
+        }
+
+        async function submitAnswers() {
+            const userAnswers = {
+                preliminary: document.getElementById('preliminary-answer').value.trim(),
+                method: document.getElementById('method-answer').value.trim(),
+                limitations: document.getElementById('limitations-answer').value.trim()
+            };
+
+            if (!userAnswers.preliminary || !userAnswers.method || !userAnswers.limitations) {
+                alert('Please fill in all three sections before submitting.');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading-overlay').classList.remove('hidden');
+
+            try {
+                const results = await markAnswers(userAnswers, currentQuestion);
+                
+                if (results) {
+                    showResults(userAnswers, results);
+                } else {
+                    alert('Error marking answers. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error marking answers: ' + error.message);
+            } finally {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
+        }
+
+        function showResults(userAnswers, markingResults) {
+            const [preliminaryScores, methodScores, limitationsScores] = markingResults;
+            
+            // Calculate totals
+            const preliminaryTotal = preliminaryScores.reduce((a, b) => a + b, 0);
+            const methodTotal = methodScores.reduce((a, b) => a + b, 0);
+            const limitationsTotal = limitationsScores.reduce((a, b) => a + b, 0);
+            const grandTotal = preliminaryTotal + methodTotal + limitationsTotal;
+            const maxTotal = currentQuestion.preliminary.length + currentQuestion.method.length + currentQuestion.limitations.length;
+
+            // Update score summary
+            document.getElementById('score-summary').innerHTML = `
+                <div class="text-2xl font-bold text-primary">
+                    Total Score: ${grandTotal}/${maxTotal} (${Math.round((grandTotal/maxTotal) * 100)}%)
+                </div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                    Preliminary: ${preliminaryTotal}/${currentQuestion.preliminary.length} | 
+                    Method: ${methodTotal}/${currentQuestion.method.length} | 
+                    Limitations: ${limitationsTotal}/${currentQuestion.limitations.length}
+                </div>
+            `;
+
+            // Show detailed results
+            showSectionResults('preliminary', userAnswers.preliminary, currentQuestion.preliminary, preliminaryScores);
+            showSectionResults('method', userAnswers.method, currentQuestion.method, methodScores);
+            showSectionResults('limitations', userAnswers.limitations, currentQuestion.limitations, limitationsScores);
+
+            // Show results section
+            document.getElementById('test-section').classList.add('hidden');
+            document.getElementById('results-section').classList.remove('hidden');
+        }
+
+        function showSectionResults(sectionName, userAnswer, markScheme, scores) {
+            const container = document.getElementById(`${sectionName}-results`);
+            const sectionTitle = sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+            const sectionTotal = scores.reduce((a, b) => a + b, 0);
+            
+            const colorClasses = {
+                preliminary: 'blue',
+                method: 'green',
+                limitations: 'red'
+            };
+            const color = colorClasses[sectionName];
+
+            container.innerHTML = `
+                <h3 class="text-lg font-semibold text-${color}-600 dark:text-${color}-400 mb-4">
+                    ${sectionTitle} (${sectionTotal}/${markScheme.length} points)
+                </h3>
+                
+                <div class="mb-4">
+                    <h4 class="font-medium mb-2">Your Answer:</h4>
+                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded border-l-4 border-gray-400">
+                        ${userAnswer.replace(/\n/g, '<br>')}
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-medium mb-2">Mark Scheme:</h4>
+                    <div class="space-y-1">
+                        ${markScheme.map((line, index) => `
+                            <div class="p-2 rounded border-l-4 ${scores[index] === 1 
+                                ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200' 
+                                : 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-800 dark:text-red-200'
+                            }">
+                                ${scores[index] === 1 ? '✓' : '✗'} ${line}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
