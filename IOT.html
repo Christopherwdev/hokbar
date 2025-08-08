@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse IoT Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A4BC7'
+                    }
+                }
+            }
+        }
+    </script>
+</head>    <header class="bg-[#2a6044] dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 position-fixed top-0 w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-4xl text-white font-bold">ECOMAGNA NEXUS <span class="font-semibold">IOT System</span></h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="status-indicator" class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-lg font-semibold text-white dark:text-gray-400">Live</span>
+                    </div>
+                    <div class="text-lg font-semibold text-white dark:text-gray-400" id="last-update"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+<body class="bg-[#2a6044] dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <!-- Header -->
+
+    <!-- Chat Suggestion System -->
+    <div class="fixed bottom-6 hidden right-6 z-50 w-96 max-w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-4 flex flex-col" style="height: 400px;">
+        <div class="flex items-center mb-2">
+            <span class="text-lg font-bold">LLM Suggestions</span>
+            <span id="status" class="ml-2 text-xs"></span>
+        </div>
+        <div id="chat-container" class="flex-1 overflow-y-auto mb-2 p-2 bg-gray-50 dark:bg-gray-900 rounded" style="max-height: 260px;"></div>
+        <div class="flex items-center space-x-2">
+            <input id="message-input" type="text" class="flex-1 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm" placeholder="Ask for suggestions..." />
+            <button id="send-button" class="px-3 py-1 text-sm bg-primary dark:bg-primary-dark text-white rounded hover:bg-primary-dark transition-colors">Send</button>
+        </div>
+    </div>
+
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Temperature</p>
+                        <p class="text-2xl font-semibold" id="temp-value">22.5°C</p>
+                    </div>
+                    <div class="w-10 h-10 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Humidity</p>
+                        <p class="text-2xl font-semibold" id="humidity-value">45.2%</p>
+                    </div>
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 2L7.76 6.84c-.45.91-.75 1.86-.91 2.83C6.68 10.79 6.6 11.89 6.6 13c0 1.88.75 3.58 1.96 4.83S11.12 19.4 13 19.4s3.58-.75 4.83-1.96S19.4 14.88 19.4 13c0-1.11-.08-2.21-.25-3.33-.16-.97-.46-1.92-.91-2.83L16 2h-6z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Active Robots</p>
+                        <p class="text-2xl font-semibold" id="robots-count">8</p>
+                    </div>
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8 5a1 1 0 100 2h1a1 1 0 100-2H8zM11 5a1 1 0 100 2h1a1 1 0 100-2h-1zM7 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 001-1v-3a1 1 0 000-2H7zM11 9a1 1 0 100 2v3a1 1 0 001 1h1a1 1 0 001-1v-3a1 1 0 100-2h-3z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Avg Battery</p>
+                        <p class="text-2xl font-semibold" id="battery-avg">85%</p>
+                    </div>
+                    <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M5 7h10l-.5-3H5.5L5 7zM3 9v6a1 1 0 001 1h12a1 1 0 001-1V9H3z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
+            <!-- Charts Section -->
+            <div class="space-x-6 grid grid-cols-2">
+                <!-- Temperature & Humidity Chart -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                    <h3 class="text-2xl font-bold mb-4">Warehouse Data</h3>
+                    <div class="h-64 relative">
+                        <canvas id="environmental-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Robot Battery Chart -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2">
+                    <h3 class="text-2xl font-bold mb-4">Robot Battery Levels</h3>
+                    <div class="h-64 relative">
+                        <canvas id="battery-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warehouse Map Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 pt-2 relative w-full">
+                <div class="flex  items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold">IOT Warehouse Path Finding Machine Learning Model (Simulation)</h3>
+                    <button id="clear-path" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors">
+                        Clear Path
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Click two points to find the shortest path</p>
+                    <div class="flex items-center space-x-4 text-xs hidden">
+                        <div class="flex items-center space-x-1">
+                            <div class="w-3 h-3 bg-blue-500 rounded"></div>
+                            <span>Start</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="w-3 h-3 bg-red-500 rounded"></div>
+                            <span>End</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="w-3 h-3 bg-green-500 rounded"></div>
+                            <span>Path</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="w-3 h-3 bg-gray-600 rounded"></div>
+                            <span>Obstacle</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="w-3 h-3 bg-purple-500 rounded"></div>
+                            <span>Robot</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 100%; height: 70vh; min-height: 500px;">
+                    <canvas id="warehouse-map" class="border border-gray-200 dark:border-gray-600 rounded-lg cursor-crosshair w-full h-full block" style="width: 100%; height: 100%;"></canvas>
+                </div>
+                <div id="path-info" class="mt-2 text-sm text-gray-600 dark:text-gray-400"></div>
+
+                <!-- Dynamic LLM Suggestion UI for warehouse optimization -->
+                <div id="llm-suggestion-box" class="mt-4 w-full">
+                    <div class="flex items-center mb-2">
+                        <span class="text-lg font-bold">Warehouse Optimization Suggestions</span>
+                        <span id="status" class="ml-2 text-xs"></span>
+                    </div>
+                    <div id="chat-container" class="flex-1 overflow-y-auto mb-2 p-2 bg-gray-50 dark:bg-gray-900 rounded" style="max-height: 160px;"></div>
+                    <div class="flex items-center space-x-2">
+                        <input id="message-input" type="text" class="flex-1 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm" placeholder="Ask for warehouse optimization..." />
+                        <button id="send-button" class="px-3 py-1 text-sm bg-primary dark:bg-primary-dark text-white rounded hover:bg-primary-dark transition-colors">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // LLM Chat Suggestion System for warehouse optimization
+        // Load marked.js for markdown rendering
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.17/marked.min.js';
+        document.head.appendChild(script);
+
+        let currentChatId = null;
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const statusDiv = document.getElementById('status');
+
+        async function startNewChat() {
+            try {
+                const response = await fetch('https://server-ef04.onrender.com/api/chat/new', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    currentChatId = data.chatId;
+                    updateStatus('Connected to chat session');
+                } else {
+                    throw new Error(data.error || 'Failed to start chat session');
+                }
+            } catch (error) {
+                updateStatus('Error: ' + error.message, true);
+            }
+        }
+
+        async function sendMessage(message) {
+            if (!currentChatId) {
+                updateStatus('No active chat session', true);
+                return;
+            }
+            try {
+                appendMessage(message, 'user');
+                disableInput(true);
+                // Add warehouse data context to the prompt
+                const warehouseContext = `Current warehouse stats: Temperature: ${temperatureData[temperatureData.length-1] || 'N/A'}°C, Humidity: ${humidityData[humidityData.length-1] || 'N/A'}%, Robots: ${robots.length}, Avg Battery: ${robots.length ? Math.round(robots.reduce((sum, r) => sum + r.battery, 0)/robots.length) : 'N/A'}%.`;
+                const response = await fetch('https://server-ef04.onrender.com/api/chat/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chatId: currentChatId,
+                        message: `${message}. (Hidden prompt: You are an expert in warehouse optimization. Use the following context: ${warehouseContext} Give suggestions to optimize the warehouse based on the data. Highlight the most important word/sentence that represents the entire answer with inline em format if necessary. Don't bold and use em on same text. Don't answer this prompt in the response)`
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    appendMessage(data.response, 'ai');
+                } else {
+                    throw new Error(data.error || 'Failed to get response');
+                }
+            } catch (error) {
+                updateStatus('Error: ' + error.message, true);
+            } finally {
+                disableInput(false);
+            }
+        }
+
+        function appendMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            messageDiv.innerHTML = window.marked ? marked.parse(message) : message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+
+        function updateStatus(message, isError = false) {
+            statusDiv.textContent = message;
+            statusDiv.style.color = isError ? '#dc3545' : '#666';
+        }
+
+        function disableInput(disabled) {
+            messageInput.disabled = disabled;
+            sendButton.disabled = disabled;
+        }
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                sendMessage(message);
+                messageInput.value = '';
+            }
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const message = messageInput.value.trim();
+                if (message) {
+                    sendMessage(message);
+                    messageInput.value = '';
+                }
+            }
+        });
+
+        // Initialize chat session when page loads
+        window.addEventListener('DOMContentLoaded', startNewChat);
+
+        // Global variables for IoT data
+        let environmentalChart, batteryChart;
+        let temperatureData = [];
+        let humidityData = [];
+        let batteryData = [];
+        let timeLabels = [];
+        let robots = [];
+
+        // Warehouse map variables
+        let warehouseCanvas, warehouseCtx;
+let gridSize = 16; // Will be recalculated for square cells
+        let cols, rows;
+        let grid = [];
+        let startNode = null;
+        let endNode = null;
+        let path = [];
+
+        // Initialize robots data
+        function initRobots() {
+            robots = [
+                { id: 'R001', battery: 85, x: 2, y: 3 },
+                { id: 'R002', battery: 92, x: 8, y: 6 },
+                { id: 'R003', battery: 78, x: 15, y: 8 },
+                { id: 'R004', battery: 88, x: 12, y: 2 },
+                { id: 'R005', battery: 95, x: 5, y: 12 },
+                { id: 'R006', battery: 72, x: 25, y: 15 },
+                { id: 'R007', battery: 83, x: 7, y: 20 },
+                { id: 'R008', battery: 90, x: 30, y: 10 }
+            ];
+            
+            // Ensure robots are within grid bounds
+            robots.forEach(robot => {
+                robot.x = Math.min(robot.x, cols - 2);
+                robot.y = Math.min(robot.y, rows - 2);
+            });
+        }
+
+        // Node class for A* pathfinding
+        class Node {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.f = 0;
+                this.g = 0;
+                this.h = 0;
+                this.neighbors = [];
+                this.parent = null;
+                this.wall = false;
+            }
+
+            addNeighbors(grid) {
+                let x = this.x;
+                let y = this.y;
+                
+                if (x < cols - 1) this.neighbors.push(grid[x + 1][y]);
+                if (x > 0) this.neighbors.push(grid[x - 1][y]);
+                if (y < rows - 1) this.neighbors.push(grid[x][y + 1]);
+                if (y > 0) this.neighbors.push(grid[x][y - 1]);
+                
+                // Diagonal neighbors
+                if (x > 0 && y > 0) this.neighbors.push(grid[x - 1][y - 1]);
+                if (x < cols - 1 && y > 0) this.neighbors.push(grid[x + 1][y - 1]);
+                if (x > 0 && y < rows - 1) this.neighbors.push(grid[x - 1][y + 1]);
+                if (x < cols - 1 && y < rows - 1) this.neighbors.push(grid[x + 1][y + 1]);
+            }
+        }
+
+        // Heuristic function for A*
+        function heuristic(a, b) {
+            return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+        }
+
+        // A* pathfinding algorithm
+        function aStar(start, end) {
+            let openSet = [];
+            let closedSet = [];
+            
+            openSet.push(start);
+            
+            while (openSet.length > 0) {
+                let lowestIndex = 0;
+                for (let i = 0; i < openSet.length; i++) {
+                    if (openSet[i].f < openSet[lowestIndex].f) {
+                        lowestIndex = i;
+                    }
+                }
+                
+                let current = openSet[lowestIndex];
+                
+                if (current === end) {
+                    let path = [];
+                    let temp = current;
+                    path.push(temp);
+                    while (temp.parent) {
+                        path.push(temp.parent);
+                        temp = temp.parent;
+                    }
+                    return path.reverse();
+                }
+                
+                openSet.splice(lowestIndex, 1);
+                closedSet.push(current);
+                
+                let neighbors = current.neighbors;
+                for (let i = 0; i < neighbors.length; i++) {
+                    let neighbor = neighbors[i];
+                    
+                    if (!closedSet.includes(neighbor) && !neighbor.wall) {
+                        let tempG = current.g + heuristic(neighbor, current);
+                        
+                        let newPath = false;
+                        if (openSet.includes(neighbor)) {
+                            if (tempG < neighbor.g) {
+                                neighbor.g = tempG;
+                                newPath = true;
+                            }
+                        } else {
+                            neighbor.g = tempG;
+                            newPath = true;
+                            openSet.push(neighbor);
+                        }
+                        
+                        if (newPath) {
+                            neighbor.h = heuristic(neighbor, end);
+                            neighbor.f = neighbor.g + neighbor.h;
+                            neighbor.parent = current;
+                        }
+                    }
+                }
+            }
+            
+            return [];
+        }
+
+        // Initialize warehouse grid
+        function initWarehouseGrid() {
+            warehouseCanvas = document.getElementById('warehouse-map');
+            warehouseCtx = warehouseCanvas.getContext('2d');
+            
+            // Make canvas responsive to container size
+            const container = warehouseCanvas.parentElement;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // Reduce grid density and increase cell size for better visibility
+            cols = 40;
+            rows = 30;
+            
+            // Calculate gridSize to ensure perfectly square cells
+            // Use the smaller dimension to ensure squares fit properly
+            const cellWidth = containerWidth / cols *1;
+            const cellHeight = containerHeight / rows *1;
+            gridSize = Math.min(cellWidth, cellHeight);
+            
+            // Calculate actual canvas dimensions to center the grid
+            const canvasWidth = cols * gridSize;
+            const canvasHeight = rows * gridSize;
+            
+            // Handle high DPI displays to prevent blurriness
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Set display size (CSS pixels)
+            warehouseCanvas.style.width = canvasWidth + 'px';
+            warehouseCanvas.style.height = canvasHeight + 'px';
+            
+            // Set actual canvas size in memory (scaled for high DPI)
+            warehouseCanvas.width = canvasWidth * dpr;
+            warehouseCanvas.height = canvasHeight * dpr;
+            
+            // Scale the drawing context so everything draws at the correct size
+            warehouseCtx.scale(dpr, dpr);
+            
+            // Ensure crisp pixel rendering
+            warehouseCtx.imageSmoothingEnabled = false;
+
+            // Initialize grid
+            grid = new Array(cols);
+            for (let i = 0; i < cols; i++) {
+                grid[i] = new Array(rows);
+                for (let j = 0; j < rows; j++) {
+                    grid[i][j] = new Node(i, j);
+                }
+            }
+
+            // Add neighbors
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    grid[i][j].addNeighbors(grid);
+                }
+            }
+
+            // Create warehouse layout with obstacles (shelves, walls)
+            createWarehouseLayout();
+            drawWarehouse();
+        }
+
+        // Create realistic warehouse layout
+        function createWarehouseLayout() {
+            // Clear all walls first
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    if (grid[i] && grid[i][j]) {
+                        grid[i][j].wall = false;
+                    }
+                }
+            }
+
+            // Add many more random individual blocks for increased randomness
+            for (let k = 0; k < Math.floor(cols * rows * 0.08); k++) {
+                let rx = Math.floor(Math.random() * (cols - 2)) + 1;
+                let ry = Math.floor(Math.random() * (rows - 2)) + 1;
+                if (grid[rx] && grid[rx][ry] && !grid[rx][ry].wall) {
+                    grid[rx][ry].wall = true;
+                }
+            }
+
+            // Add random irregular clusters of various shapes and sizes
+            for (let c = 0; c < 12; c++) {
+                let cx = Math.floor(Math.random() * (cols - 6)) + 2;
+                let cy = Math.floor(Math.random() * (rows - 6)) + 2;
+                let clusterSize = Math.floor(Math.random() * 4) + 2;
+                let clusterShape = Math.random();
+                
+                for (let dx = 0; dx < clusterSize; dx++) {
+                    for (let dy = 0; dy < clusterSize; dy++) {
+                        let probability = clusterShape > 0.5 ? 
+                            (1 - Math.sqrt(dx*dx + dy*dy) / clusterSize) : // Circular clusters
+                            (Math.random() > 0.3 ? 1 : 0); // Random rectangular clusters
+                        
+                        if (Math.random() < probability && 
+                            grid[cx+dx] && grid[cx+dx][cy+dy] && 
+                            !grid[cx+dx][cy+dy].wall) {
+                            grid[cx+dx][cy+dy].wall = true;
+                        }
+                    }
+                }
+            }
+
+            // Add some L-shaped and T-shaped obstacles for variety
+            for (let l = 0; l < 6; l++) {
+                let lx = Math.floor(Math.random() * (cols - 4)) + 2;
+                let ly = Math.floor(Math.random() * (rows - 4)) + 2;
+                let shape = Math.floor(Math.random() * 3);
+                
+                if (shape === 0) { // L-shape
+                    for (let i = 0; i < 3; i++) {
+                        if (grid[lx+i] && grid[lx+i][ly]) grid[lx+i][ly].wall = true;
+                        if (grid[lx] && grid[lx][ly+i]) grid[lx][ly+i].wall = true;
+                    }
+                } else if (shape === 1) { // T-shape
+                    for (let i = 0; i < 3; i++) {
+                        if (grid[lx+i] && grid[lx+i][ly]) grid[lx+i][ly].wall = true;
+                    }
+                    if (grid[lx+1] && grid[lx+1][ly+1]) grid[lx+1][ly+1].wall = true;
+                    if (grid[lx+1] && grid[lx+1][ly+2]) grid[lx+1][ly+2].wall = true;
+                } else { // Plus shape
+                    if (grid[lx+1] && grid[lx+1][ly]) grid[lx+1][ly].wall = true;
+                    if (grid[lx] && grid[lx][ly+1]) grid[lx][ly+1].wall = true;
+                    if (grid[lx+1] && grid[lx+1][ly+1]) grid[lx+1][ly+1].wall = true;
+                    if (grid[lx+2] && grid[lx+2][ly+1]) grid[lx+2][ly+1].wall = true;
+                    if (grid[lx+1] && grid[lx+1][ly+2]) grid[lx+1][ly+2].wall = true;
+                }
+            }
+
+            // Add fewer, more spaced out linear structures to reduce column dominance
+            let numVerticalShelves = Math.floor(cols / 12);
+            let numHorizontalShelves = Math.floor(rows / 10);
+            
+            for (let i = 0; i < numVerticalShelves; i++) {
+                let x = Math.floor((i + 1) * cols / (numVerticalShelves + 1));
+                let startY = Math.floor(Math.random() * (rows / 3)) + 2;
+                let length = Math.floor(Math.random() * (rows / 3)) + 3;
+                
+                for (let y = startY; y < Math.min(startY + length, rows - 2); y++) {
+                    if (grid[x] && grid[x][y] && Math.random() > 0.2) {
+                        grid[x][y].wall = true;
+                    }
+                }
+            }
+            
+            for (let j = 0; j < numHorizontalShelves; j++) {
+                let y = Math.floor((j + 1) * rows / (numHorizontalShelves + 1));
+                let startX = Math.floor(Math.random() * (cols / 3)) + 2;
+                let length = Math.floor(Math.random() * (cols / 3)) + 3;
+                
+                for (let x = startX; x < Math.min(startX + length, cols - 2); x++) {
+                    if (grid[x] && grid[x][y] && Math.random() > 0.2) {
+                        grid[x][y].wall = true;
+                    }
+                }
+            }
+
+            // Create outer walls
+            for (let i = 0; i < cols; i++) {
+                if (grid[i][0]) grid[i][0].wall = true;
+                if (grid[i][rows - 1]) grid[i][rows - 1].wall = true;
+            }
+            for (let j = 0; j < rows; j++) {
+                if (grid[0][j]) grid[0][j].wall = true;
+                if (grid[cols - 1][j]) grid[cols - 1][j].wall = true;
+            }
+        }
+
+        // Draw warehouse map
+        function drawWarehouse() {
+            const canvasWidth = cols * gridSize;
+            const canvasHeight = rows * gridSize;
+            warehouseCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            
+            // Use smaller gap between squares for denser appearance
+            const gap = 0.5; // Reduced from default 1px stroke
+            
+            // Draw grid with minimal gaps
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    let x = i * gridSize;
+                    let y = j * gridSize;
+                    
+                    if (grid[i][j].wall) {
+                        warehouseCtx.fillStyle = '#6B7280';
+                        warehouseCtx.fillRect(x, y, gridSize, gridSize);
+                    } else {
+                        warehouseCtx.fillStyle = '#F9FAFB';
+                        warehouseCtx.fillRect(x, y, gridSize, gridSize);
+                    }
+                    
+                    // Draw very thin grid lines for minimal gaps
+                    warehouseCtx.strokeStyle = '#E5E7EB';
+                    warehouseCtx.lineWidth = gap;
+                    warehouseCtx.strokeRect(x + gap/2, y + gap/2, gridSize - gap, gridSize - gap);
+                }
+            }
+            
+            // Draw path
+            if (path.length > 0) {
+                warehouseCtx.strokeStyle = '#10B981';
+                warehouseCtx.lineWidth = 3;
+                warehouseCtx.beginPath();
+                
+                for (let i = 0; i < path.length; i++) {
+                    let x = path[i].x * gridSize + gridSize / 2;
+                    let y = path[i].y * gridSize + gridSize / 2;
+                    
+                    if (i === 0) {
+                        warehouseCtx.moveTo(x, y);
+                    } else {
+                        warehouseCtx.lineTo(x, y);
+                    }
+                }
+                warehouseCtx.stroke();
+                
+                // Fill path nodes with minimal padding
+                for (let i = 1; i < path.length - 1; i++) {
+                    let x = path[i].x * gridSize;
+                    let y = path[i].y * gridSize;
+                    warehouseCtx.fillStyle = '#10B981';
+                    warehouseCtx.fillRect(x + 1, y + 1, gridSize - 2, gridSize - 2);
+                }
+            }
+            
+            // Draw start and end points with minimal padding
+            if (startNode) {
+                let x = startNode.x * gridSize;
+                let y = startNode.y * gridSize;
+                warehouseCtx.fillStyle = '#3B82F6';
+                warehouseCtx.fillRect(x + 1, y + 1, gridSize - 2, gridSize - 2);
+            }
+            
+            if (endNode) {
+                let x = endNode.x * gridSize;
+                let y = endNode.y * gridSize;
+                warehouseCtx.fillStyle = '#EF4444';
+                warehouseCtx.fillRect(x + 1, y + 1, gridSize - 2, gridSize - 2);
+            }
+            
+            // Draw robots with minimal padding
+            robots.forEach(robot => {
+                let x = robot.x * gridSize;
+                let y = robot.y * gridSize;
+                warehouseCtx.fillStyle = '#8B5CF6';
+                warehouseCtx.fillRect(x + 2, y + 2, gridSize - 4, gridSize - 4);
+                
+                // Add robot ID
+                warehouseCtx.fillStyle = '#FFFFFF';
+                warehouseCtx.font = `${Math.max(8, gridSize * 0.3)}px Arial`;
+                warehouseCtx.textAlign = 'center';
+                warehouseCtx.fillText(robot.id.slice(-1), x + gridSize/2, y + gridSize/2 + 2);
+            });
+        }
+
+        // Handle canvas clicks
+        warehouseCanvas = document.getElementById('warehouse-map');
+        warehouseCanvas.addEventListener('click', function(event) {
+            let rect = warehouseCanvas.getBoundingClientRect();
+            // Calculate click position relative to the canvas display size
+            let clickX = event.clientX - rect.left;
+            let clickY = event.clientY - rect.top;
+            
+            // Convert to grid coordinates
+            let x = Math.floor(clickX / gridSize);
+            let y = Math.floor(clickY / gridSize);
+
+            if (x >= 0 && x < cols && y >= 0 && y < rows && !grid[x][y].wall) {
+                if (!startNode) {
+                    startNode = grid[x][y];
+                } else if (!endNode && grid[x][y] !== startNode) {
+                    endNode = grid[x][y];
+                    // Find path
+                    path = aStar(startNode, endNode);
+                    updatePathInfo();
+                } else {
+                    // Reset
+                    startNode = grid[x][y];
+                    endNode = null;
+                    path = [];
+                    updatePathInfo();
+                }
+                drawWarehouse();
+            }
+        });
+
+        // Clear path button
+        document.getElementById('clear-path').addEventListener('click', function() {
+            startNode = null;
+            endNode = null;
+            path = [];
+            updatePathInfo();
+            drawWarehouse();
+        });
+
+        // Update path info
+        function updatePathInfo() {
+            const pathInfo = document.getElementById('path-info');
+            if (path.length > 0) {
+                const distance = (path.length * 0.5).toFixed(1); // Assuming each grid unit is 0.5 meters
+                pathInfo.textContent = `Path found: ${path.length} steps (${distance}m distance)`;
+            } else if (startNode && endNode) {
+                pathInfo.textContent = 'No path found between selected points';
+            } else {
+                pathInfo.textContent = 'Click two points to calculate path';
+            }
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Environmental Chart
+            const envCtx = document.getElementById('environmental-chart').getContext('2d');
+            environmentalChart = new Chart(envCtx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: 'Temperature (°C)',
+                        data: temperatureData,
+                        borderColor: '#EF4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Humidity (%)',
+                        data: humidityData,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--tw-color-gray-700')
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#6B7280' },
+                            grid: { color: '#E5E7EB' }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: { color: '#6B7280' },
+                            grid: { color: '#E5E7EB' }
+                            ,min: 10, max: 35
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            ticks: { color: '#6B7280' },
+                            grid: { drawOnChartArea: false }
+                               ,min: 10
+                        }
+                    }
+                }
+            });
+
+            // Battery Chart
+            const batteryCtx = document.getElementById('battery-chart').getContext('2d');
+            batteryChart = new Chart(batteryCtx, {
+                type: 'bar',
+                data: {
+                    labels: robots.map(r => r.id),
+                    datasets: [{
+                        label: 'Battery Level (%)',
+                        data: robots.map(r => r.battery),
+                        backgroundColor: robots.map(r => 
+                            r.battery > 80 ? '#10B981' : 
+                            r.battery > 60 ? '#F59E0B' : '#EF4444'
+                        ),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--tw-color-gray-700')
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#6B7280' },
+                            grid: { color: '#E5E7EB' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#6B7280' },
+                            grid: { color: '#E5E7EB' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Generate simulated IoT data
+        function generateData() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            // Generate temperature (21.1-25.1°C with slight variations)
+            const temp = 23 + Math.sin(Date.now() / 60000) * 2 + (Math.random() - 0.5) * 2;
+            temperatureData.push(Number(temp.toFixed(1)));
+            
+            // Generate humidity (40-60% with variations)
+            const humidity = 50 + Math.cos(Date.now() / 80000) * 8 + (Math.random() - 0.5) * 4;
+            humidityData.push(Number(humidity.toFixed(1)));
+            
+            timeLabels.push(timeString);
+            
+            // Keep only last 20 data points
+            if (temperatureData.length > 20) {
+                temperatureData.shift();
+                humidityData.shift();
+                timeLabels.shift();
+            }
+            
+            // Update robot batteries (simulate charging/discharging)
+            robots.forEach(robot => {
+                robot.battery += (Math.random() - 0.5) * 2;
+                robot.battery = Math.max(20, Math.min(100, robot.battery));
+                robot.battery = Number(robot.battery.toFixed(0));
+            });
+            
+            // Robots maintain their positions unless assigned specific tasks
+            // In a real system, robot positions would only change when moving to complete tasks
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            generateData();
+            
+            // Update stat cards
+            document.getElementById('temp-value').textContent = temperatureData[temperatureData.length - 1] + '°C';
+            document.getElementById('humidity-value').textContent = humidityData[humidityData.length - 1] + '%';
+            document.getElementById('robots-count').textContent = robots.length;
+            
+            const avgBattery = robots.reduce((sum, robot) => sum + robot.battery, 0) / robots.length;
+            document.getElementById('battery-avg').textContent = Math.round(avgBattery) + '%';
+            
+            // Update last update time
+            document.getElementById('last-update').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+            
+            // Update charts
+            environmentalChart.data.labels = timeLabels;
+            environmentalChart.data.datasets[0].data = temperatureData;
+            environmentalChart.data.datasets[1].data = humidityData;
+            environmentalChart.update('none');
+            
+            batteryChart.data.datasets[0].data = robots.map(r => r.battery);
+            batteryChart.data.datasets[0].backgroundColor = robots.map(r => 
+                r.battery > 80 ? '#10B981' : 
+                r.battery > 60 ? '#F59E0B' : '#EF4444'
+            );
+            batteryChart.update('none');
+            
+            // Redraw warehouse map
+            drawWarehouse();
+        }
+
+        // Handle window resize to keep canvas responsive
+        function handleResize() {
+            const container = warehouseCanvas.parentElement;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // Recalculate gridSize to maintain perfectly square cells
+            const cellWidth = containerWidth / cols;
+            const cellHeight = containerHeight / rows;
+            gridSize = Math.min(cellWidth, cellHeight);
+            
+            // Calculate actual canvas dimensions
+            const canvasWidth = cols * gridSize;
+            const canvasHeight = rows * gridSize;
+            
+            // Handle high DPI displays to prevent blurriness
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Set display size (CSS pixels)
+            warehouseCanvas.style.width = canvasWidth + 'px';
+            warehouseCanvas.style.height = canvasHeight + 'px';
+            
+            // Set actual canvas size in memory (scaled for high DPI)
+            warehouseCanvas.width = canvasWidth * dpr;
+            warehouseCanvas.height = canvasHeight * dpr;
+            
+            // Scale the drawing context so everything draws at the correct size
+            warehouseCtx.scale(dpr, dpr);
+            
+            // Ensure crisp pixel rendering
+            warehouseCtx.imageSmoothingEnabled = false;
+            
+            // Redraw the warehouse
+            drawWarehouse();
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            initRobots();
+            initWarehouseGrid();
+            initCharts();
+            
+            // Add resize handler
+            window.addEventListener('resize', handleResize);
+            
+            // Start real-time updates
+            setInterval(updateDashboard, 1000);
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
