@@ -379,8 +379,25 @@ let gridSize = 16; // Will be recalculated for square cells
             return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
         }
 
+        // Reset all nodes for a fresh pathfinding attempt
+        function resetNodes() {
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    if (grid[i] && grid[i][j]) {
+                        grid[i][j].f = 0;
+                        grid[i][j].g = 0;
+                        grid[i][j].h = 0;
+                        grid[i][j].parent = null;
+                    }
+                }
+            }
+        }
+
         // A* pathfinding algorithm
         function aStar(start, end) {
+            // Reset all nodes before starting
+            resetNodes();
+            
             let openSet = [];
             let closedSet = [];
             
@@ -515,7 +532,7 @@ let gridSize = 16; // Will be recalculated for square cells
             }
 
             // Add many more random individual blocks for increased randomness
-            for (let k = 0; k < Math.floor(cols * rows * 0.08); k++) {
+            for (let k = 0; k < Math.floor(cols * rows * 0.25); k++) {
                 let rx = Math.floor(Math.random() * (cols - 2)) + 1;
                 let ry = Math.floor(Math.random() * (rows - 2)) + 1;
                 if (grid[rx] && grid[rx][ry] && !grid[rx][ry].wall) {
@@ -711,19 +728,21 @@ let gridSize = 16; // Will be recalculated for square cells
 
             if (x >= 0 && x < cols && y >= 0 && y < rows && !grid[x][y].wall) {
                 if (!startNode) {
-                    startNode = grid[x][y];
-                } else if (!endNode && grid[x][y] !== startNode) {
-                    endNode = grid[x][y];
-                    // Find path
-                    path = aStar(startNode, endNode);
-                    updatePathInfo();
-                } else {
-                    // Reset
+                    // First click: set start node
                     startNode = grid[x][y];
                     endNode = null;
                     path = [];
-                    updatePathInfo();
+                } else if (!endNode && grid[x][y] !== startNode) {
+                    // Second click: set end node and find path
+                    endNode = grid[x][y];
+                    path = aStar(startNode, endNode);
+                } else {
+                    // Third click or clicking on existing nodes: start over
+                    startNode = grid[x][y];
+                    endNode = null;
+                    path = [];
                 }
+                updatePathInfo();
                 drawWarehouse();
             }
         });
