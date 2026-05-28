@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Priorities</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 
+              'Helvetica', 'Arial', 'sans-serif'
+            ],
+          },
+          colors: {
+            appleBlue: '#0071e3',
+            appleGrayBg: '#f5f5f7',
+            appleCardBg: '#ffffff',
+            appleSystemRed: '#ff3b30',
+            appleSystemOrange: '#ff9500',
+            appleSystemGreen: '#34c759',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Premium smooth scroll & custom styles */
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+      background-color: #f5f5f7;
+    }
+
+    /* Custom Checkbox micro-interaction */
+    .custom-checkbox input:checked ~ .checkbox-box {
+      background-color: #0071e3;
+      border-color: #0071e3;
+    }
+    
+    .custom-checkbox input:checked ~ .checkbox-box svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Soft scale transitions */
+    .priority-row {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .priority-row:hover .action-buttons {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Hide scrollbar for clean aesthetics */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Modal transition states */
+    .modal-backdrop {
+      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="text-neutral-900 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-100 selection:text-appleBlue">
+
+  <!-- Main Container -->
+  <main class="w-full max-w-2xl mx-auto px-6 py-12 md:py-20 flex-grow">
+    
+    <!-- Top Header -->
+    <header class="mb-10">
+      <p id="current-date" class="text-xs font-semibold tracking-wider text-neutral-400 uppercase mb-1">Thursday, May 28</p>
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900">Priorities</h1>
+    </header>
+
+    <!-- Inline Add Box -->
+    <section class="mb-8 bg-white rounded-2xl border border-neutral-100 shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-4 md:p-5 transition-all duration-300 focus-within:shadow-[0_10px_30px_rgba(0,0,0,0.06)] focus-within:border-neutral-200">
+      <form id="add-priority-form" onsubmit="handleAddPriority(event)" class="space-y-4">
+        <div class="flex items-center gap-3">
+          <!-- Dot Indicator representing selected priority -->
+          <div id="selected-priority-dot" class="w-3.5 h-3.5 rounded-full bg-appleSystemRed shrink-0 transition-colors duration-200"></div>
+          <input 
+            type="text" 
+            id="task-title-input"
+            required
+            placeholder="Add a new priority..." 
+            class="w-full bg-transparent text-neutral-800 placeholder-neutral-400 font-medium text-lg outline-none border-none py-1 focus:ring-0"
+            autocomplete="off"
+          />
+        </div>
+        
+        <!-- Controls row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-100">
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Due Date Field -->
+            <div class="relative flex items-center bg-neutral-50 hover:bg-neutral-100 rounded-lg px-3 py-1.5 text-neutral-600 transition-colors cursor-pointer group">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <input 
+                type="date" 
+                id="task-date-input" 
+                class="bg-transparent text-sm font-medium outline-none border-none cursor-pointer focus:ring-0 text-neutral-600 p-0 w-28"
+              />
+            </div>
+
+            <!-- Priority Selector (High, Medium, Low) -->
+            <div class="flex bg-neutral-50 rounded-lg p-0.5 border border-neutral-100">
+              <button 
+                type="button" 
+                onclick="setPriorityLevel('high')" 
+                id="btn-prio-high"
+                class="priority-select-btn px-3 py-1 text-xs font-semibold rounded-md transition-all duration-150 bg-white text-appleSystemRed shadow-sm"
+              >
+                High
+              </button>
+              <button 
+                type="button" 
+                onclick="setPriorityLevel('medium')" 
+                id="btn-prio-medium"
+                class="priority-select-btn px-3 py-1 text-xs font-medium rounded-md transition-all duration-150 text-neutral-500 hover:text-neutral-800"
+              >
+                Medium
+              </button>
+              <button 
+                type="button" 
+                onclick="setPriorityLevel('low')" 
+                id="btn-prio-low"
+                class="priority-select-btn px-3 py-1 text-xs font-medium rounded-md transition-all duration-150 text-neutral-500 hover:text-neutral-800"
+              >
+                Low
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Action Button -->
+          <button 
+            type="submit"
+            class="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-all duration-200 shadow-sm hover:shadow active:scale-95 flex items-center gap-1"
+          >
+            <span>Add</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Priorities List Container -->
+    <div class="space-y-3" id="list-container">
+      <!-- Injected priorities render here dynamically -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden flex-col items-center justify-center py-28 text-center">
+      <div class="w-20 h-20 rounded-full border-2 border-neutral-200 flex items-center justify-center text-neutral-300 transition-all duration-300 hover:scale-105">
+        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Apple Style Minimalist Footer -->
+  <footer class="w-full text-center py-8 text-xs text-neutral-400 border-t border-neutral-100">
+    <p>© Priorities. Designed with absolute simplicity.</p>
+  </footer>
+
+  <!-- Drawer/Modal for Editing Priorities -->
+  <div id="edit-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-neutral-900/40 modal-backdrop" onclick="closeEditModal()"></div>
+    
+    <!-- Drawer / Modal Card -->
+    <div class="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl p-6 md:p-8 shadow-2xl transform translate-y-10 sm:translate-y-0 sm:scale-95 transition-all duration-300 max-h-[90vh] overflow-y-auto no-scrollbar">
+      
+      <!-- Drag handle for mobile drawer look -->
+      <div class="w-12 h-1 bg-neutral-200 rounded-full mx-auto mb-6 sm:hidden"></div>
+
+      <div class="flex justify-between items-start mb-6">
+        <h3 class="text-xl font-bold text-neutral-900">Modify Priority</h3>
+        <button onclick="closeEditModal()" class="text-neutral-400 hover:text-neutral-600 p-1 rounded-full hover:bg-neutral-50 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="edit-priority-form" onsubmit="handleSaveEdit(event)" class="space-y-6">
+        <input type="hidden" id="edit-task-id" />
+        
+        <!-- Title Input -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Priority Description</label>
+          <input 
+            type="text" 
+            id="edit-task-title" 
+            required 
+            class="w-full bg-neutral-50 focus:bg-white text-neutral-800 font-medium text-base outline-none border border-neutral-100 focus:border-neutral-300 rounded-xl px-4 py-3 transition-all duration-150"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Inline due date & Priority Level -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Due Date -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Due Date</label>
+            <input 
+              type="date" 
+              id="edit-task-date" 
+              required
+              class="w-full bg-neutral-50 focus:bg-white text-neutral-800 font-medium text-sm outline-none border border-neutral-100 focus:border-neutral-300 rounded-xl px-4 py-3 transition-all duration-150"
+            />
+          </div>
+
+          <!-- Priority Indicator Selection -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Focus Tier</label>
+            <select 
+              id="edit-task-priority"
+              class="w-full bg-neutral-50 focus:bg-white text-neutral-800 font-medium text-sm outline-none border border-neutral-100 focus:border-neutral-300 rounded-xl px-4 py-3 transition-all duration-150 appearance-none"
+            >
+              <option value="high">🔴 High Priority</option>
+              <option value="medium">🟠 Medium Priority</option>
+              <option value="low">🔵 Low Priority</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end gap-3 pt-4 border-t border-neutral-100">
+          <button 
+            type="button" 
+            onclick="closeEditModal()" 
+            class="px-5 py-3 text-neutral-500 hover:text-neutral-700 font-semibold text-sm rounded-xl hover:bg-neutral-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="bg-neutral-900 hover:bg-neutral-800 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 shadow-sm active:scale-95"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // State initialization
+    let priorities = [];
+    let currentPriorityLevel = 'high';
+
+    // Helper to supply clean initial empty list on fresh load
+    function getDefaultPriorities() {
+      return [];
+    }
+
+    // Save state to browser storage
+    function saveToLocalStorage() {
+      localStorage.setItem('priorities_data', JSON.stringify(priorities));
+    }
+
+    // Load setup details on window load
+    window.onload = function() {
+      // Setup current date in header
+      const options = { weekday: 'long', month: 'short', day: 'numeric' };
+      document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', options);
+      
+      // Set tomorrow's date by default in the add form
+      document.getElementById('task-date-input').value = getRelativeDate(1);
+      
+      // Local Storage Initialization
+      const savedData = localStorage.getItem('priorities_data');
+      if (savedData) {
+        try {
+          priorities = JSON.parse(savedData);
+        } catch (e) {
+          console.warn("Could not parse saved priorities, resetting.");
+          priorities = getDefaultPriorities();
+          saveToLocalStorage();
+        }
+      } else {
+        priorities = getDefaultPriorities();
+        saveToLocalStorage();
+      }
+
+      // Run Initial Render
+      render();
+    }
+
+    // Utility function to get relative dates beautifully formatted
+    function getRelativeDate(offsetDays) {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      return d.toISOString().split('T')[0];
+    }
+
+    // Render absolute day/month numbers elegantly on the right
+    function formatBigDate(dateStr) {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length !== 3) return '';
+      const day = parseInt(parts[2], 10);
+      const month = parseInt(parts[1], 10);
+      return `${day}/${month}`;
+    }
+
+    // Verify if date is overdue (less than today, and not completed)
+    function isOverdue(dateStr, isCompleted) {
+      if (isCompleted) return false;
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const target = new Date(dateStr);
+      target.setHours(0,0,0,0);
+      return target < today;
+    }
+
+    // Change Priority selector values
+    function setPriorityLevel(level) {
+      currentPriorityLevel = level;
+      
+      // Update UI classes
+      const buttons = document.querySelectorAll('.priority-select-btn');
+      buttons.forEach(btn => {
+        btn.className = 'priority-select-btn px-3 py-1 text-xs font-medium rounded-md transition-all duration-150 text-neutral-500 hover:text-neutral-800';
+      });
+
+      const activeBtn = document.getElementById(`btn-prio-${level}`);
+      const dot = document.getElementById('selected-priority-dot');
+
+      if (level === 'high') {
+        activeBtn.className = 'priority-select-btn px-3 py-1 text-xs font-semibold rounded-md transition-all duration-150 bg-white text-appleSystemRed shadow-sm';
+        dot.className = 'w-3.5 h-3.5 rounded-full bg-appleSystemRed shrink-0 transition-colors duration-200';
+      } else if (level === 'medium') {
+        activeBtn.className = 'priority-select-btn px-3 py-1 text-xs font-semibold rounded-md transition-all duration-150 bg-white text-appleSystemOrange shadow-sm';
+        dot.className = 'w-3.5 h-3.5 rounded-full bg-appleSystemOrange shrink-0 transition-colors duration-200';
+      } else {
+        activeBtn.className = 'priority-select-btn px-3 py-1 text-xs font-semibold rounded-md transition-all duration-150 bg-white text-appleBlue shadow-sm';
+        dot.className = 'w-3.5 h-3.5 rounded-full bg-appleBlue shrink-0 transition-colors duration-200';
+      }
+    }
+
+    // Handle Quick Adding of a Priority
+    function handleAddPriority(e) {
+      e.preventDefault();
+      const titleInput = document.getElementById('task-title-input');
+      const dateInput = document.getElementById('task-date-input');
+      
+      if (!titleInput.value.trim()) return;
+
+      const newPriority = {
+        id: crypto.randomUUID(),
+        title: titleInput.value.trim(),
+        date: dateInput.value || getRelativeDate(0),
+        priority: currentPriorityLevel,
+        completed: false
+      };
+
+      priorities.push(newPriority);
+      saveToLocalStorage();
+      
+      // Reset input text, preserve current selected date and priority
+      titleInput.value = '';
+      
+      render();
+    }
+
+    // Toggle complete state
+    function toggleComplete(id) {
+      const task = priorities.find(p => p.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveToLocalStorage();
+        render();
+      }
+    }
+
+    // Delete a Priority
+    function deletePriority(id) {
+      priorities = priorities.filter(p => p.id !== id);
+      saveToLocalStorage();
+      render();
+    }
+
+    // Main rendering logic mapping state to DOM
+    function render() {
+      const container = document.getElementById('list-container');
+      const emptyState = document.getElementById('empty-state');
+      
+      // Clear container
+      container.innerHTML = '';
+
+      // Unified sorting: active items go first (sorted by date), completed go to bottom
+      const sortedPriorities = [...priorities];
+      sortedPriorities.sort((a, b) => {
+        if (a.completed !== b.completed) {
+          return a.completed ? 1 : -1;
+        }
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      // Handle empty layout state
+      if (sortedPriorities.length === 0) {
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+      } else {
+        emptyState.classList.add('hidden');
+        emptyState.classList.remove('flex');
+        
+        sortedPriorities.forEach(item => {
+          container.appendChild(createPriorityRow(item));
+        });
+      }
+    }
+
+    // Programmatically construct each beautiful Priority Card
+    function createPriorityRow(item) {
+      const row = document.createElement('div');
+      
+      // Tailor background/border for completed state
+      const completedClass = item.completed ? 'opacity-40 line-through text-neutral-400' : 'text-neutral-800';
+      
+      row.className = `priority-row group relative flex items-center justify-between p-4 bg-white hover:bg-neutral-50 rounded-xl border border-neutral-100 transition-all duration-200 select-none`;
+      row.dataset.id = item.id;
+
+      const dotColor = {
+        high: 'bg-appleSystemRed',
+        medium: 'bg-appleSystemOrange',
+        low: 'bg-appleBlue'
+      };
+
+      // Check if task date is overdue
+      const overdue = isOverdue(item.date, item.completed);
+      const dateColorClass = overdue ? 'text-appleSystemRed font-bold' : 'text-neutral-400 font-medium';
+      const formattedDate = formatBigDate(item.date);
+
+      row.innerHTML = `
+        <div class="flex items-center gap-4 flex-grow min-w-0 pr-4">
+          <!-- Circular Apple Checkbox -->
+          <label class="custom-checkbox relative flex items-center justify-center cursor-pointer shrink-0">
+            <input 
+              type="checkbox" 
+              class="sr-only" 
+              ${item.completed ? 'checked' : ''} 
+              onclick="toggleComplete('${item.id}')"
+            />
+            <div class="checkbox-box w-6 h-6 rounded-full border-2 border-neutral-200 flex items-center justify-center transition-all duration-150 hover:border-neutral-400">
+              <svg class="w-3.5 h-3.5 text-white opacity-0 transform scale-50 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </label>
+
+          <!-- Core priority details info -->
+          <div class="min-w-0 flex-grow cursor-pointer flex items-center gap-2.5" onclick="openEditModal('${item.id}')">
+            <!-- Priority Indicator Dot -->
+            <span class="w-2 h-2 rounded-full ${dotColor[item.priority]} shrink-0"></span>
+            <p class="text-[15px] md:text-base font-semibold truncate ${completedClass}">${item.title}</p>
+          </div>
+        </div>
+
+        <!-- Right Side: Big Date and Action Controls -->
+        <div class="flex items-center gap-4 shrink-0">
+          <!-- Big Date (e.g., 28/5) -->
+          <span class="text-lg md:text-xl ${dateColorClass} tracking-tight">
+            ${formattedDate}
+          </span>
+
+          <!-- Touch-Friendly action controls, reveal on hover / focus -->
+          <div class="action-buttons flex items-center gap-1 shrink-0 md:opacity-0 md:transform md:translate-x-2 transition-all duration-200">
+            <button 
+              onclick="openEditModal('${item.id}')" 
+              title="Edit Priority"
+              class="p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+            <button 
+              onclick="deletePriority('${item.id}')" 
+              title="Delete Priority"
+              class="p-1.5 text-neutral-400 hover:text-appleSystemRed hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+
+      return row;
+    }
+
+    // Modal Control Logic
+    function openEditModal(id) {
+      const target = priorities.find(p => p.id === id);
+      if (!target) return;
+
+      document.getElementById('edit-task-id').value = target.id;
+      document.getElementById('edit-task-title').value = target.title;
+      document.getElementById('edit-task-date').value = target.date;
+      document.getElementById('edit-task-priority').value = target.priority;
+
+      const modal = document.getElementById('edit-modal');
+      const card = modal.querySelector('.relative');
+      
+      modal.classList.remove('pointer-events-none');
+      modal.classList.add('opacity-100');
+      card.classList.remove('translate-y-10', 'sm:scale-95');
+      card.classList.add('translate-y-0', 'sm:scale-100');
+    }
+
+    // Close Modal View
+    function closeEditModal() {
+      const modal = document.getElementById('edit-modal');
+      const card = modal.querySelector('.relative');
+
+      modal.classList.add('pointer-events-none');
+      modal.classList.remove('opacity-100');
+      card.classList.add('translate-y-10', 'sm:scale-95');
+      card.classList.remove('translate-y-0', 'sm:scale-100');
+    }
+
+    // Handle modification save click
+    function handleSaveEdit(e) {
+      e.preventDefault();
+      
+      const id = document.getElementById('edit-task-id').value;
+      const title = document.getElementById('edit-task-title').value;
+      const date = document.getElementById('edit-task-date').value;
+      const priority = document.getElementById('edit-task-priority').value;
+
+      const targetIndex = priorities.findIndex(p => p.id === id);
+      if (targetIndex !== -1) {
+        priorities[targetIndex].title = title;
+        priorities[targetIndex].date = date;
+        priorities[targetIndex].priority = priority;
+        saveToLocalStorage();
+      }
+
+      closeEditModal();
+      render();
+    }
+  </script>
+</body>
+</html>
